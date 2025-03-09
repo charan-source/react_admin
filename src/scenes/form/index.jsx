@@ -4,11 +4,10 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import Header from "../../components/Header";
 
-
 const Form = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
-    const colors = tokens(theme.palette.mode); // Get theme colors
+  const colors = tokens(theme.palette.mode);
 
   const handleFormSubmit = (values) => {
     console.log("Form Data:", values);
@@ -74,7 +73,7 @@ const Form = () => {
           <form onSubmit={handleSubmit}>
             <Box
               display="grid"
-              gap="20px"
+              gap="24px" // Increased spacing between inputs
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? "span 4" : undefined },
@@ -110,25 +109,28 @@ const Form = () => {
               ))}
             </Box>
 
-            <Box display="flex" justifyContent="flex-end">
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    padding: "10px",
-                    fontSize: "1.2rem",
-                    fontWeight: "bold",
-                    borderRadius: "8px",
-                    boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
-                    transition: "0.3s",
-                    backgroundColor: colors.blueAccent[700],
-                    "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
-                  }}
-                >
-                  
-                  Create HOB
-                </Button>
-              </Box>
+            {/* Button with more spacing */}
+            <Box display="flex" justifyContent="flex-end" mt="24px">
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  padding: "12px 20px",
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  borderRadius: "8px",
+                  boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                  transition: "0.3s",
+                  backgroundColor: colors.blueAccent[700],
+                  "&:hover": {
+                    backgroundColor: colors.blueAccent[600],
+                    boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
+                  },
+                }}
+              >
+                Create HOB
+              </Button>
+            </Box>
           </form>
         )}
       </Formik>

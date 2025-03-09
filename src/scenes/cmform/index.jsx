@@ -110,12 +110,12 @@ const CmForm = () => {
               ))}
             </Box>
 
-            <Box display="flex" justifyContent="flex-end">
+            <Box display="flex" justifyContent="flex-end" mt="24px">
                 <Button
                   type="submit"
                   variant="contained"
                   sx={{
-                    padding: "10px",
+                    padding: "12px 20px",
                     fontSize: "1.2rem",
                     fontWeight: "bold",
                     borderRadius: "8px",
