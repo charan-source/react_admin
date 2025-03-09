@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   Box,
-  Button,
+  // Button,
   TextField,
   MenuItem,
   Table,
@@ -12,10 +12,10 @@ import {
   TableRow,
   Paper,
   Select,
-  useTheme
+  // useTheme
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { tokens } from "../../theme";
+// import { Add } from "@mui/icons-material";
+// import { tokens } from "../../theme";
 
 // Sample Ticket Data
 const sampleTickets = [
@@ -44,8 +44,8 @@ const getStatusColor = (status) => {
 };
 
 const AllExperiences = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  // const theme = useTheme();
+  // const colors = tokens(theme.palette.mode);
   const [search, setSearch] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -103,7 +103,7 @@ const AllExperiences = () => {
           onChange={handleSearch}
           sx={{ fontSize: "1rem" }}
         />
-        <Button
+        {/* <Button
           variant="contained"
           startIcon={<Add />}
           sx={{
@@ -116,7 +116,7 @@ const AllExperiences = () => {
           }}
         >
           New Ticket
-        </Button>
+        </Button> */}
       </Box>
 
       {/* Filters */}
