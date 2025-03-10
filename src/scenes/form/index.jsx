@@ -24,7 +24,7 @@ const Form = () => {
     country: "",
     email: "",
     contact: "",
-    subject: "",
+    // subject: "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -42,7 +42,7 @@ const Form = () => {
       .matches(/^[0-9]+$/, "Only numbers are allowed")
       .min(10, "Must be at least 10 digits")
       .required("Required"),
-    subject: yup.string().required("Required"),
+    // subject: yup.string().required("Required"),
   });
 
   const textFieldStyles = {
@@ -66,7 +66,7 @@ const Form = () => {
 
   return (
     <Box m="20px">
-      <Header title="Create CRM" subtitle="Create a New Customer Manager Profile" />
+      <Header title="Create HOB" subtitle="Create a New Customer Manager Profile" />
 
       <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
@@ -128,7 +128,7 @@ const Form = () => {
                   },
                 }}
               >
-                Create HOB
+                Create 
               </Button>
             </Box>
           </form>

@@ -25,7 +25,7 @@ const CmForm = () => {
     country: "",
     email: "",
     contact: "",
-    subject: "",
+    // subject: "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -43,7 +43,7 @@ const CmForm = () => {
       .matches(/^[0-9]+$/, "Only numbers are allowed")
       .min(10, "Must be at least 10 digits")
       .required("Required"),
-    subject: yup.string().required("Required"),
+    // subject: yup.string().required("Required"),
   });
 
   const textFieldStyles = {
@@ -91,7 +91,7 @@ const CmForm = () => {
                 { label: "Country", name: "country" },
                 { label: "Email Id", name: "email", type: "email" },
                 { label: "Contact", name: "contact", type: "text" },
-                { label: "Subject", name: "subject" },
+                // { label: "Subject", name: "subject" },
               ].map((field, index) => (
                 <TextField
                   key={index}
@@ -126,7 +126,7 @@ const CmForm = () => {
                   }}
                 >
                   
-                  Create CM
+                  Create 
                 </Button>
               </Box>
           </form>
