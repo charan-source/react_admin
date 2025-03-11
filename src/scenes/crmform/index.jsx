@@ -121,6 +121,7 @@ const CrmForm = () => {
                     borderRadius: "8px",
                     boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
                     transition: "0.3s",
+                    textTransform:"none",
                     backgroundColor: colors.blueAccent[700],
                     "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
                   }}

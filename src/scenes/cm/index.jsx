@@ -87,6 +87,7 @@ const Cm = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          textTransform:"none",
           "&:hover": {
             backgroundColor: "#fff",
             color: "#6870fa",

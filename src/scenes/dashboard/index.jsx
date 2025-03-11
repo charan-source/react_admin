@@ -82,7 +82,7 @@ const Dashboard = () => {
       <Box mb={3} p={2} borderRadius={2} sx={{ bgcolor: colors.primary[400] }}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item xs={12} sm={6}>
-            <Header title="Welcome to Admin Dashboard" subtitle="Welcome to your dashboard" />
+            <Header title="Good Morning" subtitle="Welcome to your dashboard" />
           </Grid>
           <Grid item>
             <Button
@@ -93,6 +93,7 @@ const Dashboard = () => {
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 padding: { xs: "8px 12px", sm: "10px 20px" },
+                textTransform:"none"
               }}
             >
               <DownloadOutlinedIcon sx={{ mr: "10px" }} />

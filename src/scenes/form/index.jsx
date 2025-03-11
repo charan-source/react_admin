@@ -122,6 +122,7 @@ const Form = () => {
                   boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
                   transition: "0.3s",
                   backgroundColor: colors.blueAccent[700],
+                  textTransform:"none",
                   "&:hover": {
                     backgroundColor: colors.blueAccent[600],
                     boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
