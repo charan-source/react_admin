@@ -65,10 +65,10 @@ const Topbar = () => {
   const logoSrc = theme.palette.mode === "dark" ? logoDark : logoLight;
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" px={2} sx={{ overflowX: "hidden" }}>
+    <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" padding={2} sx={{ overflowX: "hidden", background:colors.primary[400] }}>
       <Box display="flex" alignItems="center" flexShrink={0}>
         {isMobile ? (
-        <Box sx={{ maxWidth: "120px", height: "50px" }}>
+        <Box sx={{ maxWidth: "180px", height: "50px" }}>
           <img src={logoSrc} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </Box>
         ) : (

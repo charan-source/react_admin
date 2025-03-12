@@ -20,11 +20,11 @@ import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import Calendar from "./scenes/calendar/calendar";
 import Profile from "./scenes/profile";
-// Import Experience Pages with Correct Naming
 import AllExperiences from "./scenes/experiences/allExperiences";
 import NewExperiences from "./scenes/experiences/newExperiences";
 import PendingExperiences from "./scenes/experiences/pendingExperiences";
 import ResolvedExperiences from "./scenes/experiences/resolvedExperiences";
+
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -34,46 +34,62 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box display="flex" height="100vh">
-          {/* Sidebar: Hide in Mobile */}
-          {!isMobile && isSidebar && <Sidebar isSidebar={isSidebar} />}
 
-          {/* Main Content: Adjust for Mobile */}
+        {/* Topbar: Full width at the top */}
+        <Box sx={{ width: "100vw",  top: 5, zIndex: 1000 }}>
+          <Topbar setIsSidebar={setIsSidebar} />
+        </Box>
+
+        {/* Sidebar: Fixed on the left */}
+        {!isMobile && isSidebar && (
           <Box
-            component="main"
             sx={{
-              flexGrow: 1,
-              marginLeft: isMobile ? "0px" : (isSidebar ? "250px" : "0px"), 
-              padding: "20px",
-              overflowY: "auto",
-              transition: "margin 0.3s ease-in-out",
+              position: "fixed",
+              left: 0,
+              top: "64px", // Below Topbar
+              height: "calc(100vh - 64px)", // Full height minus Topbar height
+              width: "250px",
+              zIndex: 900, // Lower than Topbar
             }}
           >
-            <Topbar setIsSidebar={setIsSidebar} />
-            <Routes>
-          <Route path="/" element={<Dashboard />} />
-              <Route path="/cm" element={<Cm />} />
-              <Route path="/crm" element={<Crm />} />
-              <Route path="/hob" element={<Hob />} />
-              <Route path="/form" element={<Form />} />
-              <Route path="/cmform" element={<CmForm />} />
-              <Route path="/crmform" element={<CrmForm />} />
-              <Route path="/bsuform" element={<BsuForm />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
-              <Route path="/profile" element={<Profile />} />
-              
-              {/* Corrected Experience Routes */}
-              <Route path="/allExperiences" element={<AllExperiences />} />
-              <Route path="/newExperiences" element={<NewExperiences />} />
-              <Route path="/pendingExperiences" element={<PendingExperiences />} />
-              <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
-            </Routes>
+            <Sidebar isSidebar={isSidebar} />
           </Box>
+        )}
+
+        {/* Main Content */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            marginLeft: isMobile ? "0px" : isSidebar ? "250px" : "0px",
+            padding: "20px 20px 20px", // Top padding increased to prevent overlap
+            overflowY: "auto",
+            transition: "margin 0.3s ease-in-out",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/cm" element={<Cm />} />
+            <Route path="/crm" element={<Crm />} />
+            <Route path="/hob" element={<Hob />} />
+            <Route path="/form" element={<Form />} />
+            <Route path="/cmform" element={<CmForm />} />
+            <Route path="/crmform" element={<CrmForm />} />
+            <Route path="/bsuform" element={<BsuForm />} />
+            <Route path="/bar" element={<Bar />} />
+            <Route path="/pie" element={<Pie />} />
+            <Route path="/line" element={<Line />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/geography" element={<Geography />} />
+            <Route path="/profile" element={<Profile />} />
+
+            {/* Experience Routes */}
+            <Route path="/allExperiences" element={<AllExperiences />} />
+            <Route path="/newExperiences" element={<NewExperiences />} />
+            <Route path="/pendingExperiences" element={<PendingExperiences />} />
+            <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
+          </Routes>
         </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
