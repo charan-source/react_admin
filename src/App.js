@@ -35,46 +35,49 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box display="flex" height="100vh">
-          {/* Sidebar: Hide in Mobile */}
-          {!isMobile && isSidebar && <Sidebar isSidebar={isSidebar} />}
+  {/* Sidebar: Hide in Mobile */}
+  {!isMobile && isSidebar && <Sidebar isSidebar={isSidebar} />}
 
-          {/* Main Content: Adjust for Mobile */}
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              marginLeft: isMobile ? "0px" : (isSidebar ? "250px" : "0px"), 
-              padding: "20px",
-              overflowY: "auto",
-              transition: "margin 0.3s ease-in-out",
-            }}
-          >
-            <Topbar setIsSidebar={setIsSidebar} />
-            <Routes>
-          <Route path="/" element={<Dashboard />} />
-              <Route path="/cm" element={<Cm />} />
-              <Route path="/crm" element={<Crm />} />
-              <Route path="/hob" element={<Hob />} />
-              <Route path="/form" element={<Form />} />
-              <Route path="/cmform" element={<CmForm />} />
-              <Route path="/crmform" element={<CrmForm />} />
-              <Route path="/bsuform" element={<BsuForm />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} />
-              <Route path="/profile" element={<Profile />} />
-              
-              {/* Corrected Experience Routes */}
-              <Route path="/allExperiences" element={<AllExperiences />} />
-              <Route path="/newExperiences" element={<NewExperiences />} />
-              <Route path="/pendingExperiences" element={<PendingExperiences />} />
-              <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
-            </Routes>
-          </Box>
-        </Box>
+  <Box display="flex" flexDirection="column" flexGrow={1}>
+    {/* Topbar: Always Visible */}
+    <Topbar setIsSidebar={setIsSidebar} />
+
+    {/* Main Content */}
+    <Box
+  component="main"
+  sx={{
+    flexGrow: 1,
+    marginLeft: isMobile ? "0px" : isSidebar ? "250px" : "0px",
+    padding: "20px",
+    overflowY: "auto",  // Ensures scrolling when content overflows
+    overflowX: "hidden", // Prevents horizontal scrolling
+    transition: "margin 0.3s ease-in-out",
+  }}
+>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/cm" element={<Cm />} />
+        <Route path="/crm" element={<Crm />} />
+        <Route path="/hob" element={<Hob />} />
+        <Route path="/form" element={<Form />} />
+        <Route path="/cmform" element={<CmForm />} />
+        <Route path="/crmform" element={<CrmForm />} />
+        <Route path="/bsuform" element={<BsuForm />} />
+        <Route path="/bar" element={<Bar />} />
+        <Route path="/pie" element={<Pie />} />
+        <Route path="/line" element={<Line />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/geography" element={<Geography />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/allExperiences" element={<AllExperiences />} />
+        <Route path="/newExperiences" element={<NewExperiences />} />
+        <Route path="/pendingExperiences" element={<PendingExperiences />} />
+        <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
+      </Routes>
+    </Box>
+  </Box>
+</Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

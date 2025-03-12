@@ -2,31 +2,16 @@ import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal } from "@mu
 import { useState, useContext, useEffect } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
-import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-// import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
-// import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-// import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-// import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-// import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-// import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-// import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-// import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-// import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-// import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-// import { Tooltip } from "@mui/material";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined"; // For "Customer Manager"
-import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined"; // For "Customer Relationship Manager"
-import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined"; // For "Head of the Business"
-// import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
+import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import logoLight from "./logo.png";
 import logoDark from "./logo2.png";
 import { useNavigate } from "react-router-dom";
@@ -34,8 +19,7 @@ import { useNavigate } from "react-router-dom";
 const MenuItemComponent = ({ title, to, icon, selected, setSelected, closeDrawer }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-  const isActive = selected === to; // Check if the item is active
+  const isActive = selected === to;
 
   return (
     <Box
@@ -44,26 +28,23 @@ const MenuItemComponent = ({ title, to, icon, selected, setSelected, closeDrawer
       sx={{
         padding: "12px 16px",
         cursor: "pointer",
-        color: isActive ? "#fff" : colors.grey[100], // White color for active item
+        color: isActive ? "#fff" : colors.grey[100],
         backgroundColor: isActive ? colors.blueAccent[700] : "inherit",
         "&:hover": { backgroundColor: colors.grey[800] },
       }}
       onClick={() => {
         setSelected(to);
         localStorage.setItem("selectedSidebarItem", to);
-        closeDrawer(); // Close modal on selection
+        closeDrawer();
       }}
     >
-      <Box sx={{ color: isActive ? "#fff" : "inherit" }}> {/* Ensures icon color changes */}
-        {icon}
-      </Box>
+      <Box sx={{ color: isActive ? "#fff" : "inherit" }}>{icon}</Box>
       <Typography sx={{ marginLeft: 2 }}>
         <Link to={to} style={{ textDecoration: "none", color: isActive ? "#fff" : "inherit" }}>{title}</Link>
       </Typography>
     </Box>
   );
 };
-
 
 const Topbar = () => {
   const theme = useTheme();
@@ -76,31 +57,25 @@ const Topbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Sync the selected state with the current route path
     setSelected(location.pathname);
     sessionStorage.setItem("selectedSidebarItem", location.pathname);
-  }, [location.pathname]); // Trigger effect when route changes
+  }, [location.pathname]);
 
   const logoSrc = theme.palette.mode === "dark" ? logoDark : logoLight;
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2} alignItems="center" backgroundColor={colors.primary[400]} >
-      {isMobile ? (
-        <Box sx={{ width: "100%", height: "50px" }}>
+    <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" px={2} sx={{ overflowX: "hidden" }}>
+      <Box display="flex" alignItems="center" flexShrink={0}>
+        <Box sx={{ maxWidth: "120px", height: "50px" }}>
           <img src={logoSrc} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </Box>
-      ) : (
-        <Box backgroundColor={colors.primary[400]} borderRadius="3px">
-          <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" type="hidden" />
-        </Box>
-      )}
-
-      <Box display="flex">
+      </Box>
+      <Box display="flex" alignItems="center" flexShrink={0}>
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
         </IconButton>
-        <IconButton>
-          <PersonOutlinedIcon onClick = {() => navigate('profile')} />
+        <IconButton onClick={() => navigate("profile")}>
+          <PersonOutlinedIcon />
         </IconButton>
         {isMobile && (
           <IconButton onClick={() => setIsModalOpen(true)}>
@@ -113,7 +88,7 @@ const Topbar = () => {
         <Box width="250px" sx={{ background: colors.primary[400], height: "100vh", position: "absolute", left: 0, top: 0, padding: "20px" }}>
           <MenuItemComponent title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
           <MenuItemComponent title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-          <MenuItemComponent   title={ <Typography>  Customer Relationship <br /> Manager </Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+          <MenuItemComponent title={<Typography>  Customer Relationship <br /> Manager </Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
           <MenuItemComponent title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
           <MenuItemComponent title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
           <MenuItemComponent title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
