@@ -84,7 +84,7 @@ const Invoices = () => {
           },
         }}
       >
-        Add Head of the business
+        + Add Head of the business
       </Button>
       <Box
         m="40px 0 0 0"
