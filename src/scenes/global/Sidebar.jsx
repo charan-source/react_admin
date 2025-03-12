@@ -5,21 +5,10 @@ import { Link, useLocation } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-// import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-// import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-// import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-// import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-// import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-// import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-// import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-// import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-// import { Tooltip } from "@mui/material";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined"; // For "Customer Manager"
-import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined"; // For "Customer Relationship Manager"
-import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined"; // For "Head of the Business"
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
+import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import logoLight from "./logo.png";
 import logoDark from "./logo2.png";
@@ -38,7 +27,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       }}
       onClick={() => {
         setSelected(to);
-        localStorage.setItem("selectedSidebarItem", to);
+        sessionStorage.setItem("selectedSidebarItem", to); // Changed to sessionStorage
       }}
       icon={<Box sx={{ display: "flex", alignItems: "center", background: "none" }}>{icon}</Box>}
     >
@@ -54,46 +43,32 @@ const Sidebar = ({ isSidebar }) => {
   const isMobile = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
   const [selected, setSelected] = useState(location.pathname);
-  // const [isCollapsed, setIsCollapsed] = useState(false);
-
 
   useEffect(() => {
-    const storedItem = localStorage.getItem("selectedSidebarItem");
-    if (storedItem) {
-      setSelected(storedItem);
-    }
-  }, [location.pathname]);
+    // Sync the selected state with the current route path
+    setSelected(location.pathname);
+    sessionStorage.setItem("selectedSidebarItem", location.pathname);
+  }, [location.pathname]); // Trigger effect when route changes
 
   const logoSrc = theme.palette.mode === "dark" ? logoDark : logoLight;
 
   return (
-      <Box
+    <Box
       sx={{
         position: isMobile ? "absolute" : "fixed",
         left: 0,
         top: 0,
-        width: "270px", // Removed isCollapsed check
+        width: "270px",
         height: "100vh",
         background: colors.primary[400],
         display: "flex",
         flexDirection: "column",
         zIndex: isMobile ? 1300 : 1,
-
-        "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`,
-        },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
-        },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
-        },
-        "& .pro-inner-item:hover": {
-          color: "#868dfb !important",
-        },
-        "& .pro-menu-item.active": {
-          color: "#fff !important",
-        },
+        "& .pro-sidebar-inner": { background: `${colors.primary[400]} !important` },
+        "& .pro-icon-wrapper": { backgroundColor: "transparent !important" },
+        "& .pro-inner-item": { padding: "5px 35px 5px 20px !important" },
+        "& .pro-inner-item:hover": { color: "#868dfb !important" },
+        "& .pro-menu-item.active": { color: "#fff !important" },
       }}
     >
       <Box alignItems="center" sx={{ width: "100%", padding: "20px" }}>
@@ -104,10 +79,10 @@ const Sidebar = ({ isSidebar }) => {
         <Menu iconShape="square" style={{ padding: "20px", borderRadius: "20px" }}>
           <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item   title={ <Typography>  Customer Relationship <br /> Manager </Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title={<Typography> Customer Relationship <br /> Manager </Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Logout" icon={<LogoutOutlinedIcon  />} selected={selected} setSelected={setSelected} />
+          <Item title="Logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
         </Menu>
       </ProSidebar>
     </Box>

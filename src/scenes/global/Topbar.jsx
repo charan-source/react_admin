@@ -76,18 +76,17 @@ const Topbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedItem = localStorage.getItem("selectedSidebarItem");
-    if (storedItem) {
-      setSelected(storedItem);
-    }
-  }, [location.pathname]); // Sync when URL changes
+    // Sync the selected state with the current route path
+    setSelected(location.pathname);
+    sessionStorage.setItem("selectedSidebarItem", location.pathname);
+  }, [location.pathname]); // Trigger effect when route changes
 
   const logoSrc = theme.palette.mode === "dark" ? logoDark : logoLight;
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2} alignItems="center" backgroundColor={colors.primary[400]} sx={{ marginLeft: "20px" }}>
+    <Box display="flex" justifyContent="space-between" p={2} alignItems="center" backgroundColor={colors.primary[400]} >
       {isMobile ? (
-        <Box sx={{ width: "150px", height: "50px" }}>
+        <Box sx={{ width: "100%", height: "50px" }}>
           <img src={logoSrc} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </Box>
       ) : (
