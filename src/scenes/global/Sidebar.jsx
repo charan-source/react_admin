@@ -79,7 +79,7 @@ const Sidebar = ({ isSidebar }) => {
         <Menu iconShape="square" style={{ padding: "20px", borderRadius: "20px" }}>
           <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title={<Typography> Customer Relationship <br /> Manager </Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title={ <div style={{ fontWeight: "bold", textAlign: "flex-start" }}> Customer Relationship <br /> Manager</div>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
           <Item title="Logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
