@@ -24,7 +24,7 @@ const CmForm = () => {
     state: "",
     country: "",
     email: "",
-    contact: "",
+    PhoneNo: "",
     // subject: "",
   };
 
@@ -38,7 +38,7 @@ const CmForm = () => {
     state: yup.string().required("Required"),
     country: yup.string().required("Required"),
     email: yup.string().email("Invalid email").required("Required"),
-    contact: yup
+    PhoneNo: yup
       .string()
       .matches(/^[0-9]+$/, "Only numbers are allowed")
       .min(10, "Must be at least 10 digits")
@@ -90,7 +90,7 @@ const CmForm = () => {
                 { label: "State", name: "state" },
                 { label: "Country", name: "country" },
                 { label: "Email Id", name: "email", type: "email" },
-                { label: "Contact", name: "contact", type: "text" },
+                { label: "Phone No", name: "PhoneNo", type: "text" },
                 // { label: "Subject", name: "subject" },
               ].map((field, index) => (
                 <TextField
@@ -123,7 +123,7 @@ const CmForm = () => {
                     transition: "0.3s",
                     backgroundColor: colors.blueAccent[700],
                     textTransform:"none",
-                    
+
                     "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
                   }}
                 >
