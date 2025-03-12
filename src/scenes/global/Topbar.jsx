@@ -16,6 +16,7 @@ import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import logoLight from "./logo.png";
 import logoDark from "./logo2.png";
 import { useNavigate } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 const MenuItemComponent = ({ title, to, icon, selected, setSelected, closeDrawer }) => {
   const theme = useTheme();
@@ -23,27 +24,31 @@ const MenuItemComponent = ({ title, to, icon, selected, setSelected, closeDrawer
   const isActive = selected === to;
 
   return (
-    <Box
-      display="flex"
-      // alignItems="center"
-      sx={{
-        padding: "12px 16px",
-        cursor: "pointer",
-        color: isActive ? "#fff" : colors.grey[100],
-        backgroundColor: isActive ? colors.blueAccent[700] : "inherit",
-        "&:hover": { backgroundColor: colors.grey[800] },
-      }}
-      onClick={() => {
-        setSelected(to);
-        localStorage.setItem("selectedSidebarItem", to);
-        closeDrawer();
-      }}
-    >
-      <Box sx={{ color: isActive ? "#fff" : "inherit" }}>{icon}</Box>
-      <Typography sx={{ marginLeft: 2 }}>
-        <Link to={to} style={{ textDecoration: "none", color: isActive ? "#fff" : "inherit" }}>{title}</Link>
-      </Typography>
-    </Box>
+<Link
+  to={to}
+  style={{ textDecoration: "none", width: "100%" }}
+  onClick={() => {
+    setSelected(to);
+    localStorage.setItem("selectedSidebarItem", to);
+    closeDrawer();
+  }}
+>
+  <Box
+    display="flex"
+    alignItems="center"
+    sx={{
+      padding: "12px 16px",
+      cursor: "pointer",
+      color: isActive ? "#fff" : colors.grey[100],
+      backgroundColor: isActive ? colors.blueAccent[700] : "inherit",
+      width:"100%",
+      "&:hover": { backgroundColor: colors.grey[800],  },
+    }}
+  >
+    <Box sx={{ color: isActive ? "#fff" : "inherit" }}>{icon}</Box>
+    <Typography sx={{ marginLeft: 2, color: "inherit" }}>{title}</Typography>
+  </Box>
+</Link>
   );
 };
 
