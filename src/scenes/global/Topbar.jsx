@@ -2,6 +2,7 @@ import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal } from "@mu
 import { useState, useContext, useEffect } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
+import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
@@ -66,9 +67,15 @@ const Topbar = () => {
   return (
     <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" px={2} sx={{ overflowX: "hidden" }}>
       <Box display="flex" alignItems="center" flexShrink={0}>
+        {isMobile ? (
         <Box sx={{ maxWidth: "120px", height: "50px" }}>
           <img src={logoSrc} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </Box>
+        ) : (
+          <Box backgroundColor={colors.primary[400]} borderRadius="3px">
+          <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" type="hidden" />
+        </Box>
+        ) }
       </Box>
       <Box display="flex" alignItems="center" flexShrink={0}>
         <IconButton onClick={colorMode.toggleColorMode}>
@@ -85,15 +92,30 @@ const Topbar = () => {
       </Box>
 
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Box width="250px" sx={{ background: colors.primary[400], height: "100vh", position: "absolute", left: 0, top: 0, padding: "20px" }}>
-          <MenuItemComponent title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-          <MenuItemComponent title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-          <MenuItemComponent title={<Typography>  Customer Relationship <br /> Manager </Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-          <MenuItemComponent title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-          <MenuItemComponent title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-          <MenuItemComponent title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
-        </Box>
-      </Modal>
+  <Box
+    width="250px"
+    sx={{
+      background: colors.primary[400],
+      height: "100vh",
+      position: "absolute",
+      left: 0,
+      top: 0,
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center", // Ensures items are adjusted within the modal
+      alignItems: "flex-start",
+      overflow: "hidden", // Prevents scrolling
+    }}
+  >
+    <MenuItemComponent title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+    <MenuItemComponent title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+    <MenuItemComponent title={<Typography>Customer Relationship <br /> Manager</Typography>} to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+    <MenuItemComponent title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+    <MenuItemComponent title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+    <MenuItemComponent title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+  </Box>
+</Modal>
     </Box>
   );
 };
