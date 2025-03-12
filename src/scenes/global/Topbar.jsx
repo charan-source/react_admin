@@ -25,7 +25,7 @@ const MenuItemComponent = ({ title, to, icon, selected, setSelected, closeDrawer
   return (
     <Box
       display="flex"
-      alignItems="center"
+      // alignItems="center"
       sx={{
         padding: "12px 16px",
         cursor: "pointer",
@@ -103,7 +103,7 @@ const Topbar = () => {
       padding: "20px",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "center", // Ensures items are adjusted within the modal
+      // justifyContent: "center", // Ensures items are adjusted within the modal
       alignItems: "flex-start",
       overflow: "hidden", // Prevents scrolling
     }}
