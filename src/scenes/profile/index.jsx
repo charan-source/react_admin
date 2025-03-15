@@ -31,7 +31,7 @@ const Profile = () => {
         borderRadius={3} 
         boxShadow="4px 4px 10px rgba(0, 0, 0, 0.15)"
         sx={{
-          bgcolor: colors.primary[400],
+          bgcolor: "#ffffff",
           width: { xs: "95%", sm: "80%", md: "60%", lg: "50%" },
         }}
       >

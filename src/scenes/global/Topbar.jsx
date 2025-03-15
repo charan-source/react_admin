@@ -29,6 +29,7 @@ const getActivePage = (pathname) => {
     pathname === "/" ||
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
+    pathname.includes("/profile") ||
     pathname.includes("/pendingExperiences") ||
     pathname.includes("/resolvedExperiences")
   ) {
@@ -112,6 +113,8 @@ const Topbar = () => {
         return "Pending Experiences";
       case "/resolvedExperiences":
         return "Resolved Experiences";
+        case "/profile":
+          return "Profile";
       case "/notes":
         return "Notes";
       case "/calendar":
@@ -382,7 +385,7 @@ const Topbar = () => {
               </Typography>
               <Box display="flex">
                 <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px" }}>
-                  <HomeOutlinedIcon onClick={() => navigate('/')} /> /
+                  <HomeOutlinedIcon onClick={() => navigate('/')} sx={{cursor:"pointer"}} /> /
                 </Typography>
                 <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px" }}>
                   {getPageTitle()}

@@ -27,6 +27,7 @@ const getActivePage = (pathname) => {
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
     pathname.includes("/pendingExperiences") ||
+    pathname.includes("/profile") ||
     pathname.includes("/resolvedExperiences")
   ) {
     return "/"; // Dashboard is active for these routes
