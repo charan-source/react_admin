@@ -1,4 +1,4 @@
-import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal, Backdrop } from "@mui/material";
+import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal, Backdrop, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { useState, useEffect } from "react";
 import { tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
@@ -21,10 +21,9 @@ const getActivePage = (pathname) => {
     return "/cm";
   } else if (pathname.includes("/hob") || pathname.includes("/form")) {
     return "/hob";
-  }
-  else if (pathname.includes("/notes")) {
+  } else if (pathname.includes("/notes")) {
     return "/notes";
-   } else if (pathname.includes("/calendar")) {
+  } else if (pathname.includes("/calendar")) {
     return "/calendar";
   } else if (
     pathname === "/" ||
@@ -37,6 +36,47 @@ const getActivePage = (pathname) => {
   } else {
     return pathname;
   }
+};
+
+// Sidebar Item Component (Reused from Sidebar)
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  return (
+    <ListItem
+      button
+      component={Link}
+      to={to}
+      selected={selected === to}
+      onClick={() => {
+        setSelected(to);
+        sessionStorage.setItem("selectedSidebarItem", to);
+      }}
+      sx={{
+        color: selected === to ? "white" : colors.blueAccent[500],
+        fontWeight: selected === to ? "bold" : "regular",
+        backgroundColor: selected === to ? colors.blueAccent[700] : "inherit",
+        borderRadius: "10px",
+        marginBottom: "8px",
+        "&:hover": {
+          backgroundColor: selected === to ? "#3e4396 !important" : "none", // Ensure no hover effect
+          color: selected === to ? "white" : colors.blueAccent[500],
+        },
+      }}
+    >
+      <ListItemIcon sx={{ color: "inherit" }}>{icon}</ListItemIcon>
+      <ListItemText
+        primary={title}
+        sx={{
+          "& .MuiTypography-root": { // Target the nested Typography component
+            fontWeight: "bold !important", // Ensure text is bold for selected item
+            fontSize: "15px",
+          },
+        }}
+      />
+    </ListItem>
+  );
 };
 
 const Topbar = () => {
@@ -382,100 +422,22 @@ const Topbar = () => {
             boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
           }}
         >
-          <MenuItem
-            title="Dashboard"
-            to="/"
-            icon={<HomeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Customer Manager"
-            to="/cm"
-            icon={<PeopleAltOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
+          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item
             title="Customer Relationship Manager"
             to="/crm"
             icon={<HandshakeOutlinedIcon />}
             selected={selected}
             setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
           />
-          <MenuItem
-            title="Head of the Business"
-            to="/hob"
-            icon={<BusinessOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Notes"
-            to="/notes"
-            icon={<BusinessOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Calendar"
-            to="/calendar"
-            icon={<CalendarTodayOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Logout"
-            to="/logout"
-            icon={<LogoutOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
+          <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
         </Box>
       </Modal>
     </Box>
-  );
-};
-
-const MenuItem = ({ title, to, icon, selected, setSelected, closeDrawer }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const isActive = selected === to;
-
-  return (
-    <Link
-      to={to}
-      style={{ textDecoration: "none", width: "100%" }}
-      onClick={() => {
-        setSelected(to);
-        sessionStorage.setItem("selectedSidebarItem", to);
-        closeDrawer();
-      }}
-    >
-      <Box
-        display="flex"
-        alignItems="center"
-        sx={{
-          padding: "12px 16px",
-          cursor: "pointer",
-          borderRadius: 3,
-          color: isActive ? "#fff" : colors.grey[100],
-          backgroundColor: isActive ? colors.blueAccent[700] : "inherit",
-          width: "100%",
-          "&:hover": { backgroundColor: colors.grey[800] },
-        }}
-      >
-        <Box sx={{ color: isActive ? "#fff" : "inherit" }}>{icon}</Box>
-        <Typography sx={{ marginLeft: 2, color: "inherit", fontWeight: "bold", fontSize: "15px" }}>{title}</Typography>
-      </Box>
-    </Link>
   );
 };
 

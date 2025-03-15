@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
@@ -20,12 +18,11 @@ const getActivePage = (pathname) => {
     return "/cm";
   } else if (pathname.includes("/hob") || pathname.includes("/form")) {
     return "/hob";
-  }
-  else if (pathname.includes("/notes")) {
+  } else if (pathname.includes("/notes")) {
     return "/notes";
-   }  else if (pathname.includes("/calendar")) {
+  } else if (pathname.includes("/calendar")) {
     return "/calendar";
-  }else if (
+  } else if (
     pathname === "/" ||
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
@@ -44,29 +41,38 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   const colors = tokens(theme.palette.mode);
 
   return (
-    <MenuItem
-      active={selected === to}
-      style={{
-        color: selected === to ? "white" : colors.blueAccent[500],
-        fontWeight: selected === to ? "bold" : "regular",
-        backgroundColor: selected === to ? colors.blueAccent[700] : "inherit",
-        transition: "background-color 0.3s ease",
-        borderRadius: 10,
-        "&:hover": {
-          backgroundColor: colors.blueAccent[300],
-          color: "white",
-        },
-      }}
+    <ListItem
+      button
+      component={Link}
+      to={to}
+      selected={selected === to}
       onClick={() => {
         setSelected(to);
         sessionStorage.setItem("selectedSidebarItem", to);
       }}
-      icon={<Box sx={{ display: "flex", alignItems: "center", background: "none" }}>{icon}</Box>}
+      sx={{
+        color: selected === to ? "white" : colors.blueAccent[500],
+        fontWeight: selected === to ? "bold" : "regular",
+        backgroundColor: selected === to ? colors.blueAccent[700] : "inherit",
+        borderRadius: "10px",
+        marginBottom: "8px",
+        "&:hover": {
+          backgroundColor: selected === to ? "#3e4396 !important" : "none", // Ensure no hover effect
+          color: selected === to ? "white" : colors.blueAccent[500],
+        },
+      }}
     >
-      <Link to={to} style={{ textDecoration: "none", color: "inherit" }}>
-        <Typography sx={{ fontWeight: "bold", fontSize: "15px" }}>{title}</Typography>
-      </Link>
-    </MenuItem>
+      <ListItemIcon sx={{ color: "inherit" }}>{icon}</ListItemIcon>
+      <ListItemText
+        primary={title}
+        sx={{
+          "& .MuiTypography-root": { // Target the nested Typography component
+            fontWeight: "bold !important", // Ensure text is bold for selected item
+            fontSize: "14px",
+          },
+        }}
+      />
+    </ListItem>
   );
 };
 
@@ -74,7 +80,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = ({ isSidebar }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const isMobile = useMediaQuery("(max-width: 900px)");
+  // const isMobile = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
   const [selected, setSelected] = useState(getActivePage(location.pathname));
 
@@ -86,21 +92,16 @@ const Sidebar = ({ isSidebar }) => {
   const logoSrc = logoLight;
 
   return (
-    <Box
+    <Drawer
+      variant="permanent"
       sx={{
-        position: isMobile ? "absolute" : "fixed",
-        left: 0,
-        top: 0,
-        width: "270px",
-        height: "100vh",
-        background: colors.primary[500],
-        display: "flex",
-        flexDirection: "column",
-        zIndex: isMobile ? 1300 : 1,
-        "& .pro-sidebar-inner": { background: "#ffffff !important" },
-        "& .pro-icon-wrapper": { backgroundColor: "transparent !important" },
-        "& .pro-inner-item": { padding: "5px 35px 5px 20px !important" },
-        "& .pro-menu-item.active": { color: "#fff !important" },
+        // width: "260px", // Increased width from 270px to 300px
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          width: "265px", // Increased width from 270px to 300px
+          boxSizing: "border-box",
+          background: colors.primary[500],
+        },
       }}
     >
       {/* Sidebar Logo */}
@@ -117,28 +118,23 @@ const Sidebar = ({ isSidebar }) => {
         <img src={logoSrc} alt="logo" style={{ width: "100%", cursor: "pointer" }} />
       </Box>
 
-      <ProSidebar>
-        <Menu iconShape="square" style={{ padding: "20px", borderRadius: "20px" }}>
-          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item
-            title={
-              <div style={{ fontWeight: "bold", textAlign: "flex-start" }}>
-                Customer Relationship <br /> Manager
-              </div>
-            }
-            to="/crm"
-            icon={<HandshakeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-           <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        </Menu>
-      </ProSidebar>
-    </Box>
+      {/* Menu Items */}
+      <List sx={{ padding: "20px" }}>
+        <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item
+          title="Customer Relationship Manager"
+          to="/crm"
+          icon={<HandshakeOutlinedIcon />}
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
+      </List>
+    </Drawer>
   );
 };
 

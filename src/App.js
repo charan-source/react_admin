@@ -49,7 +49,7 @@ function App() {
               left: 0,
               top: "64px", // Below Topbar
               height: "calc(100vh - 64px)", // Full height minus Topbar height
-              width: "250px",
+              width: "260px",
               zIndex: 900, // Lower than Topbar
             }}
           >
@@ -62,7 +62,7 @@ function App() {
           component="main"
           sx={{
             flexGrow: 1,
-            marginLeft: isMobile ? "0px" : isSidebar ? "250px" : "0px",
+            marginLeft: isMobile ? "0px" : isSidebar ? "260px" : "0px",
             padding: "20px 20px 20px", // Top padding increased to prevent overlap
             overflowY: "auto",
             transition: "margin 0.3s ease-in-out",
