@@ -2,7 +2,7 @@ import { Box, Button, TextField, useMediaQuery, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Header from "../../components/Header";
+// import Header from "../../components/Header";
 
 
 const CmForm = () => {
@@ -66,18 +66,22 @@ const CmForm = () => {
   };
 
   return (
-    <Box m="20px">
-      <Header title="Create CM" subtitle="Create a New Customer Manager Profile" />
+    <Box m="20px" sx={{ backgroundColor:"#ffffff", padding:"20px"
 
-      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
+    }}>
+      {/* <Header title="Create CM" subtitle="Create a New Customer Manager Profile" /> */}
+
+      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit} sx={{backgroundColor:"#ffffff"}}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <Box
               display="grid"
               gap="20px"
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? "span 4" : undefined },
+               backgroundColor:"#ffffff",
+               padding:"20px"
               }}
             >
               {[
@@ -115,13 +119,14 @@ const CmForm = () => {
                   type="submit"
                   variant="contained"
                   sx={{
-                    padding: "12px 20px",
-                    fontSize: "1.2rem",
+                    padding: "12px 24px",
+                    fontSize: "14px",
                     fontWeight: "bold",
                     borderRadius: "8px",
                     boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
                     transition: "0.3s",
                     backgroundColor: colors.blueAccent[700],
+                    color:"#ffffff",
                     textTransform:"none",
 
                     "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },

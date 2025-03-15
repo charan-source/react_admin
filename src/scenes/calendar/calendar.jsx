@@ -10,14 +10,14 @@ import {
   ListItem,
   ListItemText,
   Typography,
-  useTheme,
+  // useTheme,
 } from "@mui/material";
-import Header from "../../components/Header";
-import { tokens } from "../../theme";
+// import Header from "../../components/Header";
+// import { tokens } from "../../theme";
 
 const Calendar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  // const theme = useTheme();
+  // const colors = tokens(theme.palette.mode);
   const [currentEvents, setCurrentEvents] = useState([]);
 
   const handleDateClick = (selected) => {
@@ -47,14 +47,14 @@ const Calendar = () => {
   };
 
   return (
-    <Box m="20px">
-      <Header title="Calendar" subtitle="Full Calendar Interactive Page" />
+    <Box m="20px"  sx={{backgroundColor:"#ffffff"}} >
+      {/* <Header title="Calendar" subtitle="Full Calendar Interactive Page" /> */}
 
       <Box display="flex" justifyContent="space-between">
         {/* CALENDAR SIDEBAR */}
         <Box
           flex="1 1 20%"
-          backgroundColor={colors.primary[400]}
+          backgroundColor= '#ffffff'
           p="15px"
           borderRadius="4px"
         >
@@ -64,7 +64,7 @@ const Calendar = () => {
               <ListItem
                 key={event.id}
                 sx={{
-                  backgroundColor: colors.blueAccent[500],
+                  backgroundColor: '#e8ecf1',
                   margin: "10px 0",
                   borderRadius: "2px",
                 }}

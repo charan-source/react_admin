@@ -2,12 +2,13 @@ import { Box, Button, TextField, useMediaQuery, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Header from "../../components/Header";
+// import Header from "../../components/Header";
+
 
 const Form = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
-  const colors = tokens(theme.palette.mode);
+  const colors = tokens(theme.palette.mode); // Get theme colors
 
   const handleFormSubmit = (values) => {
     console.log("Form Data:", values);
@@ -65,18 +66,22 @@ const Form = () => {
   };
 
   return (
-    <Box m="20px">
-      <Header title="Create HOB" subtitle="Create a New Customer Manager Profile" />
+    <Box m="20px" sx={{ backgroundColor:"#ffffff", padding:"20px"
 
-      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
+    }}>
+      {/* <Header title="Create CM" subtitle="Create a New Customer Manager Profile" /> */}
+
+      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit} sx={{backgroundColor:"#ffffff"}}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <Box
               display="grid"
-              gap="24px" // Increased spacing between inputs
+              gap="20px"
               gridTemplateColumns="repeat(4, minmax(0, 1fr))"
               sx={{
                 "& > div": { gridColumn: isNonMobile ? "span 4" : undefined },
+               backgroundColor:"#ffffff",
+               padding:"20px"
               }}
             >
               {[
@@ -90,7 +95,7 @@ const Form = () => {
                 { label: "Country", name: "country" },
                 { label: "Email Id", name: "email", type: "email" },
                 { label: "Phone No", name: "PhoneNo", type: "text" },
-                { label: "Subject", name: "subject" },
+                // { label: "Subject", name: "subject" },
               ].map((field, index) => (
                 <TextField
                   key={index}
@@ -109,29 +114,28 @@ const Form = () => {
               ))}
             </Box>
 
-            {/* Button with more spacing */}
             <Box display="flex" justifyContent="flex-end" mt="24px">
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  padding: "12px 20px",
-                  fontSize: "1.2rem",
-                  fontWeight: "bold",
-                  borderRadius: "8px",
-                  boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
-                  transition: "0.3s",
-                  backgroundColor: colors.blueAccent[700],
-                  textTransform:"none",
-                  "&:hover": {
-                    backgroundColor: colors.blueAccent[600],
-                    boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
-                  },
-                }}
-              >
-                Create 
-              </Button>
-            </Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    padding: "12px 24px",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    borderRadius: "8px",
+                    boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                    transition: "0.3s",
+                    backgroundColor: colors.blueAccent[700],
+                    color:"#ffffff",
+                    textTransform:"none",
+
+                    "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
+                  }}
+                >
+                  
+                  Create 
+                </Button>
+              </Box>
           </form>
         )}
       </Formik>

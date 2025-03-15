@@ -1,144 +1,263 @@
-import { Box, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import React, { useState } from "react";
+import {
+  Box,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  TextField,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
-import Header from "../../components/Header";
-import { useTheme } from "@mui/material";
+import { Search as SearchIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import InputBase from "@mui/material/InputBase";
+// import CmForm from "../cmform";
 
-const Invoices = () => {
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+const Hob = () => {
+  const colors = tokens("light");
+   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [tickets] = useState([
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },
+    {
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },  
 
-  const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
     {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      cellClassName: "name-column--cell",
-    },
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },  
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },  
     {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },  
     {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },  
     {
-      field: "address",
-      headerName: "Address",
-      flex: 1,
-    },
-    {
-      field: "city",
-      headerName: "City",
-      flex: 1,
-    },
-    {
-      field: "zipCode",
-      headerName: "Zip Code",
-      flex: 1,
-    },
-  ];
+      id: 616840,
+      name: "Satya Narayana",
+      email: "Satya@gmail.com",
+      phone: "1234567890",
+      city: "Visakhapatnam",
+      created: "14th March, 2025",
+    },  
+
+    // Add more ticket data here...
+  ]);
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Handle new ticket button click
+  // const handleNewTicket = () => {
+  //   alert("New ticket functionality to be implemented");
+  // };
 
   return (
-    <Box m="20px">
-      <Header
-        title="Head of Business Unit"
-        subtitle="List of Head of Business Unit"
-      />
-            <Button
-        variant="contained"
-        color="primary"
-        onClick={() => navigate("/form")}
-        sx={{
-          backgroundColor:  colors.blueAccent[700],
-          color: "#fff",
-          padding: "10px 20px",
-          fontWeight: "bold",
-          whiteSpace: "nowrap", // Prevent text from wrapping
-          width: { xs: "100%", sm: "auto" }, // Full width on small screens, auto on larger
-          marginLeft: { xs: "0", sm: "auto" }, // Centered on small, right-aligned on larger screens
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          "&:hover": {
-            backgroundColor: "#fff",
-            color: "#6870fa",
-          },
+    <Box>
+{isMobile ? (
+  <Box display="flex" flexDirection="column" justifyContent="space-between"  p={3} gap={2}>
+    <TextField
+      variant="outlined"
+      placeholder="Search..."
+      size="small"
+      sx={{
+        background: "#ffffff",
+        flexGrow: 1, // Makes input responsive
+        minWidth: "100px", // Minimum width for small screens
+        maxWidth: "600px", // Maximum width for large screens
+        padding: "5px 20px",
+        borderRadius: "8px",
+        "& fieldset": { border: "none" }, // Removes the border
+      }}
+      value={searchTerm}
+      onChange={handleSearchChange}
+      InputProps={{
+        startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
+      }}
+    />
+    <Button
+      variant="contained"
+      sx={{
+        background: colors.blueAccent[500],
+        color: "#ffffff",
+        width: "100%", // Fixed button width
+        height: "55px", // Fixed button height
+        borderRadius: "8px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        textTransform: "none",
+      }}
+      onClick={() => navigate('/form')}
+    >
+      Create New
+    </Button>
+  </Box>
+) : (
+  <Box display="flex" justifyContent="space-between" alignItems="center" p={3} gap={2}>
+    <TextField
+      variant="outlined"
+      placeholder="Search..."
+      size="small"
+      sx={{
+        background: "#ffffff",
+        flexGrow: 1, // Makes input responsive
+        minWidth: "100px", // Minimum width for small screens
+        maxWidth: "600px", // Maximum width for large screens
+        padding: "5px 20px",
+        borderRadius: "8px",
+        "& fieldset": { border: "none" }, // Removes the border
+      }}
+      value={searchTerm}
+      onChange={handleSearchChange}
+      InputProps={{
+        startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
+      }}
+    />
+    <Button
+      variant="contained"
+      sx={{
+        background: colors.blueAccent[500],
+        color: "#ffffff",
+        width: 127.69, // Fixed button width
+        height: 40, // Fixed button height
+        borderRadius: "4px",
+        fontSize: "14px",
+        fontWeight: "bold",
+        textTransform: "none",
+      }}
+      onClick={() => navigate('/form')}
+    >
+      Create New
+    </Button>
+  </Box>
+)}
+
+     <Box sx={{padding: isMobile ? 0 : 2}}>
+
+      {/* Responsive Table */}
+      <TableContainer component={Paper} sx={{ maxWidth: "100%", overflowX: "auto",
+         "&::-webkit-scrollbar": {
+          height: "4px", // Adjust scrollbar height
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#888", // Scrollbar color
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          backgroundColor: "#555",
+        },
         }}
       >
-        + Add Head of the business
-      </Button>
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-            color: "#fff",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
-        <Box
-        display="flex"
-        backgroundColor={colors.primary[400]}
-        borderRadius="3px"
-        // width="100px"
-      >
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton>
-     
-      </Box>
-        <DataGrid
-          rows={mockDataContacts}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-        />
+        <Table sx={{ minWidth: 650 }} aria-label="responsive table">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: colors.blueAccent[500] }}>
+              <TableCell sx={{ fontWeight: "bold", color: "#ffffff" }}>ID</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ffffff" }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ffffff" }}>Email</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ffffff" }}>Phone</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ffffff" }}>City</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "#ffffff" }}>Created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tickets.map((ticket) => (
+              <TableRow key={ticket.id}>
+                <TableCell sx={{ fontSize: "16px" }}>{ticket.id}</TableCell>
+                <TableCell sx={{ fontSize: "16px" }}>{ticket.name}</TableCell>
+                <TableCell sx={{ fontSize: "16px" }}>{ticket.email}</TableCell>
+                <TableCell sx={{ fontSize: "16px" }}>{ticket.phone}</TableCell>
+                <TableCell sx={{ fontSize: "16px" }}>{ticket.city}</TableCell>
+                <TableCell sx={{ fontSize: "16px" }}>{ticket.created}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       </Box>
     </Box>
   );
 };
 
-export default Invoices;
+export default Hob;
