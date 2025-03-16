@@ -352,7 +352,7 @@ const Topbar = () => {
               <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
                 <HomeOutlinedIcon
                   onClick={() => navigate("/")}
-                  fontSize="large"
+                  fontSize="small"
                   sx={{ cursor: "pointer" }}
                 />
                 <Typography> / </Typography>
