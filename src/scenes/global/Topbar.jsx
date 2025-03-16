@@ -113,8 +113,8 @@ const Topbar = () => {
         return "Pending Experiences";
       case "/resolvedExperiences":
         return "Resolved Experiences";
-        case "/profile":
-          return "Profile";
+      case "/profile":
+        return "Profile";
       case "/notes":
         return "Notes";
       case "/calendar":
@@ -349,8 +349,14 @@ const Topbar = () => {
               <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
                 {getPageTitle()}
               </Typography>
-              <Box sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px", alignItems: "center", gap: 1, justifyContent: "center" }}>
-                <HomeOutlinedIcon /> / {getPageTitle()}
+              <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
+                <HomeOutlinedIcon
+                  onClick={() => navigate("/")}
+                  fontSize="large"
+                  sx={{ cursor: "pointer" }}
+                />
+                <Typography> / </Typography>
+                <Typography>{getPageTitle()}</Typography>
               </Box>
             </Box>
           </Box>
@@ -383,13 +389,14 @@ const Topbar = () => {
               <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
                 {getPageTitle()}
               </Typography>
-              <Box display="flex">
-                <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px" }}>
-                  <HomeOutlinedIcon onClick={() => navigate('/')} sx={{cursor:"pointer"}} /> /
-                </Typography>
-                <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px" }}>
-                  {getPageTitle()}
-                </Typography>
+              <Box sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "14px", alignItems: "center", gap: 1, display: "flex" }}>
+              <HomeOutlinedIcon
+                  onClick={() => navigate("/")}
+                  fontSize="small"
+                  sx={{ cursor: "pointer" }}
+                />
+                <Typography> / </Typography>
+                <Typography>{getPageTitle()}</Typography>
               </Box>
             </Box>
           </Box>
