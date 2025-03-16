@@ -102,7 +102,7 @@ const Topbar = () => {
       case "/cmform":
         return "Create a New Customer Manager";
       case "/crmform":
-        return "Create a New Customer Relationship Manager";
+        return " Create a New Customer Relationship Manager";
       case "/form":
         return "Create a New Head of the Business Unit";
       case "/allExperiences":
@@ -122,7 +122,47 @@ const Topbar = () => {
       default:
         return "Page Not Found";
     }
-  };
+};
+const getPageTitle1 = () => {
+  switch (location.pathname) {
+    case "/":
+      return { primaryTitle: "Dashboard", secondaryTitle: null };
+    case "/cm":
+      return { primaryTitle: "Customer Manager", secondaryTitle: null };
+    case "/crm":
+      return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
+    case "/hob":
+      return { primaryTitle: "Head of The Business", secondaryTitle: null };
+    case "/cmform":
+      return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
+    case "/crmform":
+      return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
+    case "/form":
+      return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
+    case "/allExperiences":
+      return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
+    case "/newExperiences":
+      return { primaryTitle: "Experiences", secondaryTitle: "New Experiences" };
+    case "/pendingExperiences":
+      return { primaryTitle: "Experiences", secondaryTitle: "Pending Experiences" };
+    case "/resolvedExperiences":
+      return { primaryTitle: "Experiences", secondaryTitle: "Resolved Experiences" };
+    case "/profile":
+      return { primaryTitle: "Profile", secondaryTitle: null };
+    case "/notes":
+      return { primaryTitle: "Notes", secondaryTitle: null };
+    case "/calendar":
+      return { primaryTitle: "Calendar", secondaryTitle: null };
+    default:
+      return { primaryTitle: "Page Not Found", secondaryTitle: null };
+  }
+};
+
+
+const { primaryTitle, secondaryTitle } = getPageTitle1();
+
+// const pageTitle = getPageTitle();
+// const [primaryTitle, secondaryTitle] = pageTitle.includes(" / ") ? pageTitle.split(" / ") : [pageTitle, ""];
 
   // Sync selected state with sessionStorage
   useEffect(() => {
@@ -376,29 +416,34 @@ const Topbar = () => {
           >
             {/* Greeting Message */}
             <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "fit-content",
-                padding: "8px",
-                paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "center" : "left",
-              }}
-            >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
-                {getPageTitle()}
-              </Typography>
-              <Box sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "14px", alignItems: "center", gap: 1, display: "flex" }}>
-              <HomeOutlinedIcon
-                  onClick={() => navigate("/")}
-                  fontSize="small"
-                  sx={{ cursor: "pointer" }}
-                />
-                <Typography> / </Typography>
-                <Typography>{getPageTitle()}</Typography>
-              </Box>
-            </Box>
+  borderRadius="3px"
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    width: "fit-content",
+    padding: "8px",
+    paddingLeft: isMobile ? "12px" : "20px",
+  }}
+>
+  <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
+    {primaryTitle}
+  </Typography>
+  <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
+    <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+    <Typography> &gt; </Typography>
+    <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
+      {primaryTitle}
+    </Typography>
+    {secondaryTitle && (
+      <>
+        <Typography> &gt; </Typography>
+        <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
+          {secondaryTitle}
+        </Typography>
+      </>
+    )}
+  </Box>
+</Box>
           </Box>
         )}
       </Box>

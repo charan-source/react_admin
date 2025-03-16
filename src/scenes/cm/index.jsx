@@ -137,7 +137,7 @@ const Cm = () => {
   return (
     <Box>
 {isMobile ? (
-  <Box display="flex" flexDirection="column" justifyContent="space-between"  p={3} gap={2}>
+  <Box display="flex"  justifyContent="space-between"  p={3} gap={2}>
     <TextField
       variant="outlined"
       placeholder="Search..."
@@ -145,7 +145,7 @@ const Cm = () => {
       sx={{
         background: "#ffffff",
         flexGrow: 1, // Makes input responsive
-        minWidth: "100px", // Minimum width for small screens
+        minWidth: "50px", // Minimum width for small screens
         maxWidth: "600px", // Maximum width for large screens
         padding: "5px 20px",
         borderRadius: "8px",
@@ -157,22 +157,24 @@ const Cm = () => {
         startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
       }}
     />
-    <Button
-      variant="contained"
-      sx={{
-        background: colors.blueAccent[500],
-        color: "#ffffff",
-        width: "100%", // Fixed button width
-        height: "55px", // Fixed button height
-        borderRadius: "8px",
-        fontSize: "16px",
-        fontWeight: "bold",
-        textTransform: "none",
-      }}
-      onClick={() => navigate('/cmform')}
-    >
-      Create New
-    </Button>
+          <Button
+            variant="contained"
+            sx={{
+              background: colors.blueAccent[500],
+              fontWeight: "bold",
+              color: "#ffffff",
+              whiteSpace: "nowrap",
+              // paddingX: "15px"
+              padding: "12px 24px ",
+              fontSize: "14px",
+              textTransform:"none"
+
+            }}
+            // startIcon={<AddIcon />}
+            onClick={()=> navigate('cmform')}
+          >
+            Create New
+          </Button>
   </Box>
 ) : (
   <Box display="flex" justifyContent="space-between" alignItems="center" p={3} gap={2}>
@@ -183,7 +185,7 @@ const Cm = () => {
       sx={{
         background: "#ffffff",
         flexGrow: 1, // Makes input responsive
-        minWidth: "100px", // Minimum width for small screens
+        minWidth: "50px", // Minimum width for small screens
         maxWidth: "600px", // Maximum width for large screens
         padding: "5px 20px",
         borderRadius: "8px",
@@ -195,22 +197,23 @@ const Cm = () => {
         startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
       }}
     />
-    <Button
-      variant="contained"
-      sx={{
-        background: colors.blueAccent[500],
-        color: "#ffffff",
-        width: 127.69, // Fixed button width
-        height: 40, // Fixed button height
-        borderRadius: "4px",
-        fontSize: "14px",
-        fontWeight: "bold",
-        textTransform: "none",
-      }}
-      onClick={() => navigate('/cmform')}
-    >
-      Create New
-    </Button>
+        <Button
+            variant="contained"
+            sx={{
+              background: colors.blueAccent[500],
+              fontWeight: "bold",
+              color: "#ffffff",
+              whiteSpace: "nowrap",
+              // paddingX: "15px"
+              padding: "12px 18px ",
+              fontSize: "14px",
+              textTransform:"none"
+            }}
+            // startIcon={<AddIcon />}
+            onClick={()=> navigate('cmform')}
+          >
+            Create New
+          </Button>
   </Box>
 )}
 

@@ -137,7 +137,7 @@ const Crm = () => {
   return (
     <Box>
 {isMobile ? (
-  <Box display="flex" flexDirection="column" justifyContent="space-between"  p={3} gap={2}>
+  <Box display="flex" justifyContent="space-between"  p={3} gap={2}>
     <TextField
       variant="outlined"
       placeholder="Search..."
@@ -157,22 +157,24 @@ const Crm = () => {
         startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
       }}
     />
-    <Button
-      variant="contained"
-      sx={{
-        background: colors.blueAccent[500],
-        color: "#ffffff",
-        width: "100%", // Fixed button width
-        height: "55px", // Fixed button height
-        borderRadius: "8px",
-        fontSize: "16px",
-        fontWeight: "bold",
-        textTransform: "none",
-      }}
-      onClick={() => navigate('/crmform')}
-    >
-      Create New
-    </Button>
+          <Button
+            variant="contained"
+            sx={{
+              background: colors.blueAccent[500],
+              fontWeight: "bold",
+              color: "#ffffff",
+              whiteSpace: "nowrap",
+              // paddingX: "15px"
+              padding: "12px 24px ",
+              fontSize: "14px",
+              textTransform:"none"
+
+            }}
+            // startIcon={<AddIcon />}
+            onClick={()=> navigate('cmform')}
+          >
+            Create New
+          </Button>
   </Box>
 ) : (
   <Box display="flex" justifyContent="space-between" alignItems="center" p={3} gap={2}>
