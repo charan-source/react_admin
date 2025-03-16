@@ -40,7 +40,7 @@ const getActivePage = (pathname) => {
 };
 
 // Sidebar Item Component (Reused from Sidebar)
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, handleClose }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -53,6 +53,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       onClick={() => {
         setSelected(to);
         sessionStorage.setItem("selectedSidebarItem", to);
+        if (handleClose) handleClose();
       }}
       sx={{
         color: selected === to ? "white" : colors.blueAccent[500],
@@ -123,47 +124,47 @@ const Topbar = () => {
       default:
         return "Page Not Found";
     }
-};
-const getPageTitle1 = () => {
-  switch (location.pathname) {
-    case "/":
-      return { primaryTitle: "Dashboard", secondaryTitle: null };
-    case "/cm":
-      return { primaryTitle: "Customer Manager", secondaryTitle: null };
-    case "/crm":
-      return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
-    case "/hob":
-      return { primaryTitle: "Head of The Business", secondaryTitle: null };
-    case "/cmform":
-      return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
-    case "/crmform":
-      return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
-    case "/form":
-      return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
-    case "/allExperiences":
-      return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
-    case "/newExperiences":
-      return { primaryTitle: "Experiences", secondaryTitle: "New Experiences" };
-    case "/pendingExperiences":
-      return { primaryTitle: "Experiences", secondaryTitle: "Pending Experiences" };
-    case "/resolvedExperiences":
-      return { primaryTitle: "Experiences", secondaryTitle: "Resolved Experiences" };
-    case "/profile":
-      return { primaryTitle: "Profile", secondaryTitle: null };
-    case "/notes":
-      return { primaryTitle: "Notes", secondaryTitle: null };
-    case "/calendar":
-      return { primaryTitle: "Calendar", secondaryTitle: null };
-    default:
-      return { primaryTitle: "Page Not Found", secondaryTitle: null };
-  }
-};
+  };
+  const getPageTitle1 = () => {
+    switch (location.pathname) {
+      case "/":
+        return { primaryTitle: "Dashboard", secondaryTitle: null };
+      case "/cm":
+        return { primaryTitle: "Customer Manager", secondaryTitle: null };
+      case "/crm":
+        return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
+      case "/hob":
+        return { primaryTitle: "Head of The Business", secondaryTitle: null };
+      case "/cmform":
+        return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
+      case "/crmform":
+        return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
+      case "/form":
+        return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
+      case "/allExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
+      case "/newExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "New Experiences" };
+      case "/pendingExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "Pending Experiences" };
+      case "/resolvedExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "Resolved Experiences" };
+      case "/profile":
+        return { primaryTitle: "Profile", secondaryTitle: null };
+      case "/notes":
+        return { primaryTitle: "Notes", secondaryTitle: null };
+      case "/calendar":
+        return { primaryTitle: "Calendar", secondaryTitle: null };
+      default:
+        return { primaryTitle: "Page Not Found", secondaryTitle: null };
+    }
+  };
 
 
-const { primaryTitle, secondaryTitle } = getPageTitle1();
+  const { primaryTitle, secondaryTitle } = getPageTitle1();
 
-// const pageTitle = getPageTitle();
-// const [primaryTitle, secondaryTitle] = pageTitle.includes(" / ") ? pageTitle.split(" / ") : [pageTitle, ""];
+  // const pageTitle = getPageTitle();
+  // const [primaryTitle, secondaryTitle] = pageTitle.includes(" / ") ? pageTitle.split(" / ") : [pageTitle, ""];
 
   // Sync selected state with sessionStorage
   useEffect(() => {
@@ -272,9 +273,9 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
                 {getGreeting()} Delphin
               </Typography>
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "16px" : "16px" }}>
-              {currentTime.toLocaleString("en-US", { 
-    month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true 
-  })}
+                {currentTime.toLocaleString("en-US", {
+                  month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true
+                })}
               </Typography>
             </Box>
 
@@ -338,9 +339,9 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
                 {getGreeting()} Delphin
               </Typography>
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "14px" : "16px" }}>
-              {currentTime.toLocaleString("en-US", { 
-    month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true 
-  })}
+                {currentTime.toLocaleString("en-US", {
+                  month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true
+                })}
               </Typography>
             </Box>
 
@@ -412,7 +413,7 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
                   fontSize="small"
                   sx={{ cursor: "pointer" }}
                 />
-                <Typography> / </Typography>
+                     <Typography style={{ fontSize: 20 }}> &gt; </Typography>
                 <Typography>{getPageTitle()}</Typography>
               </Box>
             </Box>
@@ -433,38 +434,38 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
           >
             {/* Greeting Message */}
             <Box
-  borderRadius="3px"
-  sx={{
-    display: "flex",
-    flexDirection: "column",
-    width: "fit-content",
-    padding: "8px",
-    paddingLeft: isMobile ? "12px" : "20px",
-  }}
->
-  <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
-    {primaryTitle}
-  </Typography>
-  <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
-    <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
-    <Typography> &gt; </Typography>
-    <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
-      {primaryTitle}
-    </Typography>
-    {secondaryTitle && (
-      <>
-        <Typography fontSize={20}> › </Typography>
-        <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
-          {secondaryTitle}
-        </Typography>
-      </>
-    )}
-  </Box>
-</Box>
+              borderRadius="3px"
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                width: "fit-content",
+                padding: "8px",
+                paddingLeft: isMobile ? "12px" : "20px",
+              }}
+            >
+              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
+                {primaryTitle}
+              </Typography>
+              <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
+                <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+                <Typography> &gt; </Typography>
+                <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
+                  {primaryTitle}
+                </Typography>
+                {secondaryTitle && (
+                  <>
+                <Typography style={{ fontSize: 20 }}> &gt; </Typography>
+                    <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
+                      {secondaryTitle}
+                    </Typography>
+                  </>
+                )}
+              </Box>
+            </Box>
           </Box>
         )}
       </Box>
-
+<Box sx={{alignItems:"center"}}>
       {/* Mobile Sidebar Modal */}
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}
         sx={{
@@ -479,13 +480,13 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
         }}
       >
         <Box
-          width="65%"
+          width="100%"
           sx={{
             background: colors.primary[400],
             height: "100vh",
             position: "absolute",
             left: 0,
-            top: 0,
+            top: "10%",
             padding: "20px",
             display: "flex",
             flexDirection: "column",
@@ -494,21 +495,16 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
             boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
           }}
         >
-          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item
-            title="Customer Relationship Manager"
-            to="/crm"
-            icon={<HandshakeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Customer Relationship Manager" to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
         </Box>
       </Modal>
+      </Box>
     </Box>
   );
 };

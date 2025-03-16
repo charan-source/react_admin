@@ -29,6 +29,7 @@ import Notes from "./scenes/notes"
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  // const [drawer, setDrawerOpen] = useState(true);
   const isMobile = useMediaQuery("(max-width: 900px)"); // Detect mobile screen
 
   return (
@@ -38,7 +39,7 @@ function App() {
 
         {/* Topbar: Full width at the top */}
         <Box sx={{ width: "100vw",  top: 5, zIndex: 1000 }}>
-          <Topbar setIsSidebar={setIsSidebar} />
+          <Topbar setIsSidebar={setIsSidebar}  />
         </Box>
 
         {/* Sidebar: Fixed on the left */}
