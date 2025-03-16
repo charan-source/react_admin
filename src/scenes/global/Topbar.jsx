@@ -269,7 +269,7 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
               }}
             >
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "30px" : "25px" }}>
-                Good Evening Delphin
+                {getGreeting()} Delphin
               </Typography>
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "16px" : "16px" }}>
               {currentTime.toLocaleString("en-US", { 
@@ -335,7 +335,7 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
               }}
             >
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "20px" : "25px" }}>
-                Good Evening Delphin
+                {getGreeting()} Delphin
               </Typography>
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "14px" : "16px" }}>
               {currentTime.toLocaleString("en-US", { 
@@ -453,7 +453,7 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
     </Typography>
     {secondaryTitle && (
       <>
-        <Typography> &gt; </Typography>
+        <Typography fontSize={20}> › </Typography>
         <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
           {secondaryTitle}
         </Typography>
