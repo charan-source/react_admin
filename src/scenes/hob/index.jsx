@@ -197,22 +197,24 @@ const Hob = () => {
         startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
       }}
     />
-    <Button
-      variant="contained"
-      sx={{
-        background: colors.blueAccent[500],
-        color: "#ffffff",
-        width: 127.69, // Fixed button width
-        height: 40, // Fixed button height
-        borderRadius: "4px",
-        fontSize: "14px",
-        fontWeight: "bold",
-        textTransform: "none",
-      }}
-      onClick={() => navigate('/form')}
-    >
-      Create New
-    </Button>
+          <Button
+            variant="contained"
+            sx={{
+              background: colors.blueAccent[500],
+              fontWeight: "bold",
+              color: "#ffffff",
+              whiteSpace: "nowrap",
+              // paddingX: "15px"
+              padding: "12px 24px ",
+              fontSize: "14px",
+              textTransform:"none"
+
+            }}
+            // startIcon={<AddIcon />}
+            onClick={()=> navigate('cmform')}
+          >
+            Create New
+          </Button>
   </Box>
 )}
 

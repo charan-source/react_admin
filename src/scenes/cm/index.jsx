@@ -205,7 +205,7 @@ const Cm = () => {
               color: "#ffffff",
               whiteSpace: "nowrap",
               // paddingX: "15px"
-              padding: "12px 18px ",
+              padding: "12px 24px ",
               fontSize: "14px",
               textTransform:"none"
             }}
