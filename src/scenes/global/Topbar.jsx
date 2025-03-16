@@ -88,6 +88,7 @@ const Topbar = () => {
   const location = useLocation();
   const [selected, setSelected] = useState(getActivePage(location.pathname));
   const navigate = useNavigate();
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -179,6 +180,18 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
 
   const logoSrc = logoLight;
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Box
       width="100%"
@@ -259,7 +272,9 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
                 Good Evening Delphin
               </Typography>
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "16px" : "16px" }}>
-                March 13th 2025, 7:40 PM
+              {currentTime.toLocaleString("en-US", { 
+    month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true 
+  })}
               </Typography>
             </Box>
 
@@ -323,7 +338,9 @@ const { primaryTitle, secondaryTitle } = getPageTitle1();
                 Good Evening Delphin
               </Typography>
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "14px" : "16px" }}>
-                March 13th 2025, 7:40 PM
+              {currentTime.toLocaleString("en-US", { 
+    month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric", hour12: true 
+  })}
               </Typography>
             </Box>
 

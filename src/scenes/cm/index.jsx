@@ -171,7 +171,7 @@ const Cm = () => {
 
             }}
             // startIcon={<AddIcon />}
-            onClick={()=> navigate('cmform')}
+            onClick={()=> navigate('/cmform')}
           >
             Create New
           </Button>
@@ -210,7 +210,7 @@ const Cm = () => {
               textTransform:"none"
             }}
             // startIcon={<AddIcon />}
-            onClick={()=> navigate('cmform')}
+            onClick={()=> navigate('/cmform')}
           >
             Create New
           </Button>

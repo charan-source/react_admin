@@ -171,7 +171,7 @@ const Crm = () => {
 
             }}
             // startIcon={<AddIcon />}
-            onClick={()=> navigate('cmform')}
+            onClick={()=> navigate('/crmform')}
           >
             Create New
           </Button>
@@ -211,7 +211,7 @@ const Crm = () => {
 
             }}
             // startIcon={<AddIcon />}
-            onClick={()=> navigate('cmform')}
+            onClick={()=> navigate('/crmform')}
           >
             Create New
           </Button>
