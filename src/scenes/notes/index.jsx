@@ -3,13 +3,13 @@ import { Box, Typography, List, ListItem, ListItemText, useMediaQuery, TextField
 import React, { useState } from "react";
 import { tokens } from "../../theme";
 import { Search as SearchIcon } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Notes = () => {
   // Responsive breakpoints
   const isDesktop = useMediaQuery("(min-width: 1024px)"); // Desktop (5 columns)
   const isTablet = useMediaQuery("(min-width: 768px)"); // Tablet (3 columns)
-     const navigate = useNavigate();
+    //  const navigate = useNavigate();
     const isMobile = useMediaQuery("(max-width: 600px)");
       const colors = tokens("light");
       const [openModal, setOpenModal] = useState(false);
