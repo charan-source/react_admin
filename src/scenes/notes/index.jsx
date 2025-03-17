@@ -33,6 +33,26 @@ const Notes = () => {
         console.log("Submitted Name:", name);
         handleCloseModal();
       };
+
+      const StyledTextField = ({ label, name, value, handleChange, handleBlur, error, multiline = false, rows = 1 }) => {
+        return (
+          <TextField
+            fullWidth
+            variant="outlined"
+            label={label}
+            name={name}
+            value={value}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!error}
+            helperText={error}
+            multiline={multiline}
+            rows={rows}
+            sx={{ marginBottom: "15px" }}
+          />
+        );
+      };
+    
     
   // Dynamic columns based on screen size
   const columns = isDesktop ? 5 : isTablet ? 3 : 1;
@@ -55,7 +75,7 @@ const Notes = () => {
 
 
 {isMobile ? (
-  <Box display="flex"  justifyContent="space-between"  p={3} gap={2}>
+  <Box display="flex" justifyContent="space-between"  p={3} gap={2}>
     <TextField
       variant="outlined"
       placeholder="Search..."
@@ -63,7 +83,7 @@ const Notes = () => {
       sx={{
         background: "#ffffff",
         flexGrow: 1, // Makes input responsive
-        minWidth: "100px", // Minimum width for small screens
+        minWidth: "50px", // Minimum width for small screens
         maxWidth: "600px", // Maximum width for large screens
         padding: "5px 20px",
         borderRadius: "8px",
@@ -72,7 +92,7 @@ const Notes = () => {
       value={searchTerm}
       onChange={handleSearchChange}
       InputProps={{
-        startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
+        startAdornment: <SearchIcon sx={{ color: "action.active" }} />,
       }}
     />
     <Button
@@ -80,12 +100,11 @@ const Notes = () => {
       sx={{
         background: colors.blueAccent[500],
         color: "#ffffff",
-        width: 127.69, // Fixed button width
-        height: 40, // Fixed button height
-        borderRadius: "4px",
-        fontSize: "14px",
+        width: "100%", // Fixed button width
+        height: "55px", // Fixed button height
+        borderRadius: "8px",
+        fontSize: "16px",
         fontWeight: "bold",
-        padding: "12px 24px ",
         textTransform: "none",
       }}
       onClick={handleOpenModal}
@@ -106,7 +125,6 @@ const Notes = () => {
         maxWidth: "600px", // Maximum width for large screens
         padding: "5px 20px",
         borderRadius: "8px",
-        
         "& fieldset": { border: "none" }, // Removes the border
       }}
       value={searchTerm}
@@ -125,7 +143,6 @@ const Notes = () => {
         borderRadius: "4px",
         fontSize: "14px",
         fontWeight: "bold",
-        padding: "12px 24px ",
         textTransform: "none",
       }}
       onClick={handleOpenModal}
@@ -193,6 +210,20 @@ const Notes = () => {
             onChange={(e) => setName(e.target.value)}
             sx={{ mb: 3 }}
           />
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Description
+          </Typography>
+
+<StyledTextField
+                // label="Details of your experience"
+                name="experienceDetails"
+                // value={values.experienceDetails}
+                // handleChange={handleChange}
+                // handleBlur={handleBlur}
+                // error={touched.experienceDetails && errors.experienceDetails}
+                multiline
+                rows={4}
+              />
           <Box display="flex" justifyContent="flex-start" gap={3}>
             <Button variant="contained" onClick={handleSubmit} sx={{backgroundColor:colors.blueAccent[700], color:"#ffffff", fontSize:"14px", padding:"8px 32px"}} >
               Submit
