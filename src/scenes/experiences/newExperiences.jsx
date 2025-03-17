@@ -371,7 +371,8 @@ const NewExperiences = () => {
               whiteSpace: "nowrap",
               // paddingX: "15px"
               padding: "12px 18px ",
-              fontSize: "14px"
+              fontSize: "14px",
+                      textTransform:"none"
             }}
             startIcon={<AddIcon />}
             onClick={handleNewTicket}

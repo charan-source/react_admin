@@ -1,4 +1,4 @@
-import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal } from "@mui/material";
+import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal, Backdrop, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { useState, useEffect } from "react";
 import { tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
@@ -13,48 +13,138 @@ import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import logoLight from "./logo.png";
 import { useNavigate } from "react-router-dom";
 
+// Shared getActivePage function
+const getActivePage = (pathname) => {
+  if (pathname.includes("/crm") || pathname.includes("/crmform")) {
+    return "/crm";
+  } else if (pathname.includes("/cm") || pathname.includes("/cmform")) {
+    return "/cm";
+  } else if (pathname.includes("/hob") || pathname.includes("/form")) {
+    return "/hob";
+  } else if (pathname.includes("/notes")) {
+    return "/notes";
+  } else if (pathname.includes("/calendar")) {
+    return "/calendar";
+  } else if (
+    pathname === "/" ||
+    pathname.includes("/allExperiences") ||
+    pathname.includes("/newExperiences") ||
+    pathname.includes("/profile") ||
+    pathname.includes("/pendingExperiences") ||
+    pathname.includes("/resolvedExperiences")
+  ) {
+    return "/"; // Dashboard is active for these routes
+  } else {
+    return pathname;
+  }
+};
+
+// Sidebar Item Component (Reused from Sidebar)
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+
+  return (
+    <ListItem
+      button
+      component={Link}
+      to={to}
+      selected={selected === to}
+      onClick={() => {
+        setSelected(to);
+        sessionStorage.setItem("selectedSidebarItem", to);
+      }}
+      sx={{
+        color: selected === to ? "white" : colors.blueAccent[500],
+        fontWeight: selected === to ? "bold" : "regular",
+        backgroundColor: selected === to ? colors.blueAccent[700] : "inherit",
+        borderRadius: "10px",
+        marginBottom: "8px",
+        "&:hover": {
+          backgroundColor: selected === to ? "#3e4396 !important" : "none", // Ensure no hover effect
+          color: selected === to ? "white" : colors.blueAccent[500],
+        },
+      }}
+    >
+      <ListItemIcon sx={{ color: "inherit" }}>{icon}</ListItemIcon>
+      <ListItemText
+        primary={title}
+        sx={{
+          "& .MuiTypography-root": { // Target the nested Typography component
+            fontWeight: "bold !important", // Ensure text is bold for selected item
+            fontSize: "15px",
+          },
+        }}
+      />
+    </ListItem>
+  );
+};
+
 const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
-  const [selected, setSelected] = useState(location.pathname);
+  const [selected, setSelected] = useState(getActivePage(location.pathname));
   const navigate = useNavigate();
-
 
   const getPageTitle = () => {
     switch (location.pathname) {
       case "/":
-        return "Dashboard";
+        return { primaryTitle: "Dashboard", secondaryTitle: null };
       case "/cm":
-        return "Customer Manager";
+        return { primaryTitle: "Customer Manager", secondaryTitle: null };
       case "/crm":
-        return "Customer Relationship Manager";
+        return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
       case "/hob":
-        return "Head of The Business";
+        return { primaryTitle: "Head of The Business", secondaryTitle: null };
       case "/cmform":
-        return "Create a New customer Manager";
+        return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
       case "/crmform":
-        return "Create a New customer Relationship Manager";
+        return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
       case "/form":
-        return "Create a New Head of the Business Unit"
+        return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
+      case "/allExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
+      case "/newExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "New Experiences" };
+      case "/pendingExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "Pending Experiences" };
+      case "/resolvedExperiences":
+        return { primaryTitle: "Experiences", secondaryTitle: "Resolved Experiences" };
+      case "/profile":
+        return { primaryTitle: "Profile", secondaryTitle: null };
+      case "/notes":
+        return { primaryTitle: "Notes", secondaryTitle: null };
+      case "/calendar":
+        return { primaryTitle: "Calendar", secondaryTitle: null };
       default:
-        return "Page Not Found";
+        return { primaryTitle: "Page Not Found", secondaryTitle: null };
     }
   };
 
+
+  const { primaryTitle, secondaryTitle } = getPageTitle();
+
+  // Sync selected state with sessionStorage
   useEffect(() => {
-    setSelected(location.pathname);
-    sessionStorage.setItem("selectedSidebarItem", location.pathname);
+    const storedSelected = sessionStorage.getItem("selectedSidebarItem");
+    if (storedSelected) {
+      setSelected(storedSelected);
+    }
+  }, []);
+
+  useEffect(() => {
+    setSelected(getActivePage(location.pathname));
+    sessionStorage.setItem("selectedSidebarItem", getActivePage(location.pathname));
   }, [location.pathname]);
 
   const logoSrc = logoLight;
 
   return (
     <Box
-      width="100%" // ✅ Ensure full width
-      // padding={2}
+      width="100%"
       sx={{
         bgcolor: "#fefefe !important",
         overflowX: "hidden",
@@ -64,12 +154,8 @@ const Topbar = () => {
       <Box
         display="flex"
         flexDirection="column"
-        width="100%" // ✅ Ensures full width
-        // padding={2}
+        width="100%"
         bgcolor="#ffffff"
-        backgroundColor="#ffffff"
-        background="#ffffff"
-
         sx={{ overflowX: "hidden", flex: 1, marginTop: 1, background: "ffffff", backgroundColor: "#ffffff" }}
       >
         {/* Header Section */}
@@ -82,22 +168,12 @@ const Topbar = () => {
             width="100%"
             sx={{
               bgcolor: "#fefefe !important",
-              background: "#fefefe !important",
-              backgroundColor: "#fefefe !important",
-              boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)", // Bottom-only shadow
+              boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
               marginBottom: 2,
-              // paddingX: 2,
-              padding: 2
-            }}
-            style={{
-              bgcolor: "#fcfcfc !important",
-              background: "#fefefe !important",
-              backgroundColor: "#fefefe !important",
-
+              padding: 2,
             }}
           >
             {/* Logo on Mobile */}
-
             <Box sx={{ maxWidth: "180px", height: "50px", backgroundColor: "#fefefe !important" }}>
               <img
                 src={logoSrc}
@@ -106,18 +182,14 @@ const Topbar = () => {
               />
             </Box>
 
-
             {/* Mobile Menu Icon */}
-
             <IconButton onClick={() => setIsModalOpen(true)}>
               <MenuOutlinedIcon sx={{ fontSize: 30 }} />
             </IconButton>
-
           </Box>
         )}
 
         {/* Greeting and Profile Section */}
-
         {isMobile ? (
           <Box
             display="flex"
@@ -128,12 +200,10 @@ const Topbar = () => {
             flexShrink={0}
             sx={{
               bgcolor: "transparent",
-              paddingX: isMobile ? 2 : 9, // Adjust padding based on device
-              paddingY: 1, // Vertical padding for spacing
-              boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)", // Bottom-only shadow
-              // marginBottom: 2,
-              padding: 4
-
+              paddingX: isMobile ? 2 : 9,
+              paddingY: 1,
+              boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
+              padding: 4,
             }}
           >
             {/* Greeting Message */}
@@ -145,7 +215,7 @@ const Topbar = () => {
                 width: "fit-content",
                 padding: "8px",
                 paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "center" : "left", // Center align on mobile
+                textAlign: isMobile ? "center" : "left",
               }}
             >
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "30px" : "25px" }}>
@@ -168,7 +238,7 @@ const Topbar = () => {
               <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
                 <Box
                   sx={{
-                    width: isMobile ? 25 : 30, // Reduce icon size on mobile
+                    width: isMobile ? 25 : 30,
                     height: isMobile ? 25 : 30,
                     borderRadius: "50%",
                     backgroundColor: colors.blueAccent[500],
@@ -195,12 +265,8 @@ const Topbar = () => {
             flexShrink={0}
             sx={{
               bgcolor: "#ffffff",
-              paddingX: isMobile ? 2 : 4, // Adjust padding based on device
-              // paddingY: 1, // Vertical padding for spacing
-              // boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)", // Bottom-only shadow
-              // marginBottom: 2, 
-              paddingLeft: 35
-
+              paddingX: isMobile ? 2 : 4,
+              paddingLeft: 35,
             }}
           >
             {/* Greeting Message */}
@@ -213,7 +279,7 @@ const Topbar = () => {
                 padding: "8px",
                 paddingRight: "30px",
                 paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "center" : "left", // Center align on mobile
+                textAlign: isMobile ? "center" : "left",
               }}
             >
               <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "20px" : "25px" }}>
@@ -236,7 +302,7 @@ const Topbar = () => {
               <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
                 <Box
                   sx={{
-                    width: isMobile ? 25 : 30, // Reduce icon size on mobile
+                    width: isMobile ? 25 : 30,
                     height: isMobile ? 25 : 30,
                     borderRadius: "50%",
                     backgroundColor: colors.blueAccent[500],
@@ -253,13 +319,10 @@ const Topbar = () => {
               </IconButton>
             </Box>
           </Box>
-
         )}
 
-
-
+        {/* Page Title Section */}
         {isMobile ? (
-
           <Box
             display="flex"
             flexDirection="row"
@@ -267,47 +330,43 @@ const Topbar = () => {
             alignItems="center"
             width="100%"
             flexShrink={0}
-
             sx={{
               backgroundColor: colors.blueAccent[700],
-              bgcolor: colors.blueAccent[700],
-              paddingX: isMobile ? 2 : 4, // Adjust padding based on device
-              boxShadow: "0px 4px 8px -2px rgba(62, 67, 150, 0.5)", // New shadow with #3e4396 color
+              paddingX: isMobile ? 2 : 4,
+              boxShadow: "0px 4px 8px -2px rgba(62, 67, 150, 0.5)",
               padding: "20px",
-              // background: "#ffffff",
-              // marginBottom: 1,
-
-
             }}
           >
             {/* Greeting Message */}
             <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "fit-content",
-
-                padding: "8px",
-                paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "text" : "text", // Center align on mobile
-              }}
-            >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
-                {getPageTitle()}
-              </Typography>
-              <Box sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px", alignItems: "center", gap: 1, justifyContent: "center" }}>
-                <HomeOutlinedIcon /> /   {getPageTitle()}
-              </Box>
-            </Box>
-
-            {/* Profile Section */}
-
+  borderRadius="3px"
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    width: "fit-content",
+    padding: "8px",
+    paddingLeft: isMobile ? "12px" : "20px",
+    textAlign: "left",
+  }}
+>
+  <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
+    {primaryTitle}
+  </Typography>
+  <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
+    <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+    {/* <Typography> / </Typography> */}
+    {secondaryTitle && (
+      <>
+        <Typography> / </Typography>
+        <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
+          {secondaryTitle}
+        </Typography>
+      </>
+    )}
+  </Box>
+</Box>;
           </Box>
-
         ) : (
-
-
           <Box
             display="flex"
             flexDirection="row"
@@ -317,11 +376,8 @@ const Topbar = () => {
             flexShrink={0}
             sx={{
               backgroundColor: colors.blueAccent[500],
-              bgcolor: colors.blueAccent[500],
-              paddingX: isMobile ? 2 : 4, // Adjust padding based on device
-              // paddingY: 1, // Vertical padding for spacing
-              // marginLeft:30
-              paddingLeft: 35
+              paddingX: isMobile ? 2 : 4,
+              paddingLeft: 35,
             }}
           >
             {/* Greeting Message */}
@@ -331,49 +387,47 @@ const Topbar = () => {
                 display: "flex",
                 flexDirection: "column",
                 width: "fit-content",
-
                 padding: "8px",
                 paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "center" : "left", // Center align on mobile
+                textAlign: isMobile ? "text" : "text",
               }}
             >
               <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
-                {getPageTitle()}
+                {primaryTitle}
               </Typography>
-              <Box display="flex">
-                <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px", }}>
-                  <HomeOutlinedIcon onClick={() => navigate('dashboard')} />  /
-                </Typography>
-                <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "14px" : "16px", }}>
-                  {getPageTitle()}
-                </Typography>
+              <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
+                <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+                <Typography> / </Typography>
+                <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
+  {primaryTitle}
+</Typography>
+                {secondaryTitle && (
+                  <>
+                    <Typography> / </Typography>
+                    <Typography onClick={() => navigate(location.pathname)} >{secondaryTitle}</Typography>
+                  </>
+                )}
               </Box>
             </Box>
-
-            {/* Profile Section */}
-
           </Box>
-
-
         )}
-
-
-
-
       </Box>
 
-
-
-
-
-
-
-
-
       {/* Mobile Sidebar Modal */}
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+          sx: { backgroundColor: "rgba(0, 0, 0, 0.5)" }, // Semi-transparent black backdrop
+        }}
+      >
         <Box
-          width="250px"
+          width="65%"
           sx={{
             background: colors.primary[400],
             height: "100vh",
@@ -383,100 +437,28 @@ const Topbar = () => {
             padding: "20px",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            alignItems: "center",
             overflow: "hidden",
-            boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)", // Sidebar shadow
+            boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
           }}
         >
-          <MenuItem
-            title="Dashboard"
-            to="/"
-            icon={<HomeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Customer Manager"
-            to="/cm"
-            icon={<PeopleAltOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
+          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item
             title="Customer Relationship Manager"
             to="/crm"
             icon={<HandshakeOutlinedIcon />}
             selected={selected}
             setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
           />
-          <MenuItem
-            title="Head of the Business"
-            to="/hob"
-            icon={<BusinessOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Calendar"
-            to="/calendar"
-            icon={<CalendarTodayOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
-          <MenuItem
-            title="Logout"
-            to="/logout"
-            icon={<LogoutOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            closeDrawer={() => setIsModalOpen(false)}
-          />
+          <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
+          <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
         </Box>
       </Modal>
     </Box>
-
-  );
-};
-
-const MenuItem = ({ title, to, icon, selected, setSelected, closeDrawer }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const isActive = selected === to;
-
-  return (
-    <Link
-      to={to}
-      style={{ textDecoration: "none", width: "100%" }}
-      onClick={() => {
-        setSelected(to);
-        localStorage.setItem("selectedSidebarItem", to);
-        closeDrawer();
-      }}
-    >
-      <Box
-        display="flex"
-        alignItems="center"
-        sx={{
-          padding: "12px 16px",
-          cursor: "pointer",
-          color: isActive ? "#fff" : colors.grey[100],
-          backgroundColor: isActive ? colors.blueAccent[700] : "inherit",
-          width: "100%",
-          "&:hover": { backgroundColor: colors.grey[800] },
-        }}
-      >
-        <Box sx={{ color: isActive ? "#fff" : "inherit" }}>{icon}</Box>
-        <Typography sx={{ marginLeft: 2, color: "inherit" }}>{title}</Typography>
-      </Box>
-    </Link>
   );
 };
 
 export default Topbar;
-
-
