@@ -539,7 +539,7 @@ const NewExperiences = () => {
           <Table sx={{ minWidth: 650 }} aria-label="responsive table">
             <TableHead>
               <TableRow sx={{ backgroundColor: colors.blueAccent[500] }}>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>id</TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff", textTransform:"uppercase" }}>ID</TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Subject</TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Priority</TableCell>
                 <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Status</TableCell>
