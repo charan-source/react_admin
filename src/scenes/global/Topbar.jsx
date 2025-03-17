@@ -11,6 +11,8 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import logoLight from "./logo.png";
 import { useNavigate } from "react-router-dom";
 
@@ -194,6 +196,14 @@ const Topbar = () => {
     }, 60000); // Update every minute
     return () => clearInterval(interval);
   }, []);
+
+  const CustomDivider = () => (
+    <Box sx={{ width: "20px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <FontAwesomeIcon icon={faAngleRight} /> {/* Custom divider icon */}
+    </Box>
+  );
+
+    
   return (
     <Box
       width="100%"
@@ -414,7 +424,8 @@ const Topbar = () => {
                   fontSize="small"
                   sx={{ cursor: "pointer" }}
                 />
-                     <Typography style={{ fontSize: 20 }}> &gt; </Typography>
+              
+                       <CustomDivider /> 
                 <Typography>{getPageTitle()}</Typography>
               </Box>
             </Box>
@@ -448,20 +459,20 @@ const Topbar = () => {
                 {primaryTitle}
               </Typography>
               <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
-                <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
-                <Typography> &gt; </Typography>
-                <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
-                  {primaryTitle}
-                </Typography>
-                {secondaryTitle && (
-                  <>
-                <Typography style={{ fontSize: 20 }}> &gt; </Typography>
-                    <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
-                      {secondaryTitle}
-                    </Typography>
-                  </>
-                )}
-              </Box>
+  <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+  <CustomDivider /> 
+  <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
+    {primaryTitle}
+  </Typography>
+  {secondaryTitle && (
+    <>
+      <CustomDivider /> 
+      <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
+        {secondaryTitle}
+      </Typography>
+    </>
+  )}
+</Box>
             </Box>
           </Box>
         )}
