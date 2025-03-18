@@ -17,8 +17,6 @@ import {
   Select,
   InputLabel,
   FormControl,
-  // IconButton,
-  Toolbar,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import {
@@ -210,7 +208,6 @@ const NewExperiences = () => {
     // Add more ticket data here...
   ];
 
-
   // State for filter values
   const [filters, setFilters] = useState({
     type: "",
@@ -218,7 +215,6 @@ const NewExperiences = () => {
     department: "",
     priority: "",
     status: "",
-    // status: "",
   });
 
   // Handle filter change
@@ -276,8 +272,6 @@ const NewExperiences = () => {
   return (
     <Box>
       {/* Toolbar with search, import/export, and new ticket button */}
-      {/* Search Bar */}
-
       <Box display="flex" flexDirection={isMobile ? "column" : "row"} justifyContent="space-around" alignItems="center" sx={{ padding: isMobile ? 0 : 2 }}>
         <Box sx={{ width: isMobile ? "100%" : "auto" }}>
           <TextField
@@ -308,18 +302,16 @@ const NewExperiences = () => {
             flexDirection: isMobile ? "column" : "row",
             justifyContent: isMobile ? "space-around" : "flex-end",
             padding: 2,
-            gap: 5
-            // mb: 2, 
+            gap: 5,
           }}
         >
-
           <FormControl
             size="small"
             sx={{
               backgroundColor: "#ffffff",
               padding: "5px",
-              border: "none", // Removes border
-              boxShadow: "none", // Removes any shadow effects
+              border: "none",
+              boxShadow: "none",
             }}
           >
             <InputLabel sx={{ backgroundColor: "#ffffff", paddingX: "4px" }}>
@@ -331,7 +323,7 @@ const NewExperiences = () => {
               label="Rows per page"
               sx={{
                 "&.MuiOutlinedInput-root": {
-                  "& fieldset": { border: "none" }, // Removes default border
+                  "& fieldset": { border: "none" },
                   "&:hover fieldset": { border: "none" },
                   "&.Mui-focused fieldset": { border: "none" },
                 },
@@ -343,7 +335,6 @@ const NewExperiences = () => {
               <MenuItem value={100}>100</MenuItem>
             </Select>
           </FormControl>
-
 
           <Box sx={{ display: "flex", gap: 3 }}>
             <Button
@@ -369,10 +360,9 @@ const NewExperiences = () => {
               fontWeight: "bold",
               color: "#ffffff",
               whiteSpace: "nowrap",
-              // paddingX: "15px"
-              padding: "12px 18px ",
+              padding: "12px 18px",
               fontSize: "14px",
-                      textTransform:"none"
+              textTransform: "none",
             }}
             startIcon={<AddIcon />}
             onClick={handleNewTicket}
@@ -380,156 +370,21 @@ const NewExperiences = () => {
             New Experience
           </Button>
         </Box>
-
-
-
       </Box>
 
-      <Toolbar
-        sx={{
-          width:"100%",
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          justifyContent: "space-between",
-          alignItems: isMobile ? "flex-start" : "center",
-          gap: isMobile ? 2 : 0,
-          mb: 2,
-          // padding: isMobile ? 0 : 1
-        }}
-
-      >
-        {/* Filter Dropdowns */}
-
-
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            gap: 1,
-            width: isMobile ? "100%" : "100%",
-            justifyContent: "space-between",
-
-            // alignItems:"center"
-          }}
-        >
-          <Typography style={{ fontSize: "18px", textAlign: isMobile ? "left" : "center" }}>Filter Ticket By:</Typography>
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 140, backgroundColor: "#ffffff", }}>
-            <InputLabel sx={{ fontSize: "15px" }}>Type</InputLabel>
-            <Select
-              name="type"
-              value={filters.type}
-              onChange={handleFilterChange}
-              label="Type"
-              sx={{ padding: "5px" }}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="Bug">Bug</MenuItem>
-              <MenuItem value="Feature Request">Feature Request</MenuItem>
-              <MenuItem value="Enhancement">Enhancement</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 140, backgroundColor: "#ffffff" }}>
-            <InputLabel sx={{ fontSize: "15px" }}>Category</InputLabel>
-            <Select
-              name="category"
-              value={filters.category}
-              onChange={handleFilterChange}
-              label="Category"
-              sx={{ padding: "5px" }}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="Software">Software</MenuItem>
-              <MenuItem value="Hardware">Hardware</MenuItem>
-              <MenuItem value="Network">Network</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 140, backgroundColor: "#ffffff" }}>
-            <InputLabel sx={{ fontSize: "15px" }}>Department</InputLabel>
-            <Select
-              name="department"
-              value={filters.department}
-              onChange={handleFilterChange}
-              label="Department"
-              sx={{ padding: "5px" }}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="IT">IT</MenuItem>
-              <MenuItem value="Support">Support</MenuItem>
-              <MenuItem value="HR">HR</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 140, backgroundColor: "#ffffff" }}>
-            <InputLabel sx={{ fontSize: "15px" }}>Priority</InputLabel>
-            <Select
-              name="priority"
-              value={filters.priority}
-              onChange={handleFilterChange}
-              label="Priority"
-              sx={{ padding: "5px" }}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="Very Urgent">Very Urgent</MenuItem>
-              <MenuItem value="Urgent">Urgent</MenuItem>
-              <MenuItem value="Less Urgent">Less Urgent</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 140, backgroundColor: "#ffffff" }}>
-            <InputLabel sx={{ fontSize: "15px" }}>Status</InputLabel>
-            <Select
-              name="status"
-              value={filters.status}
-              onChange={handleFilterChange}
-              label="Status"
-              sx={{ padding: "5px" }}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="Processing">Processing</MenuItem>
-              <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 140, backgroundColor: "#ffffff" }}>
-            <InputLabel sx={{ fontSize: "15px" }}>Assign To</InputLabel>
-            <Select
-              name="Assign To"
-              value={filters.status}
-              onChange={handleFilterChange}
-              label="Assign To"
-              sx={{ padding: "5px" }}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="Processing">Processing</MenuItem>
-              <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
-
-
-      </Toolbar>
-
-
-
-      {/* Responsive Table */}
-      <Box sx={{ padding: isMobile ? 2 : 3 }}>
+      {/* Responsive Table with Filters */}
+      <Box sx={{ padding: isMobile ? 1 : 3 }}>
         <TableContainer
           component={Paper}
           sx={{
             maxWidth: "100%",
             overflowX: "auto",
             whiteSpace: "nowrap",
-
             "&::-webkit-scrollbar": {
-              height: "4px", // Adjust scrollbar height
+              height: "4px",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888", // Scrollbar color
+              backgroundColor: "#888",
               borderRadius: "10px",
             },
             "&::-webkit-scrollbar-thumb:hover": {
@@ -540,12 +395,62 @@ const NewExperiences = () => {
           <Table sx={{ minWidth: 650 }} aria-label="responsive table">
             <TableHead>
               <TableRow sx={{ backgroundColor: colors.blueAccent[500] }}>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff", textTransform:"uppercase" }}>ID</TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Subject</TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Priority</TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Status</TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Date</TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>Updated</TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff", textTransform: "uppercase" }}>
+                  ID
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
+                  Subject
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
+                  <Box display="flex" alignItems="center" justifyContent="center">
+                    Priority
+                    <FormControl variant="outlined" size="small" sx={{ backgroundColor: "transparent" }}>
+                      <Select
+                        name="priority"
+                        value={filters.priority}
+                        onChange={handleFilterChange}
+                        sx={{
+                          color: "#ffffff",
+                          "& .MuiSelect-icon": { color: "#ffffff" },
+                          "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                        }}
+                      >
+                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="Very Urgent">Very Urgent</MenuItem>
+                        <MenuItem value="Urgent">Urgent</MenuItem>
+                        <MenuItem value="Less Urgent">Less Urgent</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
+                  <Box display="flex" alignItems="center" justifyContent="center">
+                    Status
+                    <FormControl variant="outlined" size="small" sx={{ backgroundColor: "transparent" }}>
+                      <Select
+                        name="status"
+                        value={filters.status}
+                        onChange={handleFilterChange}
+                        sx={{
+                          color: "#ffffff",
+                          "& .MuiSelect-icon": { color: "#ffffff" },
+                          "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                        }}
+                      >
+                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="Processing">Processing</MenuItem>
+                        <MenuItem value="Pending">Pending</MenuItem>
+                        <MenuItem value="Closed">Closed</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
+                  Date
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
+                  Updated
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
