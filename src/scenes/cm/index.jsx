@@ -6,18 +6,18 @@ import {
   InputBase,
   useTheme,
   useMediaQuery,
-  MenuItem,
-  Menu,
-  Typography,
-  Checkbox,
-  FormControlLabel,
+  // MenuItem,
+  // Menu,
+  // Typography,
+  // Checkbox,
+  // FormControlLabel,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import {
   Search as SearchIcon,
-  FilterList as FilterIcon,
-  ImportExport as ImportExportIcon,
+  // FilterList as FilterIcon,
+  // ImportExport as ImportExportIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -140,59 +140,59 @@ const Cm = () => {
   const Navigate = useNavigate();
 
   // State for tickets
-  const [tickets] = useState(initialTickets); // Removed setTickets since it's unused
-  const [filteredTickets, setFilteredTickets] = useState(initialTickets);
+  // const [tickets] = useState(initialTickets); // Removed setTickets since it's unused
+  // const [filteredTickets, setFilteredTickets] = useState(initialTickets);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-  const [selectedFilters, setSelectedFilters] = useState({ priority: [], status: [] });
+  // const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  // const [selectedFilters, setSelectedFilters] = useState({ priority: [], status: [] });
 
   // Search filter
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    applyFilters(event.target.value, selectedFilters);
+    // applyFilters(event.target.value, selectedFilters);
   };
 
   // Open & Close Filter Menu
-  const handleFilterClick = (event) => setFilterAnchorEl(event.currentTarget);
-  const handleFilterClose = () => setFilterAnchorEl(null);
+  // const handleFilterClick = (event) => setFilterAnchorEl(event.currentTarget);
+  // const handleFilterClose = () => setFilterAnchorEl(null);
 
   // Handle Filter Selection
-  const handleFilterSelect = (filterType, value) => {
-    setSelectedFilters((prev) => {
-      const updatedFilters = { ...prev };
-      updatedFilters[filterType] = updatedFilters[filterType].includes(value)
-        ? updatedFilters[filterType].filter((item) => item !== value)
-        : [...updatedFilters[filterType], value];
-      applyFilters(searchTerm, updatedFilters);
-      return updatedFilters;
-    });
-  };
+  // const handleFilterSelect = (filterType, value) => {
+  //   setSelectedFilters((prev) => {
+  //     const updatedFilters = { ...prev };
+  //     updatedFilters[filterType] = updatedFilters[filterType].includes(value)
+  //       ? updatedFilters[filterType].filter((item) => item !== value)
+  //       : [...updatedFilters[filterType], value];
+  //     applyFilters(searchTerm, updatedFilters);
+  //     return updatedFilters;
+  //   });
+  // };
 
   // Apply Filters
-  const applyFilters = (search, filters) => {
-    let filtered = tickets;
-    if (search.trim()) {
-      filtered = filtered.filter((ticket) =>
-        Object.values(ticket).some((value) =>
-          String(value).toLowerCase().includes(search.toLowerCase())
-        )
-      );
-    }
-    if (filters.priority.length) {
-      filtered = filtered.filter((ticket) => filters.priority.includes(ticket.priority));
-    }
-    if (filters.status.length) {
-      filtered = filtered.filter((ticket) => filters.status.includes(ticket.status));
-    }
-    setFilteredTickets(filtered);
-  };
+  // const applyFilters = (search, filters) => {
+  //   let filtered = tickets;
+  //   if (search.trim()) {
+  //     filtered = filtered.filter((ticket) =>
+  //       Object.values(ticket).some((value) =>
+  //         String(value).toLowerCase().includes(search.toLowerCase())
+  //       )
+  //     );
+  //   }
+  //   if (filters.priority.length) {
+  //     filtered = filtered.filter((ticket) => filters.priority.includes(ticket.priority));
+  //   }
+  //   if (filters.status.length) {
+  //     filtered = filtered.filter((ticket) => filters.status.includes(ticket.status));
+  //   }
+  //   setFilteredTickets(filtered);
+  // };
 
   const handleNewTicket = () => {
     Navigate('/cmform')
   };
 
   // Get Unique Values for Filters
-  const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
+  // const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
 
   return (
     <Box m="20px">
@@ -207,7 +207,7 @@ const Cm = () => {
         </Box>
 
         {/* Export Button */}
-        <Button 
+        {/* <Button 
          sx={{
           backgroundColor: colors.blueAccent[500],
           color: "#ffffff",
@@ -219,22 +219,23 @@ const Cm = () => {
           onClick={() => alert("Export Data!")}
         >
           Export
-        </Button>
+        </Button> */}
 
         {/* Filter Button */}
-        <Button           
+        {/* <Button           
                   sx={{
                     backgroundColor: colors.blueAccent[500],
                     color: "#ffffff",
                     whiteSpace: "nowrap",
                     fontWeight: "bold",
+                      textTransform:"none"
                   }}
           variant="contained" 
           startIcon={<FilterIcon />} 
           onClick={handleFilterClick}
         >
           Filter
-        </Button>
+        </Button> */}
         <Button
             variant="contained"
             sx={{
@@ -254,7 +255,7 @@ const Cm = () => {
           </Button>
 
         {/* Filter Menu */}
-        <Menu anchorEl={filterAnchorEl} open={Boolean(filterAnchorEl)} onClose={handleFilterClose}>
+        {/* <Menu anchorEl={filterAnchorEl} open={Boolean(filterAnchorEl)} onClose={handleFilterClose}>
           <Box p={2}>
             <Typography variant="h6">Priority</Typography>
             {getUniqueValues("priority").map((priority) => (
@@ -279,7 +280,7 @@ const Cm = () => {
               </MenuItem>
             ))}
           </Box>
-        </Menu>
+        </Menu> */}
       </Box>
 
       {/* DataGrid */}
@@ -338,7 +339,7 @@ const Cm = () => {
           },
         }}>
         <DataGrid
-          rows={filteredTickets}
+          rows={initialTickets}
           columns={columns}
           pageSize={10}
         />
@@ -346,5 +347,4 @@ const Cm = () => {
     </Box>
   );
 };
-
 export default Cm;
