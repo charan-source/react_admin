@@ -28,7 +28,7 @@ const initialTickets = [
   { id: 4, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
   { id: 5, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
   { id: 6, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
-  { id: 7, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19",updated: "2 hours ago", },
+  { id: 7, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
   { id: 8, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
   { id: 9, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
   { id: 10, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
@@ -41,12 +41,12 @@ const initialTickets = [
 
 // Columns for DataGrid
 const columns = [
-  { field: "id", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false },
-  { field: "subject", headerName: "Subject", flex: 2, headerClassName: "bold-header", disableColumnMenu: true },
-  { field: "priority", headerName: "Priority", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
-  { field: "status", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
-  { field: "date", headerName: "Created", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
-  { field: "updated", headerName: "Updated", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+  { field: "id", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false, minWidth: 100 },
+  { field: "subject", headerName: "Subject", flex: 2, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 200 },
+  { field: "priority", headerName: "Priority", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  { field: "status", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  { field: "date", headerName: "Created", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  { field: "updated", headerName: "Updated", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
 ];
 
 const AllExperiences = () => {
@@ -119,7 +119,11 @@ const AllExperiences = () => {
 
         {/* Export Button */}
         <Button 
-          sx={{ backgroundColor: "#ffffff" }} 
+         sx={{
+          backgroundColor: colors.blueAccent[500],
+          color: "#ffffff",
+          whiteSpace: "nowrap",
+        }}
           variant="contained" 
           startIcon={<ImportExportIcon />} 
           onClick={() => alert("Export Data!")}
@@ -129,7 +133,11 @@ const AllExperiences = () => {
 
         {/* Filter Button */}
         <Button           
-          sx={{ backgroundColor: "#ffffff" }} 
+                  sx={{
+                    backgroundColor: colors.blueAccent[500],
+                    color: "#ffffff",
+                    whiteSpace: "nowrap",
+                  }}
           variant="contained" 
           startIcon={<FilterIcon />} 
           onClick={handleFilterClick}
@@ -177,13 +185,22 @@ const AllExperiences = () => {
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
             fontSize: "16px",
+            whiteSpace: "nowrap", // Prevent text wrapping
+            overflow: "visible", // Prevent text truncation
           },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
+            borderBottom: "none", // Remove the border below the header
             fontWeight: "bold !important",
             fontSize: "16px !important",
             color: "#ffffff",
+          },
+          // "& .MuiDataGrid-root::-webkit-scrollbar-thumb":{
+          //    width: "2px !important",
+          //    height: "6px !important"
+          //  },
+          "& .MuiDataGrid-columnSeparator": {
+            display: "none", // Hide the column separator
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             fontWeight: "bold !important", // Ensure header text is bold

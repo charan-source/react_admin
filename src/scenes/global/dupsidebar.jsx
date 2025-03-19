@@ -12,39 +12,132 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import {
   Search as SearchIcon,
   FilterList as FilterIcon,
   ImportExport as ImportExportIcon,
 } from "@mui/icons-material";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 
 // Initial ticket data
 const initialTickets = [
-  { id: 1, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19" },
-  { id: 2, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18" },
-  { id: 3, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17" },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },  
+
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },  
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },  
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },  
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },  
+  {
+    id: 616840,
+    name: "Satya Narayana",
+    email: "Satya@gmail.com",
+    phone: "1234567890",
+    city: "Visakhapatnam",
+    created: "14th March, 2025",
+  },
 ];
 
 // Columns for DataGrid
 const columns = [
-  { field: "id", headerName: "ID", flex: 0.5 },
-  { field: "subject", headerName: "Subject", flex: 2 },
-  { field: "priority", headerName: "Priority", flex: 1 },
-  { field: "status", headerName: "Status", flex: 1 },
-  { field: "date", headerName: "Created", flex: 1 },
+  { field: "id", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false, minWidth: 100 },
+  { field: "name", headerName: "Name", flex: 2, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 200 },
+  { field: "email", headerName: "Email", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  { field: "phone", headerName: "Phone", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  { field: "city", headerName: "City", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+  { field: "created", headerName: "Created", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
 ];
 
 const AllExperiences = () => {
   const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+  const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
 
   // State for tickets
-  const [tickets, setTickets] = useState(initialTickets);
+  const [tickets] = useState(initialTickets); // Removed setTickets since it's unused
   const [filteredTickets, setFilteredTickets] = useState(initialTickets);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
@@ -107,12 +200,30 @@ const AllExperiences = () => {
         </Box>
 
         {/* Export Button */}
-        <Button variant="contained" startIcon={<ImportExportIcon />} onClick={() => alert("Export Data!")}>
+        <Button 
+         sx={{
+          backgroundColor: colors.blueAccent[500],
+          color: "#ffffff",
+          whiteSpace: "nowrap",
+        }}
+          variant="contained" 
+          startIcon={<ImportExportIcon />} 
+          onClick={() => alert("Export Data!")}
+        >
           Export
         </Button>
 
         {/* Filter Button */}
-        <Button variant="contained" startIcon={<FilterIcon />} onClick={handleFilterClick}>
+        <Button           
+                  sx={{
+                    backgroundColor: colors.blueAccent[500],
+                    color: "#ffffff",
+                    whiteSpace: "nowrap",
+                  }}
+          variant="contained" 
+          startIcon={<FilterIcon />} 
+          onClick={handleFilterClick}
+        >
           Filter
         </Button>
 
@@ -135,6 +246,7 @@ const AllExperiences = () => {
             {getUniqueValues("status").map((status) => (
               <MenuItem key={status}>
                 <FormControlLabel
+                  sx={{ backgroundColor: "#ffffff" }}
                   control={<Checkbox checked={selectedFilters.status.includes(status)} onChange={() => handleFilterSelect("status", status)} />}
                   label={status}
                 />
@@ -144,7 +256,7 @@ const AllExperiences = () => {
         </Menu>
       </Box>
 
-      {/* DataGrid with Quick Filter */}
+      {/* DataGrid */}
       <Box height="70vh"
         m="13px 0 0 0"
         sx={{
@@ -155,13 +267,22 @@ const AllExperiences = () => {
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
             fontSize: "16px",
+            whiteSpace: "nowrap", // Prevent text wrapping
+            overflow: "visible", // Prevent text truncation
           },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
+            borderBottom: "none", // Remove the border below the header
             fontWeight: "bold !important",
             fontSize: "16px !important",
             color: "#ffffff",
+          },
+          // "& .MuiDataGrid-root::-webkit-scrollbar-thumb":{
+          //    width: "2px !important",
+          //    height: "6px !important"
+          //  },
+          "& .MuiDataGrid-columnSeparator": {
+            display: "none", // Hide the column separator
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             fontWeight: "bold !important", // Ensure header text is bold
@@ -193,8 +314,7 @@ const AllExperiences = () => {
         <DataGrid
           rows={filteredTickets}
           columns={columns}
-          pageSize={5}
-          components={{ Toolbar: GridToolbarQuickFilter }}
+          pageSize={10}
         />
       </Box>
     </Box>
