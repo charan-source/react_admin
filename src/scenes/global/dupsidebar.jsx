@@ -1,464 +1,346 @@
-import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal, Backdrop, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputBase,
+  useTheme,
+  useMediaQuery,
+  MenuItem,
+  Menu,
+  Typography,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { Link, useLocation } from "react-router-dom";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
-import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
-import logoLight from "./logo.png";
-import { useNavigate } from "react-router-dom";
+import {
+  Search as SearchIcon,
+  ImportExport as ImportExportIcon,
+  FilterList as FilterIcon,
+} from "@mui/icons-material";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
-// Shared getActivePage function
-const getActivePage = (pathname) => {
-  if (pathname.includes("/crm") || pathname.includes("/crmform")) {
-    return "/crm";
-  } else if (pathname.includes("/cm") || pathname.includes("/cmform")) {
-    return "/cm";
-  } else if (pathname.includes("/hob") || pathname.includes("/form")) {
-    return "/hob";
-  } else if (pathname.includes("/notes")) {
-    return "/notes";
-  } else if (pathname.includes("/calendar")) {
-    return "/calendar";
-  } else if (
-    pathname === "/" ||
-    pathname.includes("/allExperiences") ||
-    pathname.includes("/newExperiences") ||
-    pathname.includes("/profile") ||
-    pathname.includes("/pendingExperiences") ||
-    pathname.includes("/resolvedExperiences")
-  ) {
-    return "/"; // Dashboard is active for these routes
-  } else {
-    return pathname;
-  }
-};
+// Initial ticket data
+const initialTickets = [
+  {
+    id: 223958,
+    subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
+    priority: "Very Urgent",
+    status: "Processing",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Bug",
+    category: "Software",
+    department: "IT",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  // Add more tickets...
+];
 
-// Sidebar Item Component (Reused from Sidebar)
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const AllExperiences = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const isMobile = useMediaQuery("(max-width: 1300px)");
 
-  return (
-    <ListItem
-      button
-      component={Link}
-      to={to}
-      selected={selected === to}
-      onClick={() => {
-        setSelected(to);
-        sessionStorage.setItem("selectedSidebarItem", to);
-      }}
-      sx={{
-        color: selected === to ? "white" : colors.blueAccent[500],
-        fontWeight: selected === to ? "bold" : "regular",
-        backgroundColor: selected === to ? colors.blueAccent[700] : "inherit",
-        borderRadius: "10px",
-        marginBottom: "8px",
-        "&:hover": {
-          backgroundColor: selected === to ? "#3e4396 !important" : "none", // Ensure no hover effect
-          color: selected === to ? "white" : colors.blueAccent[500],
-        },
-      }}
-    >
-      <ListItemIcon sx={{ color: "inherit" }}>{icon}</ListItemIcon>
-      <ListItemText
-        primary={title}
-        sx={{
-          "& .MuiTypography-root": { // Target the nested Typography component
-            fontWeight: "bold !important", // Ensure text is bold for selected item
-            fontSize: "15px",
-          },
-        }}
-      />
-    </ListItem>
-  );
-};
+  // State for tickets
+  const [tickets, setTickets] = useState(initialTickets);
+  const [filteredTickets, setFilteredTickets] = useState(initialTickets);
+  const [searchTerm, setSearchTerm] = useState("");
 
-const Topbar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 900px)");
-  const location = useLocation();
-  const [selected, setSelected] = useState(getActivePage(location.pathname));
-  const navigate = useNavigate();
+  // State for filter menu
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState({
+    priority: [],
+    status: [],
+    type: [],
+    category: [],
+    department: [],
+  });
 
-  const getPageTitle = () => {
-    switch (location.pathname) {
-      case "/":
-        return { primaryTitle: "Dashboard", secondaryTitle: null };
-      case "/cm":
-        return { primaryTitle: "Customer Manager", secondaryTitle: null };
-      case "/crm":
-        return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
-      case "/hob":
-        return { primaryTitle: "Head of The Business", secondaryTitle: null };
-      case "/cmform":
-        return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
-      case "/crmform":
-        return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
-      case "/form":
-        return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
-      case "/allExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
-      case "/newExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "New Experiences" };
-      case "/pendingExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "Pending Experiences" };
-      case "/resolvedExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "Resolved Experiences" };
-      case "/profile":
-        return { primaryTitle: "Profile", secondaryTitle: null };
-      case "/notes":
-        return { primaryTitle: "Notes", secondaryTitle: null };
-      case "/calendar":
-        return { primaryTitle: "Calendar", secondaryTitle: null };
-      default:
-        return { primaryTitle: "Page Not Found", secondaryTitle: null };
-    }
+  // Columns for DataGrid
+  const columns = [
+    { field: "id", headerName: "ID", flex: 0.8, headerClassName: "bold-header", disableColumnMenu: false },
+    { field: "subject", headerName: "Subject", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "priority", headerName: "Priority", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "status", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "date", headerName: "Created", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "updated", headerName: "Updated", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+  ];
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    applyFilters(event.target.value, selectedFilters);
   };
 
+  // Handle filter button click
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
 
-  const { primaryTitle, secondaryTitle } = getPageTitle();
+  // Handle filter menu close
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
 
-  // Sync selected state with sessionStorage
-  useEffect(() => {
-    const storedSelected = sessionStorage.getItem("selectedSidebarItem");
-    if (storedSelected) {
-      setSelected(storedSelected);
+  // Handle filter selection
+  const handleFilterSelect = (filterType, value) => {
+    const updatedFilters = { ...selectedFilters };
+    if (updatedFilters[filterType].includes(value)) {
+      updatedFilters[filterType] = updatedFilters[filterType].filter((item) => item !== value);
+    } else {
+      updatedFilters[filterType].push(value);
     }
-  }, []);
+    setSelectedFilters(updatedFilters);
+    applyFilters(searchTerm, updatedFilters);
+  };
 
-  useEffect(() => {
-    setSelected(getActivePage(location.pathname));
-    sessionStorage.setItem("selectedSidebarItem", getActivePage(location.pathname));
-  }, [location.pathname]);
+  // Apply filters based on search term and selected filters
+  const applyFilters = (searchTerm, filters) => {
+    let filtered = tickets;
 
-  const logoSrc = logoLight;
+    // Apply search filter
+    if (searchTerm.trim() !== "") {
+      filtered = filtered.filter((ticket) =>
+        ticket.subject.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply other filters
+    if (filters.priority.length > 0) {
+      filtered = filtered.filter((ticket) => filters.priority.includes(ticket.priority));
+    }
+    if (filters.status.length > 0) {
+      filtered = filtered.filter((ticket) => filters.status.includes(ticket.status));
+    }
+    if (filters.type.length > 0) {
+      filtered = filtered.filter((ticket) => filters.type.includes(ticket.type));
+    }
+    if (filters.category.length > 0) {
+      filtered = filtered.filter((ticket) => filters.category.includes(ticket.category));
+    }
+    if (filters.department.length > 0) {
+      filtered = filtered.filter((ticket) => filters.department.includes(ticket.department));
+    }
+
+    setFilteredTickets(filtered);
+  };
+
+  // Get unique values for filters
+  const getUniqueValues = (key) => {
+    return [...new Set(tickets.map((ticket) => ticket[key]))];
+  };
 
   return (
-    <Box
-      width="100%"
-      sx={{
-        bgcolor: "#fefefe !important",
-        overflowX: "hidden",
-      }}
-    >
-      {/* Topbar Container */}
+    <Box m="20px">
+      {/* Custom Toolbar */}
       <Box
-        display="flex"
-        flexDirection="column"
-        width="100%"
-        bgcolor="#ffffff"
-        sx={{ overflowX: "hidden", flex: 1, marginTop: 1, background: "ffffff", backgroundColor: "#ffffff" }}
-      >
-        {/* Header Section */}
-        {isMobile && (
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            flexShrink={0}
-            width="100%"
-            sx={{
-              bgcolor: "#fefefe !important",
-              boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
-              marginBottom: 2,
-              padding: 2,
-            }}
-          >
-            {/* Logo on Mobile */}
-            <Box sx={{ maxWidth: "180px", height: "50px", backgroundColor: "#fefefe !important" }}>
-              <img
-                src={logoSrc}
-                alt="logo"
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
-              />
-            </Box>
-
-            {/* Mobile Menu Icon */}
-            <IconButton onClick={() => setIsModalOpen(true)}>
-              <MenuOutlinedIcon sx={{ fontSize: 30 }} />
-            </IconButton>
-          </Box>
-        )}
-
-        {/* Greeting and Profile Section */}
-        {isMobile ? (
-          <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-            alignItems="center"
-            width="100%"
-            flexShrink={0}
-            sx={{
-              bgcolor: "transparent",
-              paddingX: isMobile ? 2 : 9,
-              paddingY: 1,
-              boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
-              padding: 4,
-            }}
-          >
-            {/* Greeting Message */}
-            <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "fit-content",
-                padding: "8px",
-                paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "center" : "left",
-              }}
-            >
-              <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "30px" : "25px" }}>
-                Good Evening Delphin
-              </Typography>
-              <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "16px" : "16px" }}>
-                March 13th 2025, 7:40 PM
-              </Typography>
-            </Box>
-
-            {/* Profile Section */}
-            <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                width: "fit-content",
-                alignItems: "center",
-              }}
-            >
-              <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
-                <Box
-                  sx={{
-                    width: isMobile ? 25 : 30,
-                    height: isMobile ? 25 : 30,
-                    borderRadius: "50%",
-                    backgroundColor: colors.blueAccent[500],
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <PersonOutlinedIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
-                </Box>
-                <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
-                  Delphin
-                </Typography>
-              </IconButton>
-            </Box>
-          </Box>
-        ) : (
-          <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            width="100%"
-            flexShrink={0}
-            sx={{
-              bgcolor: "#ffffff",
-              paddingX: isMobile ? 2 : 4,
-              paddingLeft: 35,
-            }}
-          >
-            {/* Greeting Message */}
-            <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "fit-content",
-                padding: "8px",
-                paddingRight: "30px",
-                paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "center" : "left",
-              }}
-            >
-              <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "20px" : "25px" }}>
-                Good Evening Delphin
-              </Typography>
-              <Typography sx={{ color: "#8d8d8d", fontSize: isMobile ? "14px" : "16px" }}>
-                March 13th 2025, 7:40 PM
-              </Typography>
-            </Box>
-
-            {/* Profile Section */}
-            <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                width: "fit-content",
-                alignItems: "center",
-              }}
-            >
-              <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
-                <Box
-                  sx={{
-                    width: isMobile ? 25 : 30,
-                    height: isMobile ? 25 : 30,
-                    borderRadius: "50%",
-                    backgroundColor: colors.blueAccent[500],
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <PersonOutlinedIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
-                </Box>
-                <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
-                  Delphin
-                </Typography>
-              </IconButton>
-            </Box>
-          </Box>
-        )}
-
-        {/* Page Title Section */}
-        {isMobile ? (
-          <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            width="100%"
-            flexShrink={0}
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              paddingX: isMobile ? 2 : 4,
-              boxShadow: "0px 4px 8px -2px rgba(62, 67, 150, 0.5)",
-              padding: "20px",
-            }}
-          >
-            {/* Greeting Message */}
-            <Box
-  borderRadius="3px"
-  sx={{
-    display: "flex",
-    flexDirection: "column",
-    width: "fit-content",
-    padding: "8px",
-    paddingLeft: isMobile ? "12px" : "20px",
-    textAlign: "left",
-  }}
->
-  <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
-    {primaryTitle}
-  </Typography>
-  <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
-    <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
-    {/* <Typography> / </Typography> */}
-    {secondaryTitle && (
-      <>
-        <Typography> / </Typography>
-        <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
-          {secondaryTitle}
-        </Typography>
-      </>
-    )}
-  </Box>
-</Box>;
-          </Box>
-        ) : (
-          <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            width="100%"
-            flexShrink={0}
-            sx={{
-              backgroundColor: colors.blueAccent[500],
-              paddingX: isMobile ? 2 : 4,
-              paddingLeft: 35,
-            }}
-          >
-            {/* Greeting Message */}
-            <Box
-              borderRadius="3px"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "fit-content",
-                padding: "8px",
-                paddingLeft: isMobile ? "12px" : "20px",
-                textAlign: isMobile ? "text" : "text",
-              }}
-            >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
-                {primaryTitle}
-              </Typography>
-              <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
-                <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
-                <Typography> / </Typography>
-                <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
-  {primaryTitle}
-</Typography>
-                {secondaryTitle && (
-                  <>
-                    <Typography> / </Typography>
-                    <Typography onClick={() => navigate(location.pathname)} >{secondaryTitle}</Typography>
-                  </>
-                )}
-              </Box>
-            </Box>
-          </Box>
-        )}
-      </Box>
-
-      {/* Mobile Sidebar Modal */}
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
-        }}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-          sx: { backgroundColor: "rgba(0, 0, 0, 0.5)" }, // Semi-transparent black backdrop
+          gap: 2,
+          mb: 2,
+          flexDirection: isMobile ? "column" : "row",
         }}
       >
-        <Box
-          width="65%"
+        {/* Search Bar */}
+        <Box display="flex" backgroundColor="#ffffff" borderRadius="3px" flex={1}>
+          <InputBase
+            sx={{ ml: 2, flex: 1 }}
+            placeholder="Search"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <IconButton type="button" sx={{ p: 1 }} onClick={() => applyFilters(searchTerm, selectedFilters)}>
+            <SearchIcon />
+          </IconButton>
+        </Box>
+                  <input
+                    type="file"
+                    accept=".xlsx, .xls"
+                    id="import-button"
+                    style={{ display: "none" }}
+                    onChange={handleImport}
+                  />
+                  <label htmlFor="import-button">
+                    <Button
+                      variant="contained"
+                      startIcon={<ImportExportIcon />}
+                      component="span"
+                      sx={{
+                        backgroundColor: colors.blueAccent[500],
+                        color: "#ffffff",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Import
+                    </Button>
+                  </label>
+        
+                  {/* Export Button */}
+                  <Button
+                    variant="contained"
+                    startIcon={<ImportExportIcon />}
+                    onClick={handleExport}
+                    sx={{
+                      backgroundColor: colors.blueAccent[500],
+                      color: "#ffffff",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Export
+                  </Button>
+
+        {/* Filter Button with Dropdown */}
+        <Button
+          variant="contained"
+          startIcon={<FilterIcon />}
+          onClick={handleFilterClick}
           sx={{
-            background: colors.primary[400],
-            height: "100vh",
-            position: "absolute",
-            left: 0,
-            top: 0,
-            padding: "20px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            overflow: "hidden",
-            boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
+            backgroundColor: colors.blueAccent[500],
+            color: "#ffffff",
+            whiteSpace: "nowrap",
           }}
         >
-          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item
-            title="Customer Relationship Manager"
-            to="/crm"
-            icon={<HandshakeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-          />
-          <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Notes" to="/notes" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-          <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        </Box>
-      </Modal>
+          Filter
+        </Button>
+        <Menu
+          anchorEl={filterAnchorEl}
+          open={Boolean(filterAnchorEl)}
+          onClose={handleFilterClose}
+        >
+          {/* Priority Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Priority</Typography>
+          {getUniqueValues("priority").map((priority) => (
+            <MenuItem key={priority}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.priority.includes(priority)}
+                    onChange={() => handleFilterSelect("priority", priority)}
+                  />
+                }
+                label={priority}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Status Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Status</Typography>
+          {getUniqueValues("status").map((status) => (
+            <MenuItem key={status}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.status.includes(status)}
+                    onChange={() => handleFilterSelect("status", status)}
+                  />
+                }
+                label={status}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Type Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Type</Typography>
+          {getUniqueValues("type").map((type) => (
+            <MenuItem key={type}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.type.includes(type)}
+                    onChange={() => handleFilterSelect("type", type)}
+                  />
+                }
+                label={type}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Category Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Category</Typography>
+          {getUniqueValues("category").map((category) => (
+            <MenuItem key={category}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.category.includes(category)}
+                    onChange={() => handleFilterSelect("category", category)}
+                  />
+                }
+                label={category}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Department Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Department</Typography>
+          {getUniqueValues("department").map((department) => (
+            <MenuItem key={department}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.department.includes(department)}
+                    onChange={() => handleFilterSelect("department", department)}
+                  />
+                }
+                label={department}
+              />
+            </MenuItem>
+          ))}
+        </Menu>
+      </Box>
+
+      {/* DataGrid Table */}
+      <Box
+        m="13px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+            fontSize: "16px",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+            fontWeight: "bold !important",
+            fontSize: "16px !important",
+            color: "#ffffff",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: "#ffffff",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+            color: "#ffffff",
+          },
+        }}
+      >
+        <DataGrid
+          rows={filteredTickets}
+          columns={columns}
+          disableColumnMenu
+        />
+      </Box>
     </Box>
   );
 };
 
-export default Topbar;
+export default AllExperiences;

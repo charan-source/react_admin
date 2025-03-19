@@ -49,16 +49,18 @@ const Form = () => {
   const textFieldStyles = {
     "& .MuiOutlinedInput-root": {
       borderRadius: "8px",
-      border: `1px solid ${theme.palette.mode === "dark" ? "#555" : "#ccc"}`,
-      backgroundColor: theme.palette.mode === "dark" ? "#1f2a40" : "#ffffff",
+      border: "1px solid #ccc",
+      backgroundColor: "#ffffff",
       boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
       "&:hover": {
-        borderColor: theme.palette.mode === "dark" ? "#888" : "#999",
+        borderColor: "#999",
         boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
       },
+      padding: "8px 12px", // Adjust padding to reduce height
+      height: "50px", // Set a fixed height for the input
     },
     "& .MuiInputLabel-root": {
-      color: theme.palette.mode === "dark" ? "#bbb" : "#555",
+      color: "#555",
     },
     "& .MuiOutlinedInput-notchedOutline": {
       border: "none",
@@ -66,7 +68,7 @@ const Form = () => {
   };
 
   return (
-    <Box m="20px" sx={{ backgroundColor:"#ffffff", padding:"20px"
+    <Box m="15px" sx={{ backgroundColor:"#ffffff", padding:"20px"
 
     }}>
       {/* <Header title="Create CM" subtitle="Create a New Customer Manager Profile" /> */}
@@ -81,7 +83,7 @@ const Form = () => {
               sx={{
                 "& > div": { gridColumn: isNonMobile ? "span 4" : undefined },
                backgroundColor:"#ffffff",
-               padding:"20px"
+              //  padding:"10px"
               }}
             >
               {[

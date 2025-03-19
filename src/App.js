@@ -24,13 +24,16 @@ import AllExperiences from "./scenes/experiences/allExperiences";
 import NewExperiences from "./scenes/experiences/newExperiences";
 import PendingExperiences from "./scenes/experiences/pendingExperiences";
 import ResolvedExperiences from "./scenes/experiences/resolvedExperiences";
-import Notes from "./scenes/notes"
+import Notes from "./scenes/notes";
+// import { tokens } from "../../theme";
 
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   // const [drawer, setDrawerOpen] = useState(true);
   const isMobile = useMediaQuery("(max-width: 900px)"); // Detect mobile screen
+    // const theme = useTheme();
+    // const colors = tokens(theme.palette.mode);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -67,6 +70,14 @@ function App() {
             padding: "20px 20px 20px", // Top padding increased to prevent overlap
             overflowY: "auto",
             transition: "margin 0.3s ease-in-out",
+            "&::-webkit-scrollbar": {
+              width: "1px", // Width of the scrollbar
+              height: "5px", // Height of the horizontal scrollbar
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#000000", // Color of the scrollbar track
+              borderRadius: "4px",
+            },
           }}
         >
           <Routes>

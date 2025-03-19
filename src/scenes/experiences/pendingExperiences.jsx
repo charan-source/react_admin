@@ -1,472 +1,484 @@
 import React, { useState } from "react";
 import {
   Box,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-  TextField,
   Button,
+  IconButton,
+  InputBase,
+  useTheme,
+  useMediaQuery,
   MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
+  Menu,
+  Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import {
   Search as SearchIcon,
   ImportExport as ImportExportIcon,
-  Add as AddIcon,
+  FilterList as FilterIcon,
 } from "@mui/icons-material";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
+// Initial ticket data
+const initialTickets = [
+  {
+    id: 223958,
+    subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
+    priority: "Very Urgent",
+    status: "Processing",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Bug",
+    category: "Software",
+    department: "IT",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  }, {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+  {
+    id: 616840,
+    subject: "Vero excepturi cunque nulla est corrupti.",
+    priority: "Less Urgent",
+    status: "Pending",
+    date: "2 hours ago",
+    updated: "2 hours ago",
+    type: "Feature Request",
+    category: "Hardware",
+    department: "Support",
+  },
+
+  // Add more tickets...
+];
 
 const PendingExperiences = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery("(max-width: 1300px)");
   const colors = tokens(theme.palette.mode);
+  const isMobile = useMediaQuery("(max-width: 1300px)");
 
-  // State for search, rows per page, and tickets
+  // State for tickets
+  const [tickets, setTickets] = useState(initialTickets);
+  const [filteredTickets, setFilteredTickets] = useState(initialTickets);
   const [searchTerm, setSearchTerm] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const tickets = [
-    {
-      id: 223958,
-      subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
-      // createdBy: "Krystel Jetmanie",
-      // assignedTo: "Kory Maegan",
-      priority: "Very Urgent",
-      status: "Processing",
-      date: "2 hours ago",
-      updated: "2 hours ago",
 
-      type: "Bug",
-      category: "Software",
-      department: "IT",
-    },
-    {
-      id: 616840,
-      subject: "Vero excepturi cunque nulla est corrupti.",
-      // createdBy: "Savansh Ivory",
-      // assignedTo: "Leam Leda",
-      priority: "Less Urgent",
-      status: "Pending",
-      date: "2 hours ago",
-      updated: "2 hours ago",
+  // State for filter menu
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState({
+    priority: [],
+    status: [],
+    type: [],
+    category: [],
+    department: [],
+  });
 
-      type: "Feature Request",
-      category: "Hardware",
-      department: "Support",
-    },
-
-    {
-      id: 223958,
-      subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
-      // createdBy: "Krystel Jetmanie",
-      // assignedTo: "Kory Maegan",
-      priority: "Very Urgent",
-      status: "Processing",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Bug",
-      category: "Software",
-      department: "IT",
-    },
-    {
-      id: 616840,
-      subject: "Vero excepturi cunque nulla est corrupti.",
-      // createdBy: "Savansh Ivory",
-      // assignedTo: "Leam Leda",
-      priority: "Less Urgent",
-      status: "Pending",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Feature Request",
-      category: "Hardware",
-      department: "Support",
-    },
-
-    {
-      id: 223958,
-      subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
-      // createdBy: "Krystel Jetmanie",
-      // assignedTo: "Kory Maegan",
-      priority: "Very Urgent",
-      status: "Processing",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Bug",
-      category: "Software",
-      department: "IT",
-    },
-    {
-      id: 616840,
-      subject: "Vero excepturi cunque nulla est corrupti.",
-      // createdBy: "Savansh Ivory",
-      // assignedTo: "Leam Leda",
-      priority: "Less Urgent",
-      status: "Pending",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Feature Request",
-      category: "Hardware",
-      department: "Support",
-    },
-    {
-      id: 223958,
-      subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
-      // createdBy: "Krystel Jetmanie",
-      // assignedTo: "Kory Maegan",
-      priority: "Very Urgent",
-      status: "Processing",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Bug",
-      category: "Software",
-      department: "IT",
-    },
-    {
-      id: 616840,
-      subject: "Vero excepturi cunque nulla est corrupti.",
-      // createdBy: "Savansh Ivory",
-      // assignedTo: "Leam Leda",
-      priority: "Less Urgent",
-      status: "Pending",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Feature Request",
-      category: "Hardware",
-      department: "Support",
-    },
-    {
-      id: 223958,
-      subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
-      // createdBy: "Krystel Jetmanie",
-      // assignedTo: "Kory Maegan",
-      priority: "Very Urgent",
-      status: "Processing",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Bug",
-      category: "Software",
-      department: "IT",
-    },
-    {
-      id: 616840,
-      subject: "Vero excepturi cunque nulla est corrupti.",
-      // createdBy: "Savansh Ivory",
-      // assignedTo: "Leam Leda",
-      priority: "Less Urgent",
-      status: "Pending",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Feature Request",
-      category: "Hardware",
-      department: "Support",
-    },
-    {
-      id: 223958,
-      subject: "Eligendi ut illum alias voluptatibus eos molestiae accusantium.",
-      // createdBy: "Krystel Jetmanie",
-      // assignedTo: "Kory Maegan",
-      priority: "Very Urgent",
-      status: "Processing",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-
-      type: "Bug",
-      category: "Software",
-      department: "IT",
-    },
-    {
-      id: 616840,
-      subject: "Vero excepturi cunque nulla est corrupti.",
-      priority: "Less Urgent",
-      status: "Pending",
-      date: "2 hours ago",
-      updated: "2 hours ago",
-      // createdBy: "Savansh Ivory",
-      // assignedTo: "Leam Leda",
-
-
-      type: "Feature Request",
-      category: "Hardware",
-      department: "Support",
-    },
-    // Add more ticket data here...
+  // Columns for DataGrid
+  const columns = [
+    { field: "id", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false },
+    { field: "subject", headerName: "Subject", flex: 2, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "priority", headerName: "Priority", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "status", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "date", headerName: "Created", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
+    { field: "updated", headerName: "Updated", flex: 1, headerClassName: "bold-header", disableColumnMenu: true },
   ];
-
-  // State for filter values
-  const [filters, setFilters] = useState({
-    type: "",
-    category: "",
-    department: "",
-    priority: "",
-    status: "",
-  });
-
-  // Handle filter change
-  const handleFilterChange = (event) => {
-    const { name, value } = event.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
-  };
-
-  // Filter tickets based on search term and filters
-  const filteredTickets = tickets.filter((ticket) => {
-    const matchesSearch = ticket.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = filters.type ? ticket.type === filters.type : true;
-    const matchesCategory = filters.category ? ticket.category === filters.category : true;
-    const matchesDepartment = filters.department ? ticket.department === filters.department : true;
-    const matchesPriority = filters.priority ? ticket.priority === filters.priority : true;
-    const matchesStatus = filters.status ? ticket.status === filters.status : true;
-
-    return (
-      matchesSearch &&
-      matchesType &&
-      matchesCategory &&
-      matchesDepartment &&
-      matchesPriority &&
-      matchesStatus
-    );
-  });
 
   // Handle search input change
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    applyFilters(event.target.value, selectedFilters);
   };
 
-  // Handle rows per page change
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(event.target.value);
+  // Handle filter button click
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(event.currentTarget);
   };
 
-  // Handle import/export actions
-  const handleImport = () => {
-    alert("Import functionality to be implemented");
+  // Handle filter menu close
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
   };
 
+  // Handle filter selection
+  const handleFilterSelect = (filterType, value) => {
+    const updatedFilters = { ...selectedFilters };
+    if (updatedFilters[filterType].includes(value)) {
+      updatedFilters[filterType] = updatedFilters[filterType].filter((item) => item !== value);
+    } else {
+      updatedFilters[filterType].push(value);
+    }
+    setSelectedFilters(updatedFilters);
+    applyFilters(searchTerm, updatedFilters);
+  };
+
+
+  const handleImport = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(worksheet);
+        setTickets(json); // Update state with imported data
+        setFilteredTickets(json); // Also update filtered data
+        alert("Data imported successfully!");
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  // Handle export action
   const handleExport = () => {
-    alert("Export functionality to be implemented");
+    const worksheet = XLSX.utils.json_to_sheet(filteredTickets);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Tickets");
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(data, "tickets.xlsx");
+    alert("Data exported successfully!");
+  };
+  // Apply filters based on search term and selected filters
+  const applyFilters = (searchTerm, filters) => {
+    let filtered = tickets;
+
+    // Apply search filter
+    if (searchTerm.trim() !== "") {
+      filtered = filtered.filter((ticket) =>
+        ticket.subject.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply other filters
+    if (filters.priority.length > 0) {
+      filtered = filtered.filter((ticket) => filters.priority.includes(ticket.priority));
+    }
+    if (filters.status.length > 0) {
+      filtered = filtered.filter((ticket) => filters.status.includes(ticket.status));
+    }
+    if (filters.type.length > 0) {
+      filtered = filtered.filter((ticket) => filters.type.includes(ticket.type));
+    }
+    if (filters.category.length > 0) {
+      filtered = filtered.filter((ticket) => filters.category.includes(ticket.category));
+    }
+    if (filters.department.length > 0) {
+      filtered = filtered.filter((ticket) => filters.department.includes(ticket.department));
+    }
+
+    setFilteredTickets(filtered);
   };
 
-  // Handle new ticket button click
-  const handleNewTicket = () => {
-    alert("New ticket functionality to be implemented");
+  // Get unique values for filters
+  const getUniqueValues = (key) => {
+    return [...new Set(tickets.map((ticket) => ticket[key]))];
   };
 
   return (
-    <Box>
-      {/* Toolbar with search, import/export, and new ticket button */}
-      <Box display="flex" flexDirection={isMobile ? "column" : "row"} justifyContent="space-around" alignItems="center" sx={{ padding: isMobile ? 0 : 2 }}>
-        <Box sx={{ width: isMobile ? "100%" : "auto" }}>
-          <TextField
-            variant="outlined"
-            placeholder="Search..."
-            size="small"
-            sx={{
-              background: "#ffffff",
-              width: isMobile ? "100%" : "560px",
-              "& .MuiInputBase-root": {
-                height: "48px",
-              },
-              "& .MuiInputBase-input": {
-                fontSize: "16px",
-              },
-            }}
+    <Box m="20px">
+      {/* Custom Toolbar */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 2,
+          mb: 2,
+          flexDirection: isMobile ? "column" : "row",
+        }}
+      >
+        {/* Search Bar */}
+        <Box display="flex" backgroundColor="#ffffff" borderRadius="3px" flex={1}>
+          <InputBase
+            sx={{ ml: 2, flex: 1 }}
+            placeholder="Search"
             value={searchTerm}
             onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
-            }}
           />
+          <IconButton type="button" sx={{ p: 1 }} onClick={() => applyFilters(searchTerm, selectedFilters)}>
+            <SearchIcon />
+          </IconButton>
         </Box>
-        {/* Rows per page selector */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            justifyContent: isMobile ? "space-around" : "flex-end",
-            padding: 2,
-            gap: 5,
-          }}
-        >
-          <FormControl
-            size="small"
-            sx={{
-              backgroundColor: "#ffffff",
-              padding: "5px",
-              border: "none",
-              boxShadow: "none",
-            }}
-          >
-            <InputLabel sx={{ backgroundColor: "#ffffff", paddingX: "4px" }}>
-              Rows per page
-            </InputLabel>
-            <Select
-              value={rowsPerPage}
-              onChange={handleRowsPerPageChange}
-              label="Rows per page"
-              sx={{
-                "&.MuiOutlinedInput-root": {
-                  "& fieldset": { border: "none" },
-                  "&:hover fieldset": { border: "none" },
-                  "&.Mui-focused fieldset": { border: "none" },
-                },
-              }}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={25}>25</MenuItem>
-              <MenuItem value={50}>50</MenuItem>
-              <MenuItem value={100}>100</MenuItem>
-            </Select>
-          </FormControl>
-
-          <Box sx={{ display: "flex", gap: 3 }}>
-            <Button
-              onClick={handleImport}
-              sx={{ backgroundColor: "#ffffff", display: "flex", alignItems: "center", gap: 1 }}
-            >
-              <ImportExportIcon />
-              <Typography variant="body2" sx={{ fontSize: "14px" }}>Import</Typography>
-            </Button>
-            <Button
-              onClick={handleExport}
-              sx={{ backgroundColor: "#ffffff", display: "flex", alignItems: "center", gap: 1 }}
-            >
-              <ImportExportIcon />
-              <Typography variant="body2" sx={{ fontSize: "14px" }}>Export</Typography>
-            </Button>
-          </Box>
-
+        <input
+          type="file"
+          accept=".xlsx, .xls"
+          id="import-button"
+          style={{ display: "none" }}
+          onChange={handleImport}
+        />
+        <label htmlFor="import-button">
           <Button
             variant="contained"
+            startIcon={<ImportExportIcon />}
+            component="span"
             sx={{
-              background: colors.blueAccent[500],
-              fontWeight: "bold",
+              backgroundColor: colors.blueAccent[500],
               color: "#ffffff",
               whiteSpace: "nowrap",
-              padding: "12px 18px",
-              fontSize: "14px",
-              textTransform: "none",
             }}
-            startIcon={<AddIcon />}
-            onClick={handleNewTicket}
           >
-            New Experience
+            Import
           </Button>
-        </Box>
-      </Box>
+        </label>
 
-      {/* Responsive Table with Filters */}
-      <Box sx={{ padding: isMobile ? 2 : 3 }}>
-        <TableContainer
-          component={Paper}
+        {/* Export Button */}
+        <Button
+          variant="contained"
+          startIcon={<ImportExportIcon />}
+          onClick={handleExport}
           sx={{
-            maxWidth: "100%",
-            overflowX: "auto",
+            backgroundColor: colors.blueAccent[500],
+            color: "#ffffff",
             whiteSpace: "nowrap",
-            "&::-webkit-scrollbar": {
-              height: "4px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#888",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-            },
           }}
         >
-          <Table sx={{ minWidth: 650 }} aria-label="responsive table">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: colors.blueAccent[500] }}>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff", textTransform: "uppercase" }}>
-                  ID
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
-                  Subject
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
-                  <Box display="flex" alignItems="center" justifyContent="center">
-                    Priority
-                    <FormControl variant="outlined" size="small" sx={{ backgroundColor: "transparent" }}>
-                      <Select
-                        name="priority"
-                        value={filters.priority}
-                        onChange={handleFilterChange}
-                        sx={{
-                          color: "#ffffff",
-                          "& .MuiSelect-icon": { color: "#ffffff" },
-                          "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                        }}
-                      >
-                        <MenuItem value="">All</MenuItem>
-                        <MenuItem value="Very Urgent">Very Urgent</MenuItem>
-                        <MenuItem value="Urgent">Urgent</MenuItem>
-                        <MenuItem value="Less Urgent">Less Urgent</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
-                  <Box display="flex" alignItems="center" justifyContent="center">
-                    Status
-                    <FormControl variant="outlined" size="small" sx={{ backgroundColor: "transparent" }}>
-                      <Select
-                        name="status"
-                        value={filters.status}
-                        onChange={handleFilterChange}
-                        sx={{
-                          color: "#ffffff",
-                          "& .MuiSelect-icon": { color: "#ffffff" },
-                          "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                        }}
-                      >
-                        <MenuItem value="">All</MenuItem>
-                        <MenuItem value="Processing">Processing</MenuItem>
-                        <MenuItem value="Pending">Pending</MenuItem>
-                        <MenuItem value="Closed">Closed</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
-                  Date
-                </TableCell>
-                <TableCell sx={{ fontWeight: "bold", fontSize: "16px", color: "#ffffff" }}>
-                  Updated
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredTickets.slice(0, rowsPerPage).map((ticket) => (
-                <TableRow key={ticket.id}>
-                  <TableCell sx={{ fontSize: "16px" }}>{ticket.id}</TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>{ticket.subject}</TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>{ticket.priority}</TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>{ticket.status}</TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>{ticket.date}</TableCell>
-                  <TableCell sx={{ fontSize: "16px" }}>{ticket.updated}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+          Export
+        </Button>
+
+        {/* Filter Button with Dropdown */}
+        <Button
+          variant="contained"
+          startIcon={<FilterIcon />}
+          onClick={handleFilterClick}
+          sx={{
+            backgroundColor: colors.blueAccent[500],
+            color: "#ffffff",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Filter
+        </Button>
+        <Menu
+          anchorEl={filterAnchorEl}
+          open={Boolean(filterAnchorEl)}
+          onClose={handleFilterClose}
+        >
+          {/* Priority Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Priority</Typography>
+          {getUniqueValues("priority").map((priority) => (
+            <MenuItem key={priority}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.priority.includes(priority)}
+                    onChange={() => handleFilterSelect("priority", priority)}
+                  />
+                }
+                label={priority}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Status Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Status</Typography>
+          {getUniqueValues("status").map((status) => (
+            <MenuItem key={status}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.status.includes(status)}
+                    onChange={() => handleFilterSelect("status", status)}
+                  />
+                }
+                label={status}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Type Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Type</Typography>
+          {getUniqueValues("type").map((type) => (
+            <MenuItem key={type}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.type.includes(type)}
+                    onChange={() => handleFilterSelect("type", type)}
+                  />
+                }
+                label={type}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Category Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Category</Typography>
+          {getUniqueValues("category").map((category) => (
+            <MenuItem key={category}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.category.includes(category)}
+                    onChange={() => handleFilterSelect("category", category)}
+                  />
+                }
+                label={category}
+              />
+            </MenuItem>
+          ))}
+
+          {/* Department Filter */}
+          <Typography variant="h6" sx={{ p: 2 }}>Department</Typography>
+          {getUniqueValues("department").map((department) => (
+            <MenuItem key={department}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.department.includes(department)}
+                    onChange={() => handleFilterSelect("department", department)}
+                  />
+                }
+                label={department}
+              />
+            </MenuItem>
+          ))}
+        </Menu>
+      </Box>
+
+      {/* DataGrid Table */}
+      <Box
+        m="13px 0 0 0"  
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+            fontSize: "16px",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+            fontWeight: "bold !important",
+            fontSize: "16px !important",
+            color: "#ffffff",
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: "bold !important", // Ensure header text is bold
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: "#ffffff",
+            // scrollbarWidth: "thin", 
+            // Custom scrollbar styles
+            "&::-webkit-scrollbar": {
+              width: "1px", // Width of the scrollbar
+              height: "5px", // Height of the horizontal scrollbar
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: colors.grey[200], // Color of the scrollbar track
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: colors.blueAccent[500], // Color of the scrollbar thumb
+              borderRadius: "4px",
+              "&:hover": {
+                backgroundColor: colors.blueAccent[700], // Color of the scrollbar thumb on hover
+              },
+            },
+          },
+          "& .MuiDataGrid-row": {
+            borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
+          },
+          "& .MuiTablePagination-root": {
+            color: "#ffffff !important", // Ensure pagination text is white
+          },
+          "& .MuiTablePagination-selectLabel, & .MuiTablePagination-input": {
+            color: "#ffffff !important", // Ensure select label and input text are white
+          },
+          "& .MuiTablePagination-displayedRows": {
+            color: "#ffffff !important", // Ensure displayed rows text is white
+          },
+          "& .MuiSvgIcon-root": {
+            color: "#ffffff !important", // Ensure pagination icons are white
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+            color: "#ffffff",
+          },
+        }}
+      >
+        <DataGrid
+          rows={filteredTickets}
+          columns={columns}
+          disableColumnMenu
+        />
       </Box>
     </Box>
   );
