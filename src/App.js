@@ -25,6 +25,7 @@ import NewExperiences from "./scenes/experiences/newExperiences";
 import PendingExperiences from "./scenes/experiences/pendingExperiences";
 import ResolvedExperiences from "./scenes/experiences/resolvedExperiences";
 import Notes from "./scenes/notes";
+import Organization from "./scenes/organization";
 // import { tokens } from "../../theme";
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
             <Route path="/geography" element={<Geography />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/organization" element={<Organization />} />
 
             {/* Experience Routes */}
             <Route path="/allExperiences" element={<AllExperiences />} />

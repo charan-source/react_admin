@@ -79,7 +79,7 @@ const initialTickets = [
     phone: "1234567890",
     city: "Visakhapatnam",
     created: "14th March, 2025",
-  },  
+  },
 
   {
     id: 616840,
@@ -88,7 +88,7 @@ const initialTickets = [
     phone: "1234567890",
     city: "Visakhapatnam",
     created: "14th March, 2025",
-  },  
+  },
   {
     id: 616840,
     name: "Satya Narayana",
@@ -96,7 +96,7 @@ const initialTickets = [
     phone: "1234567890",
     city: "Visakhapatnam",
     created: "14th March, 2025",
-  },  
+  },
   {
     id: 616840,
     name: "Satya Narayana",
@@ -104,7 +104,7 @@ const initialTickets = [
     phone: "1234567890",
     city: "Visakhapatnam",
     created: "14th March, 2025",
-  },  
+  },
   {
     id: 616840,
     name: "Satya Narayana",
@@ -112,7 +112,7 @@ const initialTickets = [
     phone: "1234567890",
     city: "Visakhapatnam",
     created: "14th March, 2025",
-  },  
+  },
   {
     id: 616840,
     name: "Satya Narayana",
@@ -195,7 +195,7 @@ const Cm = () => {
   // const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
 
   return (
-    <Box m="20px">
+    <Box m="10px">
       {/* Toolbar */}
       <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2} flexDirection={isMobile ? "column" : "row"}>
         {/* Search Bar */}
@@ -237,22 +237,22 @@ const Cm = () => {
           Filter
         </Button> */}
         <Button
-            variant="contained"
-            sx={{
-              background: colors.blueAccent[500],
-              fontWeight: "bold",
-              color: "#ffffff",
-              whiteSpace: "nowrap",
-              // paddingX: "15px"
-              // padding: "12px 18px ",
-              // fontSize: "14px",
-              textTransform:"none"
-            }}
-            startIcon={<AddIcon />}
-            onClick={handleNewTicket}
-          >
-             Create New
-          </Button>
+          variant="contained"
+          sx={{
+            background: colors.blueAccent[500],
+            fontWeight: "bold",
+            color: "#ffffff",
+            whiteSpace: "nowrap",
+            // paddingX: "15px"
+            // padding: "12px 18px ",
+            // fontSize: "14px",
+            textTransform: "none"
+          }}
+          startIcon={<AddIcon />}
+          onClick={handleNewTicket}
+        >
+          Create New
+        </Button>
 
         {/* Filter Menu */}
         {/* <Menu anchorEl={filterAnchorEl} open={Boolean(filterAnchorEl)} onClose={handleFilterClose}>
@@ -287,10 +287,11 @@ const Cm = () => {
       <Box height="70vh"
         m="13px 0 0 0"
         sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-            overflowX: "auto", // Enable horizontal scrolling
-          },
+          overflowX: "hidden",
+          // "& .MuiDataGrid-root": {
+          //   border: "none",
+          //   overflowX: "auto", // Enable horizontal scrolling
+          // },
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
             fontSize: "16px",
@@ -311,10 +312,26 @@ const Cm = () => {
           "& .MuiDataGrid-columnSeparator": {
             display: "none", // Hide the column separator
           },
+          // "& .MuiDataGrid-root::-webkit-scrollbar": {
+          //   display: "none", // Hides scrollbar in Chrome, Safari
+          // },
           "& .MuiDataGrid-columnHeaderTitle": {
             fontWeight: "bold !important", // Ensure header text is bold
           },
+          // "& .MuiDataGrid-virtualScroller": {
+          //   backgroundColor: "#ffffff",
+          // },
+          "& .MuiDataGrid-root::-webkit-scrollbar": {
+            display: "none !important",
+          },
+          "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+            display: "none !important",
+          },
+          "& .MuiDataGrid-root": {
+            scrollbarWidth: "none !important", // Hides scrollbar in Firefox
+          },
           "& .MuiDataGrid-virtualScroller": {
+            // scrollbarWidth: "none !important",
             backgroundColor: "#ffffff",
           },
           "& .MuiDataGrid-row": {
@@ -339,11 +356,70 @@ const Cm = () => {
           },
         }}>
         <DataGrid
-            sx={{
-              "& .MuiDataGrid-columnSeparator": {
-               display: "none !important", // Ensures it overrides MUI defaults
-              },
-            }}
+          sx={{
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+              fontSize: "16px",
+              whiteSpace: "nowrap", // Prevent text wrapping
+              overflow: "visible", // Prevent text truncation
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none", // Remove the border below the header
+              fontWeight: "bold !important",
+              fontSize: "16px !important",
+              color: "#ffffff",
+            },
+            // "& .MuiDataGrid-root::-webkit-scrollbar-thumb":{
+            //    width: "2px !important",
+            //    height: "6px !important"
+            //  },
+            "& .MuiDataGrid-columnSeparator": {
+              display: "none", // Hide the column separator
+            },
+            // "& .MuiDataGrid-root::-webkit-scrollbar": {
+            //   display: "none", // Hides scrollbar in Chrome, Safari
+            // },
+            "& .MuiDataGrid-columnHeaderTitle": {
+              fontWeight: "bold !important", // Ensure header text is bold
+            },
+            // "& .MuiDataGrid-virtualScroller": {
+            //   backgroundColor: "#ffffff",
+            // },
+            "& .MuiDataGrid-root::-webkit-scrollbar": {
+              display: "none !important",
+            },
+            "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+              display: "none !important",
+            },
+            "& .MuiDataGrid-root": {
+              // scrollbarWidth: "none !important", // Hides scrollbar in Firefox
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              // scrollbarWidth: "none !important",
+              backgroundColor: "#ffffff",
+            },
+            "& .MuiDataGrid-row": {
+              borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
+            },
+            "& .MuiTablePagination-root": {
+              color: "#ffffff !important", // Ensure pagination text is white
+            },
+            "& .MuiTablePagination-selectLabel, & .MuiTablePagination-input": {
+              color: "#ffffff !important", // Ensure select label and input text are white
+            },
+            "& .MuiTablePagination-displayedRows": {
+              color: "#ffffff !important", // Ensure displayed rows text is white
+            },
+            "& .MuiSvgIcon-root": {
+              color: "#ffffff !important", // Ensure pagination icons are white
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+              color: "#ffffff",
+            },
+          }}
           rows={initialTickets}
           columns={columns}
           pageSize={10}

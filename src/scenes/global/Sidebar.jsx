@@ -23,7 +23,10 @@ const getActivePage = (pathname) => {
     return "/notes";
   } else if (pathname.includes("/calendar")) {
     return "/calendar";
-  } else if (
+  }
+  else if (pathname.includes("/organization")) {
+    return "/organization";
+  }  else if (
     pathname === "/" ||
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
@@ -132,6 +135,7 @@ const Sidebar = ({ isSidebar }) => {
           setSelected={setSelected}
         />
         <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
