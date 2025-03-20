@@ -339,6 +339,11 @@ const Hob = () => {
           },
         }}>
         <DataGrid
+            sx={{
+              "& .MuiDataGrid-columnSeparator": {
+               display: "none !important", // Ensures it overrides MUI defaults
+              },
+            }}
           rows={initialTickets}
           columns={columns}
           pageSize={10}

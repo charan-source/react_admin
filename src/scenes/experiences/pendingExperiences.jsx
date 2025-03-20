@@ -18,7 +18,9 @@ import {
   Search as SearchIcon,
   FilterList as FilterIcon,
   ImportExport as ImportExportIcon,
+  // Add as AddIcon,
 } from "@mui/icons-material";
+// import { useNavigate } from "react-router-dom";
 
 // Initial ticket data
 const initialTickets = [
@@ -49,10 +51,12 @@ const columns = [
   { field: "updated", headerName: "Updated", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
 ];
 
+
 const PendingExperiences = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
+  // const Navigate = useNavigate();
 
   // State for tickets
   const [tickets] = useState(initialTickets); // Removed setTickets since it's unused
@@ -102,6 +106,9 @@ const PendingExperiences = () => {
     setFilteredTickets(filtered);
   };
 
+  // const handleNewTicket = () => {
+  //   Navigate('/crmform')
+  // };
   // Get Unique Values for Filters
   const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
 
@@ -118,28 +125,32 @@ const PendingExperiences = () => {
         </Box>
 
         {/* Export Button */}
-        <Button 
-         sx={{
-          backgroundColor: colors.blueAccent[500],
-          color: "#ffffff",
-          whiteSpace: "nowrap",
-        }}
-          variant="contained" 
-          startIcon={<ImportExportIcon />} 
+        <Button
+          sx={{
+            backgroundColor: colors.blueAccent[500],
+            color: "#ffffff",
+            whiteSpace: "nowrap",
+            fontWeight: "bold",
+            textTransform: "none"
+          }}
+          variant="contained"
+          startIcon={<ImportExportIcon />}
           onClick={() => alert("Export Data!")}
         >
           Export
         </Button>
 
         {/* Filter Button */}
-        <Button           
-                  sx={{
-                    backgroundColor: colors.blueAccent[500],
-                    color: "#ffffff",
-                    whiteSpace: "nowrap",
-                  }}
-          variant="contained" 
-          startIcon={<FilterIcon />} 
+        <Button
+          sx={{
+            backgroundColor: colors.blueAccent[500],
+            color: "#ffffff",
+            whiteSpace: "nowrap",
+            fontWeight: "bold",
+            textTransform: "none"
+          }}
+          variant="contained"
+          startIcon={<FilterIcon />}
           onClick={handleFilterClick}
         >
           Filter
@@ -172,6 +183,23 @@ const PendingExperiences = () => {
             ))}
           </Box>
         </Menu>
+        {/* <Button
+          variant="contained"
+          sx={{
+            background: colors.blueAccent[500],
+            fontWeight: "bold",
+            color: "#ffffff",
+            whiteSpace: "nowrap",
+            // paddingX: "15px"
+            // padding: "12px 18px ",
+            // fontSize: "14px",
+            textTransform: "none"
+          }}
+          startIcon={<AddIcon />}
+          onClick={handleNewTicket}
+        >
+          New Experience
+        </Button> */}
       </Box>
 
       {/* DataGrid */}
@@ -195,6 +223,10 @@ const PendingExperiences = () => {
             fontSize: "16px !important",
             color: "#ffffff",
           },
+          // "& .MuiDataGrid-root::-webkit-scrollbar-thumb":{
+          //    width: "2px !important",
+          //    height: "6px !important"
+          //  },
           "& .MuiDataGrid-columnSeparator": {
             display: "none", // Hide the column separator
           },
@@ -226,6 +258,11 @@ const PendingExperiences = () => {
           },
         }}>
         <DataGrid
+        sx={{
+            "& .MuiDataGrid-columnSeparator": {
+             display: "none !important", // Ensures it overrides MUI defaults
+            },
+          }}
           rows={filteredTickets}
           columns={columns}
           pageSize={10}
