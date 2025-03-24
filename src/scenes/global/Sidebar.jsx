@@ -7,28 +7,30 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import logoLight from "./logo.png";
 
 // Shared getActivePage function
 const getActivePage = (pathname) => {
-  if (pathname.includes("/crm") || pathname.includes("/crmform")) {
+  if (pathname.includes("/crm") || pathname.includes("/crmform") || pathname.includes("/crmdetails")) {
     return "/crm";
-  } else if (pathname.includes("/cm") || pathname.includes("/cmform")) {
+  } else if (pathname.includes("/cm") || pathname.includes("/cmform") || pathname.includes("/cmdetails")) {
     return "/cm";
-  } else if (pathname.includes("/hob") || pathname.includes("/form")) {
+  } else if (pathname.includes("/hob") || pathname.includes("/form") || pathname.includes("/hobdetails")) {
     return "/hob";
   } else if (pathname.includes("/notes")) {
     return "/notes";
   } else if (pathname.includes("/calendar")) {
     return "/calendar";
   }
-  else if (pathname.includes("/organization")) {
+  else if (pathname.includes("/organization") || pathname.includes("/organizationdetails")) {
     return "/organization";
   }  else if (
     pathname === "/" ||
     pathname.includes("/allExperiences") ||
+    pathname.includes("/ticketdetails") ||
     pathname.includes("/newExperiences") ||
     pathname.includes("/pendingExperiences") ||
     pathname.includes("/profile") ||
@@ -134,7 +136,7 @@ const Sidebar = ({ isSidebar }) => {
           selected={selected}
           setSelected={setSelected}
         />
-        <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+       <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />

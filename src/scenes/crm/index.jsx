@@ -24,103 +24,15 @@ import { useNavigate } from "react-router-dom";
 
 // Initial ticket data
 const initialTickets = [
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
+  { id: 1, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "Wipro" },
+  { id: 2, name: "Satya Narayana", email: "Satya@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", customermanager: "RamBabu", organization: "Infosys" },
+  { id: 3, name: "Rambabu bade", email: "john@gmail.com", phone: "1234567890", city: "New York", created: "15th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "TCS" },
+  { id: 4, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "HCL" },
+  { id: 5, name: "Satya Narayana", email: "Satya@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "Tech Mahindra" },
+  { id: 6, name: "John Doe", email: "john@gmail.com", phone: "1234567890", city: "New York", created: "15th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", Organization: "HCL" },
+  { id: 7, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "Infosys" },
+  { id: 8, name: "Satya Narayana", email: "Satya@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "Wipro" },
+  { id: 9, name: "John Doe", email: "john@gmail.com", phone: "1234567890", city: "New York", created: "15th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", customermanager:"RamBabu", organization: "TCS" },
 ];
 
 // Columns for DataGrid
@@ -189,6 +101,10 @@ const Crm = () => {
 
   const handleNewTicket = () => {
     Navigate('/crmform')
+  };
+
+  const handleRowClick = (params) => {
+    Navigate('/crmdetails', { state: { ticket: params.row } });
   };
 
   // Get Unique Values for Filters
@@ -423,6 +339,7 @@ const Crm = () => {
           rows={initialTickets}
           columns={columns}
           pageSize={10}
+          onRowClick={handleRowClick}
         />
       </Box>
     </Box>

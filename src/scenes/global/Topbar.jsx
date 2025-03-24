@@ -10,6 +10,7 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
@@ -95,7 +96,6 @@ const Topbar = () => {
   const [selected, setSelected] = useState(getActivePage(location.pathname));
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
-
   const getPageTitle = () => {
     switch (location.pathname) {
       case "/":
@@ -104,16 +104,26 @@ const Topbar = () => {
         return "Customer Manager";
       case "/crm":
         return "Customer Relationship Manager";
-      case "/hob":
-        return "Head of The Business";
       case "/cmform":
         return "Create a New Customer Manager";
       case "/crmform":
         return " Create a New Customer Relationship Manager";
+      case "/crmdetails":
+        return "Customer Relationship Manager Details";
+      case "/cmdetails":
+        return "Customer Manager Details";
+      case "/organizationdetails":
+          return " Organization Details";
+      case "/ticketdetails":
+          return " Experience Details";
       case "/form":
-        return "Create a New Head of the Business Unit";
+        return "Create a New Organization";
+      case "/hobdetails":
+          return "Head of The Department Details";
       case "/allExperiences":
         return "All Experiences";
+      case "/organization":
+        return "Organizations";
       case "/newExperiences":
         return "New Experiences";
       case "/pendingExperiences":
@@ -138,16 +148,26 @@ const Topbar = () => {
         return { primaryTitle: "Customer Manager", secondaryTitle: null };
       case "/crm":
         return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
-      case "/hob":
-        return { primaryTitle: "Head of The Business", secondaryTitle: null };
+        case "/cmdetails":
+          return { primaryTitle: "Customer Manager Details ", secondaryTitle: null };
+      case "/organization":
+        return { primaryTitle: "Organization", secondaryTitle: null };
+      case "/ticketdetails":
+          return { primaryTitle: "Experience Details", secondaryTitle: null };
+      case "/organizationdetails":
+          return { primaryTitle: "Organizations Details", secondaryTitle: null };
       case "/cmform":
         return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
+      case "/crmdetails":
+        return { primaryTitle: "Customer Relationship Manager Details ", secondaryTitle: null };
       case "/crmform":
         return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
+        case "/hob":
+          return { primaryTitle: "Head of the Business", secondaryTitle: null };
       case "/form":
         return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
-      case "/organization":
-          return { primaryTitle: "Organizations", secondaryTitle: null };
+      case "/hobdetails":
+          return { primaryTitle: "Head of The Business Details", secondaryTitle: null };
       case "/allExperiences":
         return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
       case "/newExperiences":
@@ -514,7 +534,7 @@ const Topbar = () => {
           <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
           <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
           <Item title="Customer Relationship Manager" to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Head of the Business" to="/hob" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
           <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
           <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
           <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />

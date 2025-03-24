@@ -22,106 +22,18 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-// Initial ticket data
 const initialTickets = [
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },  
-  {
-    id: 616840,
-    name: "Satya Narayana",
-    email: "Satya@gmail.com",
-    phone: "1234567890",
-    city: "Visakhapatnam",
-    created: "14th March, 2025",
-  },
+  { id: 1, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "Wipro" },
+  { id: 2, name: "Satya Narayana", email: "Satya@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Infosys" },
+  { id: 3, name: "Rambabu bade", email: "john@gmail.com", phone: "1234567890", city: "New York", created: "15th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "TCS" },
+  { id: 4, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "HCL" },
+  { id: 5, name: "Satya Narayana", email: "Satya@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "Tech Mahindra" },
+  { id: 6, name: "John Doe", email: "john@gmail.com", phone: "1234567890", city: "New York", created: "15th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", Organization: "HCL" },
+  { id: 7, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "Infosys" },
+  { id: 8, name: "Satya Narayana", email: "Satya@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "Wipro" },
+  { id: 9, name: "John Doe", email: "john@gmail.com", phone: "1234567890", city: "New York", created: "15th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode:"+91", address:"5448 Claudine Extension Suite 701", organization: "TCS" },
 ];
+
 
 // Columns for DataGrid
 const columns = [
@@ -191,11 +103,16 @@ const Organization = () => {
     Navigate('/form')
   };
 
+
+
+  const handleRowClick = (params) => {
+    Navigate('/organizationdetails', { state: { ticket: params.row } });
+  };
   // Get Unique Values for Filters
   // const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
 
   return (
-    <Box m="20px">
+    <Box m="10px">
       {/* Toolbar */}
       <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2} flexDirection={isMobile ? "column" : "row"}>
         {/* Search Bar */}
@@ -416,6 +333,7 @@ const Organization = () => {
           rows={initialTickets}
           columns={columns}
           pageSize={10}
+          onRowClick={handleRowClick}
         />
       </Box>
     </Box>

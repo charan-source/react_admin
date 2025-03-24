@@ -26,6 +26,11 @@ import PendingExperiences from "./scenes/experiences/pendingExperiences";
 import ResolvedExperiences from "./scenes/experiences/resolvedExperiences";
 import Notes from "./scenes/notes";
 import Organization from "./scenes/organization";
+import TicketDetails from "./scenes/ticketsdetails";
+import OrganizationDetails from "./scenes/organizationdetails";
+import CmDetails from "./scenes/cmdetails";
+import CrmDetails from "./scenes/crmdetails";
+import HobDetails from "./scenes/hobdetails";
 // import { tokens } from "../../theme";
 
 function App() {
@@ -84,11 +89,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/cm" element={<Cm />} />
+            <Route path="/cmdetails" element={<CmDetails />} />
             <Route path="/crm" element={<Crm />} />
             <Route path="/hob" element={<Hob />} />
             <Route path="/form" element={<Form />} />
             <Route path="/cmform" element={<CmForm />} />
             <Route path="/crmform" element={<CrmForm />} />
+            <Route path="/crmdetails" element={<CrmDetails />} />
             <Route path="/bsuform" element={<BsuForm />} />
             <Route path="/bar" element={<Bar />} />
             <Route path="/pie" element={<Pie />} />
@@ -99,9 +106,12 @@ function App() {
             <Route path="/notes" element={<Notes />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/organization" element={<Organization />} />
+            <Route path="/organizationdetails" element={<OrganizationDetails />} />
+            <Route path="/hobdetails" element={<HobDetails />} />
 
             {/* Experience Routes */}
             <Route path="/allExperiences" element={<AllExperiences />} />
+            <Route path="/ticketdetails" element={<TicketDetails />} />
             <Route path="/newExperiences" element={<NewExperiences />} />
             <Route path="/pendingExperiences" element={<PendingExperiences />} />
             <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />

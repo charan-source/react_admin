@@ -20,26 +20,27 @@ import {
   ImportExport as ImportExportIcon,
   // Add as AddIcon,
 } from "@mui/icons-material";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Initial ticket data
 const initialTickets = [
-  { id: 1, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
-  { id: 2, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
-  { id: 3, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
-  { id: 4, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
-  { id: 5, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
-  { id: 6, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
-  { id: 7, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
-  { id: 8, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
-  { id: 9, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
-  { id: 10, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
-  { id: 11, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
-  { id: 12, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
-  { id: 13, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", updated: "2 hours ago", },
-  { id: 14, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", updated: "2 hours ago", },
-  { id: 15, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", updated: "2 hours ago", },
+  { id: 1, subject: "Issue A Issue A  Issue A Issue A", priority: "High", status: "Open", date: "2024-03-19", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan", department:"technical", experience : "Extremely Frustrated", organization: "Wipro", requestdetails:"revenue department having issue please , solve that issue" },
+  { id: 2, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", time: "23:15:00" , updated: "2 hours ago",cmname: "satya", crmname:"charan",  department:"technical", experience : "Frustrated", organization: "Infosys", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 3, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical", experience : "Happy", organization: "TCS", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 4, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", time: "23:15:00" , updated: "2 hours ago",cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Happy", organization: "HCL", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 5, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", time: "23:15:00" , updated: "2 hours ago",cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Frustrated", organization: "Tech Mahindra", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 6, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", time: "23:15:00" , updated: "2 hours ago",cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Frustrated", organization: "Tech Mahindra", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 7, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", time: "23:15:00" , updated: "2 hours ago",cmname: "satya", crmname:"charan",  department:"technical", experience : "Happy", organization: "HCL", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 8, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", time: "23:15:00" , updated: "2 hours ago",cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Frustrated", organization: "Infosys", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 9, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical" , experience :  "Extremely Happy", organization: "Wipro", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 10, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical" , experience : "Happy", organization: "Infosys", requestdetails:"revenue department having issue please , solve that issue"   },
+  { id: 11, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Frustrated", organization: "TCS", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 12, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical", experience : "Happy", organization: "Tech Mahindra" , requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 13, subject: "Issue A", priority: "High", status: "Open", date: "2024-03-19", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Frustrated", organization: "HCL", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 14, subject: "Issue B", priority: "Low", status: "Closed", date: "2024-03-18", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Happy", organization: "Wipro", requestdetails:"revenue department having issue please , solve that issue"  },
+  { id: 15, subject: "Issue C", priority: "Medium", status: "In Progress", date: "2024-03-17", time: "23:15:00" , updated: "2 hours ago", cmname: "satya", crmname:"charan",  department:"technical", experience : "Extremely Happy", organization: "TCS", requestdetails:"revenue department having issue please , solve that issue"  },
 ];
+
 
 // Columns for DataGrid
 const columns = [
@@ -56,7 +57,7 @@ const AllExperiences = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const isMobile = useMediaQuery("(max-width: 600px)");
-  // const Navigate = useNavigate();
+  const Navigate = useNavigate();
 
   // State for tickets
   const [tickets] = useState(initialTickets); // Removed setTickets since it's unused
@@ -112,8 +113,12 @@ const AllExperiences = () => {
   // Get Unique Values for Filters
   const getUniqueValues = (key) => [...new Set(tickets.map((ticket) => ticket[key]))];
 
+  const handleRowClick = (params) => {
+    Navigate('/ticketdetails', { state: { ticket: params.row } });
+  };
+
   return (
-    <Box m="20px">
+    <Box m="10px">
       {/* Toolbar */}
       <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2} flexDirection={isMobile ? "column" : "row"}>
         {/* Search Bar */}
@@ -342,6 +347,7 @@ const AllExperiences = () => {
           rows={filteredTickets}
           columns={columns}
           pageSize={10}
+          onRowClick={handleRowClick}
         />
       </Box>
     </Box>
