@@ -83,7 +83,7 @@ const HobDetails = () => {
       borderRadius: "8px",
       backgroundColor: "#ffffff",
       boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
-      fontSize: "16px", 
+      fontSize: "16px",
       "&:hover": {
         borderColor: "#999",
         boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
@@ -93,7 +93,7 @@ const HobDetails = () => {
     },
     "& .MuiInputLabel-root": {
       color: "#555",
-      fontSize: "16px", 
+      fontSize: "16px",
     },
     "& .MuiOutlinedInput-notchedOutline": {
       border: "1px solid #ccc", // Ensure the border is visible
@@ -122,53 +122,71 @@ const HobDetails = () => {
               gap="20px"
               gridTemplateColumns={isNonMobile ? "repeat(1, minmax(0, 1fr))" : "repeat(3, minmax(0, 1fr))"}
             >
-          
-                <TextField
-                          fullWidth
-                          variant="outlined"
-                          type="text"
-                          label="First Name"
-                          name="firstName"
-                          value={values.firstName}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          error={!!touched.firstName && !!errors.firstName}
-                          helperText={touched.firstName && errors.firstName}
-                          sx={{ ...textFieldStyles, gridColumn: "span 1" }}
-                          disabled={!isEditing} // Disable in non-editing mode
-                        />
-          
-                        {/* Middle Name */}
-                        <TextField
-                          fullWidth
-                          variant="outlined"
-                          type="text"
-                          label="Middle Name"
-                          name="middleName"
-                          value={values.middleName}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          error={!!touched.middleName && !!errors.middleName}
-                          helperText={touched.middleName && errors.middleName}
-                          sx={{ ...textFieldStyles, gridColumn: "span 1" }}
-                          disabled={!isEditing} // Disable in non-editing mode
-                        />
-          
-                        {/* Last Name */}
-                        <TextField
-                          fullWidth
-                          variant="outlined"
-                          type="text"
-                          label="Last Name"
-                          name="lastName"
-                          value={values.lastName}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          error={!!touched.lastName && !!errors.lastName}
-                          helperText={touched.lastName && errors.lastName}
-                          sx={{ ...textFieldStyles, gridColumn: "span 1" }}
-                          disabled={!isEditing} // Disable in non-editing mode
-                        />
+
+              <TextField
+                fullWidth
+                variant="outlined"
+                type="text"
+                label="First Name"
+                name="firstName"
+                value={values.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={!!touched.firstName && !!errors.firstName}
+                helperText={touched.firstName && errors.firstName}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
+                disabled={!isEditing} // Disable in non-editing mode
+              />
+
+              {/* Middle Name */}
+              <TextField
+                fullWidth
+                variant="outlined"
+                type="text"
+                label="Middle Name"
+                name="middleName"
+                value={values.middleName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={!!touched.middleName && !!errors.middleName}
+                helperText={touched.middleName && errors.middleName}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
+                disabled={!isEditing} // Disable in non-editing mode
+              />
+
+              {/* Last Name */}
+              <TextField
+                fullWidth
+                variant="outlined"
+                type="text"
+                label="Last Name"
+                name="lastName"
+                value={values.lastName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={!!touched.lastName && !!errors.lastName}
+                helperText={touched.lastName && errors.lastName}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
+                disabled={!isEditing} // Disable in non-editing mode
+              />
 
               {/* Email Id */}
               <TextField
@@ -182,7 +200,13 @@ const HobDetails = () => {
                 onBlur={handleBlur}
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -198,7 +222,13 @@ const HobDetails = () => {
                 onBlur={handleBlur}
                 error={!!touched.address && !!errors.address}
                 helperText={touched.address && errors.address}
-                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -222,6 +252,13 @@ const HobDetails = () => {
                       disabled={!isEditing} // Disable in non-editing mode
                     />
                   )}
+                  sx={{
+                    ...textFieldStyles,
+                    "& .MuiInputBase-input.Mui-disabled": {
+                      WebkitTextFillColor: "#000", // Keep text color black when disabled
+                    },
+          
+                  }}
                   disabled={!isEditing} // Disable in non-editing mode
                 />
                 <TextField
@@ -235,7 +272,13 @@ const HobDetails = () => {
                   onBlur={handleBlur}
                   error={!!touched.PhoneNo && !!errors.PhoneNo}
                   helperText={touched.PhoneNo && errors.PhoneNo}
-                  sx={textFieldStyles}
+                  sx={{
+                    ...textFieldStyles,
+                    "& .MuiInputBase-input.Mui-disabled": {
+                      WebkitTextFillColor: "#000", // Keep text color black when disabled
+                    },
+             
+                  }}
                   disabled={!isEditing} // Disable in non-editing mode
                 />
               </Box>
@@ -262,7 +305,13 @@ const HobDetails = () => {
                     disabled={!isEditing} // Disable in non-editing mode
                   />
                 )}
-                sx={{ gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -287,7 +336,13 @@ const HobDetails = () => {
                     disabled={!selectedCountry || !isEditing} // Disable in non-editing mode
                   />
                 )}
-                sx={{ gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!selectedCountry || !isEditing} // Disable in non-editing mode
               />
 
@@ -311,7 +366,13 @@ const HobDetails = () => {
                     disabled={!selectedState || !isEditing} // Disable in non-editing mode
                   />
                 )}
-                sx={{ gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!selectedState || !isEditing} // Disable in non-editing mode
               />
             </Box>
@@ -363,7 +424,7 @@ const HobDetails = () => {
                     onClick={handleCancel} // Cancel editing mode
                     sx={{
                       padding: "12px 24px",
-                      marginLeft:"5px",
+                      marginLeft: "5px",
                       fontSize: "14px",
                       fontWeight: "bold",
                       borderRadius: "8px",

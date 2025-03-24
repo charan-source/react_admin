@@ -134,7 +134,13 @@ const OrganizationDetails = () => {
                 onBlur={handleBlur}
                 error={!!touched.organization && !!errors.organization}
                 helperText={touched.organization && errors.organization}
-                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -150,7 +156,13 @@ const OrganizationDetails = () => {
                 onBlur={handleBlur}
                 error={!!touched.name && !!errors.name}
                 helperText={touched.name && errors.name}
-                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -166,7 +178,13 @@ const OrganizationDetails = () => {
                 onBlur={handleBlur}
                 error={!!touched.email && !!errors.email}
                 helperText={touched.email && errors.email}
-                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -182,7 +200,13 @@ const OrganizationDetails = () => {
                 onBlur={handleBlur}
                 error={!!touched.address && !!errors.address}
                 helperText={touched.address && errors.address}
-                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -206,6 +230,13 @@ const OrganizationDetails = () => {
                       disabled={!isEditing} // Disable in non-editing mode
                     />
                   )}
+                  sx={{
+                    ...textFieldStyles,
+                    "& .MuiInputBase-input.Mui-disabled": {
+                      WebkitTextFillColor: "#000", // Keep text color black when disabled
+                    },
+           
+                  }}
                   disabled={!isEditing} // Disable in non-editing mode
                 />
                 <TextField
@@ -219,7 +250,13 @@ const OrganizationDetails = () => {
                   onBlur={handleBlur}
                   error={!!touched.PhoneNo && !!errors.PhoneNo}
                   helperText={touched.PhoneNo && errors.PhoneNo}
-                  sx={textFieldStyles}
+                  sx={{
+                    ...textFieldStyles,
+                    "& .MuiInputBase-input.Mui-disabled": {
+                      WebkitTextFillColor: "#000", // Keep text color black when disabled
+                    },
+              
+                  }}
                   disabled={!isEditing} // Disable in non-editing mode
                 />
               </Box>
@@ -246,7 +283,14 @@ const OrganizationDetails = () => {
                     disabled={!isEditing} // Disable in non-editing mode
                   />
                 )}
-                sx={{ gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
+  
                 disabled={!isEditing} // Disable in non-editing mode
               />
 
@@ -271,7 +315,14 @@ const OrganizationDetails = () => {
                     disabled={!selectedCountry || !isEditing} // Disable in non-editing mode
                   />
                 )}
-                sx={{ gridColumn: "span 1" }}
+
+                sx={{
+                    ...textFieldStyles,
+                    "& .MuiInputBase-input.Mui-disabled": {
+                      WebkitTextFillColor: "#000", // Keep text color black when disabled
+                    },
+                     gridColumn: "span 1"
+                  }}
                 disabled={!selectedCountry || !isEditing} // Disable in non-editing mode
               />
 
@@ -295,7 +346,13 @@ const OrganizationDetails = () => {
                     disabled={!selectedState || !isEditing} // Disable in non-editing mode
                   />
                 )}
-                sx={{ gridColumn: "span 1" }}
+                sx={{
+                  ...textFieldStyles,
+                  "& .MuiInputBase-input.Mui-disabled": {
+                    WebkitTextFillColor: "#000", // Keep text color black when disabled
+                  },
+                   gridColumn: "span 1"
+                }}
                 disabled={!selectedState || !isEditing} // Disable in non-editing mode
               />
             </Box>
