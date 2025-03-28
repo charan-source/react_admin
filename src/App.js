@@ -9,28 +9,37 @@ import Dashboard from "./scenes/dashboard";
 import Cm from "./scenes/cm";
 import Hob from "./scenes/hob";
 import Crm from "./scenes/crm";
+import Organization from "./scenes/organization";
+import AllExperiences from "./scenes/experiences/allExperiences";
+import NewExperiences from "./scenes/experiences/newExperiences";
+import PendingExperiences from "./scenes/experiences/pendingExperiences";
+import ResolvedExperiences from "./scenes/experiences/resolvedExperiences";
+
 import Bar from "./scenes/bar";
-import Form from "./scenes/form";
-import CmForm from "./scenes/cmform";
-import CrmForm from "./scenes/crmform";
-import BsuForm from "./scenes/bsuform";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import Calendar from "./scenes/calendar/calendar";
 import Profile from "./scenes/profile";
-import AllExperiences from "./scenes/experiences/allExperiences";
-import NewExperiences from "./scenes/experiences/newExperiences";
-import PendingExperiences from "./scenes/experiences/pendingExperiences";
-import ResolvedExperiences from "./scenes/experiences/resolvedExperiences";
 import Notes from "./scenes/notes";
-import Organization from "./scenes/organization";
-import TicketDetails from "./scenes/ticketsdetails";
-import OrganizationDetails from "./scenes/organizationdetails";
+
+
+
+
 import CmDetails from "./scenes/cmdetails";
 import CrmDetails from "./scenes/crmdetails";
+import OrganizationDetails from "./scenes/organizationdetails";
 import HobDetails from "./scenes/hobdetails";
+import TicketDetails from "./scenes/ticketsdetails";
+
+import Form from "./scenes/form";
+import CmForm from "./scenes/cmform";
+import CrmForm from "./scenes/crmform";
+import BsuForm from "./scenes/bsuform";
+import OrganizationForm from "./scenes/organizationform";
+
+
 // import { tokens } from "../../theme";
 
 function App() {
@@ -89,32 +98,42 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/cm" element={<Cm />} />
-            <Route path="/cmdetails" element={<CmDetails />} />
+ 
             <Route path="/crm" element={<Crm />} />
             <Route path="/hob" element={<Hob />} />
+            <Route path="/organization" element={<Organization />} />
+            <Route path="/allExperiences" element={<AllExperiences />} />
+            <Route path="/newExperiences" element={<NewExperiences />} />
+            <Route path="/pendingExperiences" element={<PendingExperiences />} />
+            <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/notes" element={<Notes />} />
+
+
             <Route path="/form" element={<Form />} />
             <Route path="/cmform" element={<CmForm />} />
             <Route path="/crmform" element={<CrmForm />} />
-            <Route path="/crmdetails" element={<CrmDetails />} />
             <Route path="/bsuform" element={<BsuForm />} />
+            <Route path="/organizationform" element={<OrganizationForm />} />
+     
+
+            <Route path="/cmdetails" element={<CmDetails />} />
+            <Route path="/crmdetails" element={<CrmDetails />} />
+            <Route path="/organizationdetails" element={<OrganizationDetails />} />
+            <Route path="/hobdetails" element={<HobDetails />} />
+            <Route path="/ticketdetails" element={<TicketDetails />} />
+
+
             <Route path="/bar" element={<Bar />} />
             <Route path="/pie" element={<Pie />} />
             <Route path="/line" element={<Line />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/geography" element={<Geography />} />
-            <Route path="/notes" element={<Notes />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/organization" element={<Organization />} />
-            <Route path="/organizationdetails" element={<OrganizationDetails />} />
-            <Route path="/hobdetails" element={<HobDetails />} />
 
-            {/* Experience Routes */}
-            <Route path="/allExperiences" element={<AllExperiences />} />
-            <Route path="/ticketdetails" element={<TicketDetails />} />
-            <Route path="/newExperiences" element={<NewExperiences />} />
-            <Route path="/pendingExperiences" element={<PendingExperiences />} />
-            <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
+
+            {/* Experience Routes OrganizationForm */}
+
           </Routes>
         </Box>
       </ThemeProvider>

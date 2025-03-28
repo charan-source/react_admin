@@ -247,6 +247,9 @@ const ResolvedExperiences = () => {
           },
           "& .MuiDataGrid-root": {
             // scrollbarWidth: "none", // Hides scrollbar in Firefox
+            "&:hover": {
+              cursor: "pointer",
+            },
           },
           "& .MuiDataGrid-virtualScroller": {
             backgroundColor: "#ffffff",
@@ -311,6 +314,10 @@ const ResolvedExperiences = () => {
           },
           "& .MuiDataGrid-root": {
             // scrollbarWidth: "none !important", // Hides scrollbar in Firefox
+            "&:hover": {
+              cursor: "pointer",
+               backgroundColor:"#D9EAFD"
+            },
           },
           "& .MuiDataGrid-virtualScroller": {
             // scrollbarWidth: "none !important",

@@ -1,4 +1,4 @@
-import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Typography } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 const HobDetails = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
-  const colors = tokens(theme.palette.mode); // Get theme colors
+  const colors = tokens(theme.palette.mode);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -17,7 +17,6 @@ const HobDetails = () => {
   const location = useLocation();
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
 
-  // Initialize selectedCountry, selectedState, and selectedCity based on ticket data
   useEffect(() => {
     if (ticket.country) {
       const country = Country.getAllCountries().find((c) => c.name === ticket.country);
@@ -34,14 +33,13 @@ const HobDetails = () => {
   }, [ticket, selectedCountry, selectedState]);
 
   const handleFormSubmit = (values) => {
-    // Combine phone code and phone number
     const fullPhoneNumber = `${values.phoneCode}${values.PhoneNo}`;
     console.log("Form Data:", { ...values, fullPhoneNumber });
-    setIsEditing(false); // Exit editing mode after saving
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setIsEditing(false); // Exit editing mode without saving
+    setIsEditing(false);
   };
 
   const initialValues = {
@@ -55,8 +53,8 @@ const HobDetails = () => {
     email: ticket.email || "",
     PhoneNo: ticket.phoneno || "",
     phoneCode: ticket.phonenocode || "",
-    address: ticket.address || "", // New field for customer manager
-    organization: ticket.organization || "", // New field for organization
+    address: ticket.address || "",
+    organization: ticket.organization || "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -75,9 +73,10 @@ const HobDetails = () => {
       .required("Required"),
     phoneCode: yup.string().required("Required"),
     address: yup.string().required("Required"),
-    organization: yup.string().required("Required"), // Add organization validation
+    organization: yup.string().required("Required"),
   });
 
+  // Styles for editable fields
   const textFieldStyles = {
     "& .MuiOutlinedInput-root": {
       borderRadius: "8px",
@@ -90,27 +89,64 @@ const HobDetails = () => {
       },
       padding: "8px 12px",
       height: "50px",
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#ccc",
+      },
     },
     "& .MuiInputLabel-root": {
       color: "#555",
       fontSize: "16px",
     },
-    "& .MuiOutlinedInput-notchedOutline": {
-      border: "1px solid #ccc", // Ensure the border is visible
-    },
   };
 
+  // Styles for disabled fields (view mode)
+  // const disabledFieldStyles = {
+  //   padding: "12px",
+  //   backgroundColor: "#f5f5f5",
+  //   borderRadius: "8px",
+  //   minHeight: "50px",
+  //   display: "flex",
+  //   alignItems: "center",
+  //   fontSize: "16px",
+  //   color: "#000",
+  //   boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
+  //   border: "1px solid transparent",
+  // };
 
-
-
-  // Get all countries
   const countries = Country.getAllCountries();
-
-  // Get states based on selected country
   const states = selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
-
-  // Get cities based on selected state
   const cities = selectedState ? City.getCitiesOfState(selectedCountry?.isoCode, selectedState.isoCode) : [];
+
+  const getPhoneCodeDisplay = (phoneCode) => {
+    if (!phoneCode) return "-";
+    const country = countries.find(c => `+${c.phonecode}` === phoneCode);
+    return country ? `+${country.phonecode} (${country.name})` : phoneCode;
+  };
+
+  // Helper function to render fields in both modes
+
+  const renderField = (heading, name, value, fieldComponent, gridSpan = 1) => (
+    <Box sx={{ gridColumn: `span ${gridSpan}` }}>
+      <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
+        {heading}
+      </Typography>
+      {isEditing ? (
+        fieldComponent
+      ) : (
+        <Typography variant="body1" sx={{ 
+          padding: "12px",
+          backgroundColor: "#f5f5f5",
+          borderRadius: "4px",
+          minHeight: "50px",
+          display: "flex",
+          alignItems: "center"
+        }}>
+          {value || "-"}
+        </Typography>
+      )}
+    </Box>
+  );
+
 
   return (
     <Box m="15px" sx={{ backgroundColor: "#ffffff", padding: "20px", borderRadius: "8px" }}>
@@ -122,259 +158,226 @@ const HobDetails = () => {
               gap="20px"
               gridTemplateColumns={isNonMobile ? "repeat(1, minmax(0, 1fr))" : "repeat(3, minmax(0, 1fr))"}
             >
-
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                label="First Name"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!isEditing} // Disable in non-editing mode
-              />
-
-              {/* Middle Name */}
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                label="Middle Name"
-                name="middleName"
-                value={values.middleName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.middleName && !!errors.middleName}
-                helperText={touched.middleName && errors.middleName}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!isEditing} // Disable in non-editing mode
-              />
-
-              {/* Last Name */}
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                label="Last Name"
-                name="lastName"
-                value={values.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!isEditing} // Disable in non-editing mode
-              />
-
-              {/* Email Id */}
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="email"
-                label="Email Id"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!isEditing} // Disable in non-editing mode
-              />
-
-              {/* Address */}
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="text"
-                label="Address"
-                name="address"
-                value={values.address}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.address && !!errors.address}
-                helperText={touched.address && errors.address}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!isEditing} // Disable in non-editing mode
-              />
-
-              {/* Phone Code and Phone Number (Combined as one span) */}
-              <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px" }}>
-                <Autocomplete
-                  fullWidth
-                  options={countries}
-                  getOptionLabel={(option) => `+${option.phonecode} (${option.name})`}
-                  value={countries.find((country) => `+${country.phonecode}` === values.phoneCode) || null}
-                  onChange={(event, newValue) => {
-                    setFieldValue("phoneCode", newValue ? `+${newValue.phonecode}` : "");
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Phone Code"
-                      sx={textFieldStyles}
-                      error={!!touched.phoneCode && !!errors.phoneCode}
-                      helperText={touched.phoneCode && errors.phoneCode}
-                      disabled={!isEditing} // Disable in non-editing mode
-                    />
-                  )}
-                  sx={{
-                    ...textFieldStyles,
-                    "& .MuiInputBase-input.Mui-disabled": {
-                      WebkitTextFillColor: "#000", // Keep text color black when disabled
-                    },
-          
-                  }}
-                  disabled={!isEditing} // Disable in non-editing mode
-                />
+              {/* First Name */}
+              {renderField(
+                "First Name",
+                "name",
+                values.name,
                 <TextField
                   fullWidth
                   variant="outlined"
                   type="text"
-                  label="Phone No"
-                  name="PhoneNo"
-                  value={values.PhoneNo}
+                  name="name"
+                  value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error={!!touched.PhoneNo && !!errors.PhoneNo}
-                  helperText={touched.PhoneNo && errors.PhoneNo}
-                  sx={{
-                    ...textFieldStyles,
-                    "& .MuiInputBase-input.Mui-disabled": {
-                      WebkitTextFillColor: "#000", // Keep text color black when disabled
-                    },
-             
-                  }}
-                  disabled={!isEditing} // Disable in non-editing mode
+                  error={!!touched.name && !!errors.name}
+                  helperText={touched.name && errors.name}
+                  sx={textFieldStyles}
                 />
-              </Box>
+              )}
 
-              {/* Country Dropdown */}
-              <Autocomplete
-                fullWidth
-                options={countries}
-                getOptionLabel={(option) => option.name}
-                value={selectedCountry}
-                onChange={(event, newValue) => {
-                  setSelectedCountry(newValue);
-                  setSelectedState(null); // Reset state when country changes
-                  setSelectedCity(null); // Reset city when country changes
-                  setFieldValue("country", newValue ? newValue.name : "");
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Country"
-                    sx={textFieldStyles}
-                    error={!!touched.country && !!errors.country}
-                    helperText={touched.country && errors.country}
-                    disabled={!isEditing} // Disable in non-editing mode
-                  />
-                )}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!isEditing} // Disable in non-editing mode
-              />
+              {/* Middle Name */}
+              {renderField(
+                "Middle Name",
+                "middleName",
+                values.middleName,
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="text"
+                  name="middleName"
+                  value={values.middleName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.middleName && !!errors.middleName}
+                  helperText={touched.middleName && errors.middleName}
+                  sx={textFieldStyles}
+                />
+              )}
 
-              {/* State Dropdown */}
-              <Autocomplete
-                fullWidth
-                options={states}
-                getOptionLabel={(option) => option.name}
-                value={selectedState}
-                onChange={(event, newValue) => {
-                  setSelectedState(newValue);
-                  setSelectedCity(null); // Reset city when state changes
-                  setFieldValue("state", newValue ? newValue.name : "");
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="State"
-                    sx={textFieldStyles}
-                    error={!!touched.state && !!errors.state}
-                    helperText={touched.state && errors.state}
-                    disabled={!selectedCountry || !isEditing} // Disable in non-editing mode
-                  />
-                )}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!selectedCountry || !isEditing} // Disable in non-editing mode
-              />
+              {/* Last Name */}
+              {renderField(
+                "Last Name",
+                "lastName",
+                values.lastName,
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="text"
+                  name="lastName"
+                  value={values.lastName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.lastName && !!errors.lastName}
+                  helperText={touched.lastName && errors.lastName}
+                  sx={textFieldStyles}
+                />
+              )}
 
-              {/* City Dropdown */}
-              <Autocomplete
-                fullWidth
-                options={cities}
-                getOptionLabel={(option) => option.name}
-                value={selectedCity}
-                onChange={(event, newValue) => {
-                  setSelectedCity(newValue);
-                  setFieldValue("city", newValue ? newValue.name : "");
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="City"
-                    sx={textFieldStyles}
-                    error={!!touched.city && !!errors.city}
-                    helperText={touched.city && errors.city}
-                    disabled={!selectedState || !isEditing} // Disable in non-editing mode
+              {/* Email */}
+              {renderField(
+                "Email Id",
+                "email",
+                values.email,
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.email && !!errors.email}
+                  helperText={touched.email && errors.email}
+                  sx={textFieldStyles}
+                />
+              )}
+
+              {/* Address */}
+              {renderField(
+                "Address",
+                "address",
+                values.address,
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="text"
+                  name="address"
+                  value={values.address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.address && !!errors.address}
+                  helperText={touched.address && errors.address}
+                  sx={textFieldStyles}
+                />
+              )}
+
+              {/* Phone Number */}
+              {renderField(
+                "Phone Number",
+                "PhoneNo",
+                values.PhoneNo ? `${getPhoneCodeDisplay(values.phoneCode)} ${values.PhoneNo}` : "-",
+                <Box sx={{ display: "flex", gap: "10px" }}>
+                  <Autocomplete
+                    fullWidth
+                    options={countries}
+                    getOptionLabel={(option) => `+${option.phonecode} (${option.name})`}
+                    value={countries.find((country) => `+${country.phonecode}` === values.phoneCode) || null}
+                    onChange={(event, newValue) => {
+                      setFieldValue("phoneCode", newValue ? `+${newValue.phonecode}` : "");
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Phone Code"
+                        sx={textFieldStyles}
+                        error={!!touched.phoneCode && !!errors.phoneCode}
+                        helperText={touched.phoneCode && errors.phoneCode}
+                      />
+                    )}
                   />
-                )}
-                sx={{
-                  ...textFieldStyles,
-                  "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#000", // Keep text color black when disabled
-                  },
-                   gridColumn: "span 1"
-                }}
-                disabled={!selectedState || !isEditing} // Disable in non-editing mode
-              />
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    type="text"
+                    label="Phone No"
+                    name="PhoneNo"
+                    value={values.PhoneNo}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.PhoneNo && !!errors.PhoneNo}
+                    helperText={touched.PhoneNo && errors.PhoneNo}
+                    sx={textFieldStyles}
+                  />
+                </Box>,
+                1
+              )}
+
+              {/* Country */}
+              {renderField(
+                "Country",
+                "country",
+                values.country,
+                <Autocomplete
+                  fullWidth
+                  options={countries}
+                  getOptionLabel={(option) => option.name}
+                  value={selectedCountry}
+                  onChange={(event, newValue) => {
+                    setSelectedCountry(newValue);
+                    setSelectedState(null);
+                    setSelectedCity(null);
+                    setFieldValue("country", newValue ? newValue.name : "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Country"
+                      sx={textFieldStyles}
+                      error={!!touched.country && !!errors.country}
+                      helperText={touched.country && errors.country}
+                    />
+                  )}
+                />
+              )}
+
+              {/* State */}
+              {renderField(
+                "State",
+                "state",
+                values.state,
+                <Autocomplete
+                  fullWidth
+                  options={states}
+                  getOptionLabel={(option) => option.name}
+                  value={selectedState}
+                  onChange={(event, newValue) => {
+                    setSelectedState(newValue);
+                    setSelectedCity(null);
+                    setFieldValue("state", newValue ? newValue.name : "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="State"
+                      sx={textFieldStyles}
+                      error={!!touched.state && !!errors.state}
+                      helperText={touched.state && errors.state}
+                      disabled={!selectedCountry}
+                    />
+                  )}
+                  disabled={!selectedCountry}
+                />
+              )}
+
+              {/* City */}
+              {renderField(
+                "City",
+                "city",
+                values.city,
+                <Autocomplete
+                  fullWidth
+                  options={cities}
+                  getOptionLabel={(option) => option.name}
+                  value={selectedCity}
+                  onChange={(event, newValue) => {
+                    setSelectedCity(newValue);
+                    setFieldValue("city", newValue ? newValue.name : "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="City"
+                      sx={textFieldStyles}
+                      error={!!touched.city && !!errors.city}
+                      helperText={touched.city && errors.city}
+                      disabled={!selectedState}
+                    />
+                  )}
+                  disabled={!selectedState}
+                />
+              )}
             </Box>
 
             <Box display="flex" justifyContent="flex-end" mt="24px">
@@ -382,7 +385,7 @@ const HobDetails = () => {
                 <Button
                   type="button"
                   variant="contained"
-                  onClick={() => setIsEditing(true)} // Enable editing mode
+                  onClick={() => setIsEditing(true)}
                   sx={{
                     padding: "12px 24px",
                     fontSize: "14px",
@@ -421,10 +424,10 @@ const HobDetails = () => {
                   <Button
                     type="button"
                     variant="contained"
-                    onClick={handleCancel} // Cancel editing mode
+                    onClick={handleCancel}
                     sx={{
                       padding: "12px 24px",
-                      marginLeft: "5px",
+                      marginLeft: "10px",
                       fontSize: "14px",
                       fontWeight: "bold",
                       borderRadius: "8px",
