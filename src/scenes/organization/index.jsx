@@ -243,6 +243,10 @@ const Organization = () => {
           },
           "& .MuiDataGrid-root": {
             scrollbarWidth: "none !important", // Hides scrollbar in Firefox
+            "&:hover": {
+              cursor: "pointer",
+              backgroundColor:"#D9EAFD"
+            },
           },
           "& .MuiDataGrid-row": {
             borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
@@ -308,6 +312,10 @@ const Organization = () => {
             },
             "& .MuiDataGrid-root": {
               // scrollbarWidth: "none !important", // Hides scrollbar in Firefox
+              "&:hover": {
+                cursor: "pointer",
+                backgroundColor:"#D9EAFD"
+              },
             },
             "& .MuiDataGrid-virtualScroller": {
               // scrollbarWidth: "none !important",
@@ -317,6 +325,7 @@ const Organization = () => {
               borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
               "&:hover": {
                 cursor: "pointer",
+                backgroundColor:"#D9EAFD"
               },
             },
             "& .MuiTablePagination-root": {
