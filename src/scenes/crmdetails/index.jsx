@@ -1,10 +1,11 @@
-import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete,  Typography } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Typography } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
 import React, { useState, useEffect, useMemo } from 'react';
 import { Country, State, City } from 'country-state-city';
 import { useLocation } from 'react-router-dom';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const CrmDetails = () => {
   const theme = useTheme();
@@ -14,6 +15,7 @@ const CrmDetails = () => {
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [orgManagerPairs, setOrgManagerPairs] = useState([{ org: "", manager: "" }]);
   const location = useLocation();
 
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
@@ -54,8 +56,8 @@ const CrmDetails = () => {
     email: ticket.email || "",
     PhoneNo: ticket.phoneno || "",
     phoneCode: ticket.phonenocode || "",
-    customerManager: ticket.customermanager || "",
-    organization: ticket.organization || "",
+    organization0: ticket.organization || "",
+    customerManager0: ticket.customermanager || "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -73,8 +75,8 @@ const CrmDetails = () => {
       .min(10, "Must be at least 10 digits")
       .required("Required"),
     phoneCode: yup.string().required("Required"),
-    customerManager: yup.string().required("Required"),
-    organization: yup.string().required("Required"),
+    organization0: yup.string().required("Required"),
+    customerManager0: yup.string().required("Required"),
   });
   const textFieldStyles = {
     "& .MuiOutlinedInput-root": {
@@ -110,7 +112,7 @@ const CrmDetails = () => {
   //   // boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
   // };
 
-  
+
   // const selectStyles = {
   //   "& .MuiOutlinedInput-root": {
   //     borderRadius: "8px",
@@ -164,7 +166,7 @@ const CrmDetails = () => {
       {isEditing ? (
         fieldComponent
       ) : (
-        <Typography variant="body1" sx={{ 
+        <Typography variant="body1" sx={{
           padding: "12px",
           backgroundColor: "#f5f5f5",
           borderRadius: "4px",
@@ -177,6 +179,35 @@ const CrmDetails = () => {
       )}
     </Box>
   );
+
+  const addOrgManagerPair = () => {
+    setOrgManagerPairs([...orgManagerPairs, { org: "", manager: "" }]);
+  };
+
+
+  const removeOrgManagerPair = (index) => {
+    if (orgManagerPairs.length > 1) {
+      const updatedPairs = [...orgManagerPairs];
+      updatedPairs.splice(index, 1);
+      setOrgManagerPairs(updatedPairs);
+    }
+  };
+
+  const customerManagers = [
+    "Rambabu",
+    "Charan",
+    "Sathira",
+    "Jyothika",
+    "Customer Manager 5",
+  ];
+
+  const organization = [
+    "Wipro",
+    "Infosys",
+    "TCS",
+    "HCL",
+    "Tech Mahindra",
+  ];
 
 
   return (
@@ -404,7 +435,114 @@ const CrmDetails = () => {
                   sx={textFieldStyles}
                 />
               )}
+              {/* 
+              {renderField(
+                "Organization",
+                "organization",
+                values.organization,
+                <Autocomplete
+                  fullWidth
+                  options={organization}
+                  getOptionLabel={(option) => option}
+                  value={values.organization || null}
+                  onChange={(event, newValue) => {
+                    setFieldValue("organization", newValue || "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={textFieldStyles}
+                      error={!!touched.organization && !!errors.organization}
+                      helperText={touched.organization && errors.organization}
+                    />
+                  )}
+                  popupIcon={<ArrowDropDownIcon />}
+                  freeSolo
+                />
+              )} */}
 
+
+              {orgManagerPairs.map((pair, index) => (
+                <React.Fragment key={`pair-${index}`}>
+                  {/* Organization Field */}
+                  {renderField(
+                    index === 0 ? "Organization" : `Organization ${index + 1}`,
+                    `organization${index}`,
+                    values[`organization${index}`],
+                    <Autocomplete
+                      fullWidth
+                      options={organization}
+                      value={values[`organization${index}`] || null}
+                      onChange={(event, newValue) => {
+                        setFieldValue(`organization${index}`, newValue || "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          sx={textFieldStyles}
+                          error={!!touched[`organization${index}`] && !!errors[`organization${index}`]}
+                          helperText={touched[`organization${index}`] && errors[`organization${index}`]}
+                        />
+                      )}
+                      freeSolo
+                      forcePopupIcon
+                      popupIcon={<ArrowDropDownIcon />}
+                    />,
+                    1,
+                    true // isDropdown flag
+                  )}
+
+                  {/* Customer Manager Field */}
+                  {renderField(
+                    index === 0 ? "Customer Manager" : `Customer Manager ${index + 1}`,
+                    `customerManager${index}`,
+                    values[`customerManager${index}`],
+                    <Autocomplete
+                      fullWidth
+                      options={customerManagers}
+                      value={values[`customerManager${index}`] || null}
+                      onChange={(event, newValue) => {
+                        setFieldValue(`customerManager${index}`, newValue || "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          sx={textFieldStyles}
+                          error={!!touched[`customerManager${index}`] && !!errors[`customerManager${index}`]}
+                          helperText={touched[`customerManager${index}`] && errors[`customerManager${index}`]}
+                        />
+                      )}
+                      freeSolo
+                      forcePopupIcon
+                      popupIcon={<ArrowDropDownIcon />}
+                    />,
+                    1,
+                    true // isDropdown flag
+                  )}
+
+                  {/* Add/Remove Buttons Column */}
+                  <Box sx={{ gridColumn: "span 1", gap: "10px", alignItems: "center", display: isEditing ? "flex" : "none", marginTop:"30px"  }}>
+                    {index === orgManagerPairs.length - 1 ? (
+                      <Button
+                        variant="outlined"
+                        onClick={addOrgManagerPair}
+                        sx={{ minWidth: '100px', height: '40px', backgroundColor: colors.blueAccent[700], color: "#ffffff" }}
+                      >
+                        Add More
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        onClick={() => removeOrgManagerPair(index)}
+                        sx={{ minWidth: '100px', height: '40px', backgroundColor: '#ffebee' }}
+                        color="error"
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </Box>
+                </React.Fragment>
+              ))}
             </Box>
 
             <Box display="flex" justifyContent="flex-end" mt="24px">

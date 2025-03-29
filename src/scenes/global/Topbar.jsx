@@ -96,6 +96,7 @@ const Topbar = () => {
   const [selected, setSelected] = useState(getActivePage(location.pathname));
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
+
   const getPageTitle = () => {
     switch (location.pathname) {
       case "/":
@@ -114,6 +115,8 @@ const Topbar = () => {
         return "Customer Manager Details";
       case "/organizationdetails":
           return " Organization Details";
+      case "/organizationform":
+          return "Create a New Organization";     
       case "/ticketdetails":
           return " Experience Details";
       case "/form":
