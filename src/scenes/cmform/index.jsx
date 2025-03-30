@@ -1,30 +1,136 @@
-import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Avatar, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-// import Header from "../../components/Header";
 import { Country, State, City } from 'country-state-city';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
+function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
+  const cropWidth = mediaWidth * 0.9;
+  const cropHeight = cropWidth / aspect;
 
+  const cropX = (mediaWidth - cropWidth) / 2;
+  const cropY = (mediaHeight - cropHeight) / 2;
+
+  return {
+    unit: '%',
+    x: cropX / mediaWidth * 100,
+    y: cropY / mediaHeight * 100,
+    width: cropWidth / mediaWidth * 100,
+    height: cropHeight / mediaHeight * 100
+  };
+}
 
 const CmForm = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
-  const colors = tokens(theme.palette.mode); // Get theme colors
+  const colors = tokens(theme.palette.mode);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [originalImage, setOriginalImage] = useState(null);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [crop, setCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState();
+  const imgRef = useRef(null);
+  const fileInputRef = useRef(null);
+  // const previewCanvasRef = useRef(null);
 
   const handleFormSubmit = (values) => {
-    console.log("Form Data:", values);
+    const formData = {
+      ...values,
+      profileImage: profileImage
+    };
+    console.log("Form Data:", formData);
   };
+
+  // ... (keep all your existing initialValues, checkoutSchema, textFieldStyles, and other constants)
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setOriginalImage(reader.result);
+        setCropModalOpen(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
+  function onImageLoad(e) {
+    const { width, height } = e.currentTarget;
+    setCrop(centerAspectCrop(width, height, 1));
+  }
+
+  const handleCropComplete = (crop) => {
+    setCompletedCrop(crop);
+  };
+
+  const handleCropImage = async () => {
+    if (!completedCrop || !imgRef.current) {
+      return;
+    }
+
+    const image = imgRef.current;
+    const canvas = document.createElement('canvas');
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = completedCrop.width;
+    canvas.height = completedCrop.height;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      return;
+    }
+
+    ctx.drawImage(
+      image,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      completedCrop.width,
+      completedCrop.height
+    );
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProfileImage(reader.result);
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/jpeg', 0.9);
+    });
+  };
+
+  const handleSaveCroppedImage = async () => {
+    await handleCropImage();
+    setCropModalOpen(false);
+  };
+
 
   const initialValues = {
     firstName: "",
     middleName: "",
     lastName: "",
+    gender: "",
     designation: "",
     street: "",
     city: "",
@@ -32,13 +138,14 @@ const CmForm = () => {
     country: "",
     email: "",
     PhoneNo: "",
-    // subject: "",
+    organization: "",
   };
 
   const checkoutSchema = yup.object().shape({
     firstName: yup.string().required("Required"),
     middleName: yup.string(),
     lastName: yup.string().required("Required"),
+    gender: yup.string().required("Required"),
     designation: yup.string().required("Required"),
     street: yup.string().required("Required"),
     city: yup.string().required("Required"),
@@ -50,7 +157,7 @@ const CmForm = () => {
       .matches(/^[0-9]+$/, "Only numbers are allowed")
       .min(10, "Must be at least 10 digits")
       .required("Required"),
-    // subject: yup.string().required("Required"),
+    organization: yup.string().required("Required"),
   });
 
   const textFieldStyles = {
@@ -63,8 +170,8 @@ const CmForm = () => {
         borderColor: "#999",
         boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
       },
-      padding: "8px 12px", // Adjust padding to reduce height
-      height: "50px", // Set a fixed height for the input
+      padding: "8px 12px",
+      height: "50px",
     },
     "& .MuiInputLabel-root": {
       color: "#555",
@@ -74,45 +181,85 @@ const CmForm = () => {
     },
   };
 
-  // Get all countries
   const countries = Country.getAllCountries();
-
-  // Get states based on selected country
   const states = selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
-
-  // Get cities based on selected state
   const cities = selectedState ? City.getCitiesOfState(selectedCountry?.isoCode, selectedState.isoCode) : [];
-
-
-  const organization = [
-    "Wipro",
-    "Infosys",
-    "TCS",
-    "HCL",
-    "Tech Mahindra",
-  ];
-
-
-
-  // const customerManagers = [
-  //   "Rambabu",
-  //   "Charan",
-  //   "Sathira",
-  //   "Jyothika",
-  //   "Customer Manager 5",
-  // ];
-
+  const organization = ["Wipro", "Infosys", "TCS", "HCL", "Tech Mahindra"];
+  const gender = ["Male", "Female"];
 
   return (
-    <Box m="15px" sx={{
-      backgroundColor: "#ffffff", padding: "20px"
-
-    }}>
-      {/* <Header title="Create CM" subtitle="Create a New Customer Manager Profile" /> */}
-
-      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit} sx={{ backgroundColor: "#ffffff" }}>
+    <Box m="15px" sx={{ backgroundColor: "#ffffff", padding: "20px" }}>
+      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
-          <form onSubmit={handleSubmit} >
+          <form onSubmit={handleSubmit}>
+            {/* Profile Photo Section */}
+            <Box display="flex" justifyContent="center" mb="20px">
+              <Box sx={{ position: 'relative' }}>
+                <Avatar
+                  src={profileImage || "https://via.placeholder.com/150"}
+                  sx={{
+                    width: 120,
+                    height: 120,
+                    border: `2px solid ${colors.primary[500]}`,
+                    cursor: 'pointer'
+                  }}
+                  onClick={triggerFileInput}
+                />
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    backgroundColor: colors.blueAccent[500],
+                    '&:hover': {
+                      backgroundColor: colors.blueAccent[600],
+                    }
+                  }}
+                  onClick={triggerFileInput}
+                >
+                  <PhotoCamera />
+                </IconButton>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                />
+              </Box>
+            </Box>
+
+            {/* Crop Modal */}
+            <Dialog open={cropModalOpen} onClose={() => setCropModalOpen(false)} maxWidth="md">
+              <DialogTitle>Crop Profile Picture</DialogTitle>
+              <DialogContent>
+                {originalImage && (
+                  <ReactCrop
+                    crop={crop}
+                    onChange={(c) => setCrop(c)}
+                    onComplete={handleCropComplete}
+                    aspect={1}
+                    circularCrop
+                  >
+                    <img
+                      ref={imgRef}
+                      src={originalImage}
+                      onLoad={onImageLoad}
+                      style={{ maxHeight: '70vh', maxWidth: '100%' }}
+                      alt="Crop preview"
+                    />
+                  </ReactCrop>
+                )}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setCropModalOpen(false)} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleSaveCroppedImage} color="primary" variant="contained">
+                  Save
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Box
               display="grid"
               gap="20px"
@@ -120,7 +267,6 @@ const CmForm = () => {
               sx={{
                 "& > div": { gridColumn: isNonMobile ? "span 4" : undefined },
                 backgroundColor: "#ffffff",
-                //  padding:"10px"
               }}
             >
               {[
@@ -128,8 +274,6 @@ const CmForm = () => {
                 { label: "Middle Name", name: "middleName" },
                 { label: "Last Name", name: "lastName" },
                 { label: "Email Id", name: "email", type: "email" },
-                // { label: "Phone No", name: "PhoneNo", type: "text" },
-                // { label: "Subject", name: "subject" },
               ].map((field, index) => (
                 <TextField
                   key={index}
@@ -148,7 +292,6 @@ const CmForm = () => {
               ))}
 
               <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px" }}>
-                {/* Phone Code Dropdown */}
                 <Autocomplete
                   fullWidth
                   options={countries}
@@ -164,13 +307,10 @@ const CmForm = () => {
                       sx={textFieldStyles}
                       error={!!touched.phoneCode && !!errors.phoneCode}
                       helperText={touched.phoneCode && errors.phoneCode}
-
                     />
                   )}
-
                 />
 
-                {/* Phone Number Input */}
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -183,32 +323,31 @@ const CmForm = () => {
                   error={!!touched.PhoneNo && !!errors.PhoneNo}
                   helperText={touched.PhoneNo && errors.PhoneNo}
                   sx={textFieldStyles}
-
                 />
               </Box>
 
+              <Autocomplete
+                fullWidth
+                options={gender}
+                value={values.gender || null}
+                onChange={(event, newValue) => {
+                  setFieldValue("gender", newValue || "");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Gender"
+                    sx={textFieldStyles}
+                    error={!!touched.gender && !!errors.gender}
+                    helperText={touched.gender && errors.gender}
+                  />
+                )}
+                sx={{ gridColumn: "span 1" }}
+                freeSolo
+                forcePopupIcon
+                popupIcon={<ArrowDropDownIcon />}
+              />
 
-              {/* {[
-              
-                              { label: "Address", name: "address" },
-                            ].map((field, index) => (
-                              <TextField
-                                key={index}
-                                fullWidth
-                                variant="outlined"
-                                type={field.type || "text"}
-                                label={field.label}
-                                name={field.name}
-                                value={values[field.name]}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                error={!!touched[field.name] && !!errors[field.name]}
-                                helperText={touched[field.name] && errors[field.name]}
-                                sx={{ ...textFieldStyles, gridColumn: "span 1" }}
-                              />
-                            ))} */}
-
-              {/* Country Dropdown */}
               <Autocomplete
                 fullWidth
                 options={countries}
@@ -216,8 +355,8 @@ const CmForm = () => {
                 value={selectedCountry}
                 onChange={(event, newValue) => {
                   setSelectedCountry(newValue);
-                  setSelectedState(null); // Reset state when country changes
-                  setSelectedCity(null); // Reset city when country changes
+                  setSelectedState(null);
+                  setSelectedCity(null);
                   setFieldValue("country", newValue ? newValue.name : "");
                 }}
                 renderInput={(params) => (
@@ -232,7 +371,6 @@ const CmForm = () => {
                 sx={{ gridColumn: "span 1" }}
               />
 
-              {/* State Dropdown */}
               <Autocomplete
                 fullWidth
                 options={states}
@@ -240,7 +378,7 @@ const CmForm = () => {
                 value={selectedState}
                 onChange={(event, newValue) => {
                   setSelectedState(newValue);
-                  setSelectedCity(null); // Reset city when state changes
+                  setSelectedCity(null);
                   setFieldValue("province", newValue ? newValue.name : "");
                 }}
                 renderInput={(params) => (
@@ -257,7 +395,6 @@ const CmForm = () => {
                 disabled={!selectedCountry}
               />
 
-              {/* City Dropdown */}
               <Autocomplete
                 fullWidth
                 options={cities}
@@ -282,7 +419,8 @@ const CmForm = () => {
               />
 
               {[
-
+                { label: "Designation", name: "designation" },
+                { label: "Street Address", name: "street" },
                 { label: "Postal Code", name: "postcode" },
               ].map((field, index) => (
                 <TextField
@@ -300,10 +438,10 @@ const CmForm = () => {
                   sx={{ ...textFieldStyles, gridColumn: "span 1" }}
                 />
               ))}
-          
+
               <Autocomplete
                 fullWidth
-                options={organization} // Your array of strings: ["Wipro", "Infosys", ...]
+                options={organization}
                 value={values.organization || null}
                 onChange={(event, newValue) => {
                   setFieldValue("organization", newValue || "");
@@ -319,11 +457,9 @@ const CmForm = () => {
                 )}
                 sx={{ gridColumn: "span 1" }}
                 freeSolo
-                forcePopupIcon // This ensures the dropdown icon is always visible
-                popupIcon={<ArrowDropDownIcon />} // Optional: Customize the icon
+                forcePopupIcon
+                popupIcon={<ArrowDropDownIcon />}
               />
-
-   
             </Box>
 
             <Box display="flex" justifyContent="flex-end" mt="24px">
@@ -340,14 +476,16 @@ const CmForm = () => {
                   backgroundColor: colors.blueAccent[700],
                   color: "#ffffff",
                   textTransform: "none",
-
-                  "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
+                  "&:hover": {
+                    backgroundColor: colors.blueAccent[600],
+                    boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)"
+                  },
                 }}
               >
-
                 Create
               </Button>
             </Box>
+
           </form>
         )}
       </Formik>

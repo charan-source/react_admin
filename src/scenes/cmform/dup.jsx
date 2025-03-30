@@ -1,173 +1,62 @@
-import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Avatar, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Avatar, IconButton } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-// import Header from "../../components/Header";
 import { Country, State, City } from 'country-state-city';
 import React, { useState, useRef } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
 
-
-
-
-
-function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
-  const cropWidth = mediaWidth * 0.9;
-  const cropHeight = cropWidth / aspect;
-
-  const cropX = (mediaWidth - cropWidth) / 2;
-  const cropY = (mediaHeight - cropHeight) / 2;
-
-  return {
-    unit: '%',
-    x: cropX / mediaWidth * 100,
-    y: cropY / mediaHeight * 100,
-    width: cropWidth / mediaWidth * 100,
-    height: cropHeight / mediaHeight * 100
-  };
-}
-
-
-const Form = () => {
+const CmForm = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
-  const colors = tokens(theme.palette.mode); // Get theme colors
+  const colors = tokens(theme.palette.mode);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
-   const [profileImage, setProfileImage] = useState(null);
-      const [originalImage, setOriginalImage] = useState(null);
-      const [cropModalOpen, setCropModalOpen] = useState(false);
-      const [crop, setCrop] = useState();
-      const [completedCrop, setCompletedCrop] = useState();
-      const imgRef = useRef(null);
-      const fileInputRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const fileInputRef = useRef(null);
 
+  const handleFormSubmit = (values) => {
+    const formData = {
+      ...values,
+      profileImage: profileImage // Include the profile image in the form data
+    };
+    console.log("Form Data:", formData);
+  };
 
-      const handleFormSubmit = (values) => {
-        const formData = {
-          ...values,
-          profileImage: profileImage
-        };
-        console.log("Form Data:", formData);
-      };
-    
-  
-  
-  
-      const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            setOriginalImage(reader.result);
-            setCropModalOpen(true);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-    
-      const triggerFileInput = () => {
-        fileInputRef.current?.click();
-      };
-    
-      function onImageLoad(e) {
-        const { width, height } = e.currentTarget;
-        setCrop(centerAspectCrop(width, height, 1));
-      }
-    
-      const handleCropComplete = (crop) => {
-        setCompletedCrop(crop);
-      };
-    
-      const handleCropImage = async () => {
-        if (!completedCrop || !imgRef.current) {
-          return;
-        }
-    
-        const image = imgRef.current;
-        const canvas = document.createElement('canvas');
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = completedCrop.width;
-        canvas.height = completedCrop.height;
-        const ctx = canvas.getContext('2d');
-    
-        if (!ctx) {
-          return;
-        }
-    
-        ctx.drawImage(
-          image,
-          completedCrop.x * scaleX,
-          completedCrop.y * scaleY,
-          completedCrop.width * scaleX,
-          completedCrop.height * scaleY,
-          0,
-          0,
-          completedCrop.width,
-          completedCrop.height
-        );
-    
-        return new Promise((resolve) => {
-          canvas.toBlob((blob) => {
-            if (!blob) {
-              return;
-            }
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              setProfileImage(reader.result);
-              resolve(reader.result);
-            };
-            reader.readAsDataURL(blob);
-          }, 'image/jpeg', 0.9);
-        });
-      };
-    
-      const handleSaveCroppedImage = async () => {
-        await handleCropImage();
-        setCropModalOpen(false);
-      };
-    
-  
-  
   const initialValues = {
     firstName: "",
     middleName: "",
     lastName: "",
+    gender: "",
     designation: "",
     street: "",
-    gender : "",
     city: "",
     state: "",
     country: "",
     email: "",
-    phoneCode: "",
     PhoneNo: "",
-    // subject: "",
+    organization: "",
   };
 
   const checkoutSchema = yup.object().shape({
     firstName: yup.string().required("Required"),
     middleName: yup.string(),
     lastName: yup.string().required("Required"),
+    gender: yup.string().required("Required"),
     designation: yup.string().required("Required"),
-   gender: yup.string().required("Required"),
     street: yup.string().required("Required"),
     city: yup.string().required("Required"),
     state: yup.string().required("Required"),
     country: yup.string().required("Required"),
     email: yup.string().email("Invalid email").required("Required"),
-    phoneCode: yup.string().required("Required"),
     PhoneNo: yup
       .string()
       .matches(/^[0-9]+$/, "Only numbers are allowed")
       .min(10, "Must be at least 10 digits")
       .required("Required"),
-    // subject: yup.string().required("Required"),
+    organization: yup.string().required("Required"),
   });
 
   const textFieldStyles = {
@@ -180,8 +69,8 @@ const Form = () => {
         borderColor: "#999",
         boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
       },
-      padding: "8px 12px", // Adjust padding to reduce height
-      height: "50px", // Set a fixed height for the input
+      padding: "8px 12px",
+      height: "50px",
     },
     "& .MuiInputLabel-root": {
       color: "#555",
@@ -193,26 +82,33 @@ const Form = () => {
 
   // Get all countries
   const countries = Country.getAllCountries();
-
-  // Get states based on selected country
   const states = selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
-
-  // Get cities based on selected state
   const cities = selectedState ? City.getCitiesOfState(selectedCountry?.isoCode, selectedState.isoCode) : [];
+  const organization = ["Wipro", "Infosys", "TCS", "HCL", "Tech Mahindra"];
   const gender = ["Male", "Female"];
 
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
   return (
-    <Box m="15px" sx={{
-      backgroundColor: "#ffffff", padding: "20px"
-
-    }}>
-      {/* <Header title="Create CM" subtitle="Create a New Customer Manager Profile" /> */}
-
-      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit} sx={{ backgroundColor: "#ffffff" }}>
+    <Box m="15px" sx={{ backgroundColor: "#ffffff", padding: "20px" }}>
+      <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
-          <form onSubmit={handleSubmit} >
-
-<Box display="flex" justifyContent="center" mb="20px">
+          <form onSubmit={handleSubmit}>
+            {/* Profile Photo Section */}
+            <Box display="flex" justifyContent="center" mb="20px">
               <Box sx={{ position: 'relative' }}>
                 <Avatar
                   src={profileImage || "https://via.placeholder.com/150"}
@@ -248,37 +144,6 @@ const Form = () => {
               </Box>
             </Box>
 
-            {/* Crop Modal */}
-            <Dialog open={cropModalOpen} onClose={() => setCropModalOpen(false)} maxWidth="md">
-              <DialogTitle>Crop Profile Picture</DialogTitle>
-              <DialogContent>
-                {originalImage && (
-                  <ReactCrop
-                    crop={crop}
-                    onChange={(c) => setCrop(c)}
-                    onComplete={handleCropComplete}
-                    aspect={1}
-                    circularCrop
-                  >
-                    <img
-                      ref={imgRef}
-                      src={originalImage}
-                      onLoad={onImageLoad}
-                      style={{ maxHeight: '70vh', maxWidth: '100%' }}
-                      alt="Crop preview"
-                    />
-                  </ReactCrop>
-                )}
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setCropModalOpen(false)} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={handleSaveCroppedImage} color="primary" variant="contained">
-                  Save
-                </Button>
-              </DialogActions>
-            </Dialog>
             <Box
               display="grid"
               gap="20px"
@@ -286,15 +151,13 @@ const Form = () => {
               sx={{
                 "& > div": { gridColumn: isNonMobile ? "span 4" : undefined },
                 backgroundColor: "#ffffff",
-                //  padding:"10px"
               }}
             >
               {[
                 { label: "First Name", name: "firstName" },
                 { label: "Middle Name", name: "middleName" },
                 { label: "Last Name", name: "lastName" },
-
-                // { label: "Subject", name: "subject" },
+                { label: "Email Id", name: "email", type: "email" },
               ].map((field, index) => (
                 <TextField
                   key={index}
@@ -312,10 +175,7 @@ const Form = () => {
                 />
               ))}
 
-              {/* Country Dropdown */}
-
               <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px" }}>
-                {/* Phone Code Dropdown */}
                 <Autocomplete
                   fullWidth
                   options={countries}
@@ -331,13 +191,10 @@ const Form = () => {
                       sx={textFieldStyles}
                       error={!!touched.phoneCode && !!errors.phoneCode}
                       helperText={touched.phoneCode && errors.phoneCode}
-
                     />
                   )}
-
                 />
 
-                {/* Phone Number Input */}
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -350,58 +207,30 @@ const Form = () => {
                   error={!!touched.PhoneNo && !!errors.PhoneNo}
                   helperText={touched.PhoneNo && errors.PhoneNo}
                   sx={textFieldStyles}
-
                 />
               </Box>
 
-
-
-
-
-
-              {[
-                { label: "Email Id", name: "email", type: "email" },
-
-                // { label: "Subject", name: "subject" },
-              ].map((field, index) => (
-                <TextField
-                  key={index}
-                  fullWidth
-                  variant="outlined"
-                  type={field.type || "text"}
-                  label={field.label}
-                  name={field.name}
-                  value={values[field.name]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched[field.name] && !!errors[field.name]}
-                  helperText={touched[field.name] && errors[field.name]}
-                  sx={{ ...textFieldStyles, gridColumn: "span 1" }}
-                />
-              ))}
-
-
-                            <Autocomplete
-                              fullWidth
-                              options={gender}
-                              value={values.gender || null}
-                              onChange={(event, newValue) => {
-                                setFieldValue("gender", newValue || "");
-                              }}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Gender"
-                                  sx={textFieldStyles}
-                                  error={!!touched.gender && !!errors.gender}
-                                  helperText={touched.gender && errors.gender}
-                                />
-                              )}
-                              sx={{ gridColumn: "span 1" }}
-                              freeSolo
-                              forcePopupIcon
-                              popupIcon={<ArrowDropDownIcon />}
-                            />
+              <Autocomplete
+                fullWidth
+                options={gender}
+                value={values.gender || null}
+                onChange={(event, newValue) => {
+                  setFieldValue("gender", newValue || "");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Gender"
+                    sx={textFieldStyles}
+                    error={!!touched.gender && !!errors.gender}
+                    helperText={touched.gender && errors.gender}
+                  />
+                )}
+                sx={{ gridColumn: "span 1" }}
+                freeSolo
+                forcePopupIcon
+                popupIcon={<ArrowDropDownIcon />}
+              />
 
               <Autocomplete
                 fullWidth
@@ -410,8 +239,8 @@ const Form = () => {
                 value={selectedCountry}
                 onChange={(event, newValue) => {
                   setSelectedCountry(newValue);
-                  setSelectedState(null); // Reset state when country changes
-                  setSelectedCity(null); // Reset city when country changes
+                  setSelectedState(null);
+                  setSelectedCity(null);
                   setFieldValue("country", newValue ? newValue.name : "");
                 }}
                 renderInput={(params) => (
@@ -426,7 +255,6 @@ const Form = () => {
                 sx={{ gridColumn: "span 1" }}
               />
 
-              {/* State Dropdown */}
               <Autocomplete
                 fullWidth
                 options={states}
@@ -434,7 +262,7 @@ const Form = () => {
                 value={selectedState}
                 onChange={(event, newValue) => {
                   setSelectedState(newValue);
-                  setSelectedCity(null); // Reset city when state changes
+                  setSelectedCity(null);
                   setFieldValue("province", newValue ? newValue.name : "");
                 }}
                 renderInput={(params) => (
@@ -451,7 +279,6 @@ const Form = () => {
                 disabled={!selectedCountry}
               />
 
-              {/* City Dropdown */}
               <Autocomplete
                 fullWidth
                 options={cities}
@@ -475,6 +302,48 @@ const Form = () => {
                 disabled={!selectedState}
               />
 
+              {[
+                { label: "Designation", name: "designation" },
+                { label: "Street Address", name: "street" },
+                { label: "Postal Code", name: "postcode" },
+              ].map((field, index) => (
+                <TextField
+                  key={index}
+                  fullWidth
+                  variant="outlined"
+                  type={field.type || "text"}
+                  label={field.label}
+                  name={field.name}
+                  value={values[field.name]}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched[field.name] && !!errors[field.name]}
+                  helperText={touched[field.name] && errors[field.name]}
+                  sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                />
+              ))}
+          
+              <Autocomplete
+                fullWidth
+                options={organization}
+                value={values.organization || null}
+                onChange={(event, newValue) => {
+                  setFieldValue("organization", newValue || "");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Organization"
+                    sx={textFieldStyles}
+                    error={!!touched.organization && !!errors.organization}
+                    helperText={touched.organization && errors.organization}
+                  />
+                )}
+                sx={{ gridColumn: "span 1" }}
+                freeSolo
+                forcePopupIcon
+                popupIcon={<ArrowDropDownIcon />}
+              />
             </Box>
 
             <Box display="flex" justifyContent="flex-end" mt="24px">
@@ -491,11 +360,12 @@ const Form = () => {
                   backgroundColor: colors.blueAccent[700],
                   color: "#ffffff",
                   textTransform: "none",
-
-                  "&:hover": { backgroundColor: colors.blueAccent[600], boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
+                  "&:hover": { 
+                    backgroundColor: colors.blueAccent[600], 
+                    boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" 
+                  },
                 }}
               >
-
                 Create
               </Button>
             </Box>
@@ -506,4 +376,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default CmForm;

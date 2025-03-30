@@ -31,7 +31,7 @@ const getActivePage = (pathname) => {
     return "/calendar";
   } else if (pathname.includes("/organization")) {
     return "/organization";
-  }  else if (
+  } else if (
     pathname === "/" ||
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
@@ -109,20 +109,22 @@ const Topbar = () => {
         return "Create a New Customer Manager";
       case "/crmform":
         return " Create a New Customer Relationship Manager";
+      case "/hob":
+        return "Head of the Business";
       case "/crmdetails":
         return "Customer Relationship Manager Details";
       case "/cmdetails":
         return "Customer Manager Details";
       case "/organizationdetails":
-          return " Organization Details";
+        return " Organization Details";
       case "/organizationform":
-          return "Create a New Organization";     
+        return "Create a New Organization";
       case "/ticketdetails":
-          return " Experience Details";
+        return " Experience Details";
       case "/form":
         return "Create a New Organization";
       case "/hobdetails":
-          return "Head of The Department Details";
+        return "Head of The Department Details";
       case "/allExperiences":
         return "All Experiences";
       case "/organization":
@@ -151,28 +153,28 @@ const Topbar = () => {
         return { primaryTitle: "Customer Manager", secondaryTitle: null };
       case "/crm":
         return { primaryTitle: "Customer Relationship Manager", secondaryTitle: null };
-        case "/cmdetails":
-          return { primaryTitle: "Customer Manager Details ", secondaryTitle: null };
+      case "/cmdetails":
+        return { primaryTitle: "Customer Manager Details ", secondaryTitle: null };
       case "/organization":
         return { primaryTitle: "Organization", secondaryTitle: null };
       case "/ticketdetails":
-          return { primaryTitle: "Experience Details", secondaryTitle: null };
+        return { primaryTitle: "Experience Details", secondaryTitle: null };
       case "/organizationdetails":
-          return { primaryTitle: "Organizations Details", secondaryTitle: null };
+        return { primaryTitle: "Organizations Details", secondaryTitle: null };
       case "/organizationform":
-          return { primaryTitle: "Organization", secondaryTitle: "Create a New Organization" };
+        return { primaryTitle: "Organization", secondaryTitle: "Create a New Organization" };
       case "/cmform":
         return { primaryTitle: "Customer Manager", secondaryTitle: "Create a New Customer Manager" };
       case "/crmdetails":
         return { primaryTitle: "Customer Relationship Manager Details ", secondaryTitle: null };
       case "/crmform":
         return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
-        case "/hob":
-          return { primaryTitle: "Head of the Business", secondaryTitle: null };
+      case "/hob":
+        return { primaryTitle: "Head of the Business", secondaryTitle: null };
       case "/form":
         return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
       case "/hobdetails":
-          return { primaryTitle: "Head of The Business Details", secondaryTitle: null };
+        return { primaryTitle: "Head of The Business Details", secondaryTitle: null };
       case "/allExperiences":
         return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
       case "/newExperiences":
@@ -232,7 +234,7 @@ const Topbar = () => {
     </Box>
   );
 
-    
+
   return (
     <Box
       width="100%"
@@ -444,7 +446,7 @@ const Topbar = () => {
                 textAlign: isMobile ? "text" : "text",
               }}
             >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
+              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "20px", fontWeight:"bold" }}>
                 {getPageTitle()}
               </Typography>
               <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
@@ -453,8 +455,8 @@ const Topbar = () => {
                   fontSize="small"
                   sx={{ cursor: "pointer" }}
                 />
-              
-                       <CustomDivider /> 
+
+                <CustomDivider />
                 <Typography>{getPageTitle()}</Typography>
               </Box>
             </Box>
@@ -484,68 +486,68 @@ const Topbar = () => {
                 paddingLeft: isMobile ? "12px" : "20px",
               }}
             >
-              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "20px" : "25px" }}>
+              <Typography sx={{ color: "#ffffff", fontSize: isMobile ? "17px" : "20px", fontWeight:"bold" }}>
                 {primaryTitle}
               </Typography>
               <Box sx={{ color: "#ffffff", alignItems: "center", gap: 1, display: "flex" }}>
-  <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
-  <CustomDivider /> 
-  <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(-1)}>
-    {primaryTitle}
-  </Typography>
-  {secondaryTitle && (
-    <>
-      <CustomDivider /> 
-      <Typography sx={{ cursor: "pointer" }} onClick={() => navigate(location.pathname)}>
-        {secondaryTitle}
-      </Typography>
-    </>
-  )}
-</Box>
+                <HomeOutlinedIcon onClick={() => navigate("/")} fontSize="small" sx={{ cursor: "pointer" }} />
+                <CustomDivider />
+                <Typography sx={{ cursor: "pointer", fontSize:"14px" }} onClick={() => navigate(-1)}>
+                  {primaryTitle}
+                </Typography>
+                {secondaryTitle && (
+                  <>
+                    <CustomDivider />
+                    <Typography sx={{ cursor: "pointer" ,  fontSize:"14px"}} onClick={() => navigate(location.pathname)}>
+                      {secondaryTitle}
+                    </Typography>
+                  </>
+                )}
+              </Box>
             </Box>
           </Box>
         )}
       </Box>
-<Box sx={{alignItems:"center"}}>
-      {/* Mobile Sidebar Modal */}
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-          sx: { backgroundColor: "rgba(0, 0, 0, 0.5)" }, // Semi-transparent black backdrop
-        }}
-      >
-        <Box
-          width="100%"
+      <Box sx={{ alignItems: "center" }}>
+        {/* Mobile Sidebar Modal */}
+        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}
           sx={{
-            background: colors.primary[400],
-            height: "100vh",
-            position: "absolute",
-            left: 0,
-            top: "10%",
-            padding: "20px",
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
-            overflow: "hidden",
-            boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
+          }}
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+            sx: { backgroundColor: "rgba(0, 0, 0, 0.5)" }, // Semi-transparent black backdrop
           }}
         >
-          <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Customer Relationship Manager" to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-          <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-        </Box>
-      </Modal>
+          <Box
+            width="100%"
+            sx={{
+              background: colors.primary[400],
+              height: "100vh",
+              position: "absolute",
+              left: 0,
+              top: "10%",
+              padding: "20px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              overflow: "hidden",
+              boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <Item title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Customer Manager" to="/cm" icon={<PeopleAltOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Customer Relationship Manager" to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+          </Box>
+        </Modal>
       </Box>
     </Box>
   );
