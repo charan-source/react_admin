@@ -14,6 +14,7 @@ const OrganizationDetails = () => {
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [orgManagerPairs, setOrgManagerPairs] = useState([{ branch: "" }]);
   const location = useLocation();
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
 
@@ -113,6 +114,19 @@ const OrganizationDetails = () => {
   //   border: "1px solid transparent",
   // };
 
+
+  const addOrgManagerPair = () => {
+    setOrgManagerPairs([...orgManagerPairs, { branch: "" }]);
+  };
+
+  const removeOrgManagerPair = (index) => {
+    if (orgManagerPairs.length > 1) {
+      const updatedPairs = [...orgManagerPairs];
+      updatedPairs.splice(index, 1);
+      setOrgManagerPairs(updatedPairs);
+    }
+  };
+
   const countries = Country.getAllCountries();
   const states = selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
   const cities = selectedState ? City.getCitiesOfState(selectedCountry?.isoCode, selectedState.isoCode) : [];
@@ -131,7 +145,7 @@ const OrganizationDetails = () => {
       {isEditing ? (
         fieldComponent
       ) : (
-        <Typography variant="body1" sx={{ 
+        <Typography variant="body1" sx={{
           padding: "12px",
           backgroundColor: "#f5f5f5",
           borderRadius: "4px",
@@ -357,6 +371,99 @@ const OrganizationDetails = () => {
                   disabled={!selectedState}
                 />
               )}
+
+              <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px", alignItems: "center" }}></Box>
+
+              {/* Branch Fields - Single Column Layout */}
+              {/* Branch Fields - Single Column Layout */}
+              <Box sx={{ gridColumn: "span 1" }}>
+                {orgManagerPairs.map((pair, index) => (
+                  <React.Fragment key={`pair-${index}`}>
+                    {/* <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
+                      {index === 0 ?  `Branch  ${index + 1}` : ""}
+                    </Typography> */}
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "10px",
+                        mb: 2,
+                        alignItems: "center"
+                      }}
+                    >
+                      {/* Branch Field with Heading */}
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="subtitle1" sx={{ mb: 1, color: "#555" }}>
+                          {index === 0 ? "Branch" : `Branch ${index + 1}`}
+                        </Typography>
+                        {isEditing ? (
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            type="text"
+                            name={`branch${index}`}
+                            value={values[`branch${index}`] || ''}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={!!touched[`branch${index}`] && !!errors[`branch${index}`]}
+                            helperText={touched[`branch${index}`] && errors[`branch${index}`]}
+                            sx={textFieldStyles}
+                          />
+                        ) : (
+                          <Box sx={{
+                            padding: "12px",
+                            backgroundColor: "#f5f5f5",
+                            borderRadius: "4px",
+                            minHeight: "50px",
+                            display: "flex",
+                            alignItems: "center"
+                          }}>
+                            {values[`branch${index}`] || "-"}
+                          </Box>
+                        )}
+                      </Box>
+
+                      {/* Add/Remove Buttons */}
+                      {isEditing && (
+                        <Box sx={{
+                          display: "flex",
+                          gap: "10px",
+                          alignItems: "center",
+                          marginTop:"30px"
+                        }}>
+                          {index === orgManagerPairs.length - 1 ? (
+                            <Button
+                              variant="outlined"
+                              onClick={addOrgManagerPair}
+                              sx={{
+                                minWidth: '100px',
+                                height: '40px',
+                                backgroundColor: colors.blueAccent[700],
+                                color: "#ffffff"
+                              }}
+                            >
+                              Add More
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              onClick={() => removeOrgManagerPair(index)}
+                              sx={{
+                                minWidth: '100px',
+                                height: '40px',
+                                backgroundColor: '#ffebee'
+                              }}
+                              color="error"
+                            >
+                              Remove
+                            </Button>
+                          )}
+                        </Box>
+                      )}
+                    </Box>
+                  </React.Fragment>
+                ))}
+              </Box>
             </Box>
 
             <Box display="flex" justifyContent="flex-end" mt="24px">
