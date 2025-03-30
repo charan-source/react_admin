@@ -1,10 +1,31 @@
-import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Typography } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Typography, Avatar, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import { Country, State, City } from 'country-state-city';
 import { useLocation } from 'react-router-dom';
+
+
+function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
+  const cropWidth = mediaWidth * 0.9;
+  const cropHeight = cropWidth / aspect;
+
+  const cropX = (mediaWidth - cropWidth) / 2;
+  const cropY = (mediaHeight - cropHeight) / 2;
+
+  return {
+    unit: '%',
+    x: cropX / mediaWidth * 100,
+    y: cropY / mediaHeight * 100,
+    width: cropWidth / mediaWidth * 100,
+    height: cropHeight / mediaHeight * 100
+  };
+}
 
 const HobDetails = () => {
   const theme = useTheme();
@@ -14,7 +35,103 @@ const HobDetails = () => {
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+    const [profileImage, setProfileImage] = useState(null);
+    const [originalImage, setOriginalImage] = useState(null);
+    const [cropModalOpen, setCropModalOpen] = useState(false);
+    const [crop, setCrop] = useState();
+    const [completedCrop, setCompletedCrop] = useState();
+    const imgRef = useRef(null);
+    const fileInputRef = useRef(null);
   const location = useLocation();
+
+  const handleFormSubmit = (values) => {
+    const formData = {
+      ...values,
+      profileImage: profileImage
+    };
+    const fullPhoneNumber = `${values.phoneCode}${values.PhoneNo}`;
+    console.log("Form Data:", { ...values, fullPhoneNumber });
+    setIsEditing(false);
+    console.log("Form Data:", formData);
+
+  };
+
+  const handleImageUpload = (event) => {
+    if (!isEditing) return; // Prevent image upload in disabled mode
+    
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setOriginalImage(reader.result);
+        setCropModalOpen(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    if (!isEditing) return; // Prevent triggering file input in disabled mode
+    fileInputRef.current?.click();
+  };
+
+  function onImageLoad(e) {
+    const { width, height } = e.currentTarget;
+    setCrop(centerAspectCrop(width, height, 1));
+  }
+
+  const handleCropComplete = (crop) => {
+    setCompletedCrop(crop);
+  };
+
+  const handleCropImage = async () => {
+    if (!completedCrop || !imgRef.current) {
+      return;
+    }
+
+    const image = imgRef.current;
+    const canvas = document.createElement('canvas');
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = completedCrop.width;
+    canvas.height = completedCrop.height;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      return;
+    }
+
+    ctx.drawImage(
+      image,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      completedCrop.width,
+      completedCrop.height
+    );
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProfileImage(reader.result);
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/jpeg', 0.9);
+    });
+  };
+
+  const handleSaveCroppedImage = async () => {
+    await handleCropImage();
+    setCropModalOpen(false);
+  };
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
 
   useEffect(() => {
@@ -32,11 +149,7 @@ const HobDetails = () => {
     }
   }, [ticket, selectedCountry, selectedState]);
 
-  const handleFormSubmit = (values) => {
-    const fullPhoneNumber = `${values.phoneCode}${values.PhoneNo}`;
-    console.log("Form Data:", { ...values, fullPhoneNumber });
-    setIsEditing(false);
-  };
+
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -147,12 +260,84 @@ const HobDetails = () => {
     </Box>
   );
 
+  const gender = ["Male", "Female"];
 
   return (
     <Box m="15px" sx={{ backgroundColor: "#ffffff", padding: "20px", borderRadius: "8px" }}>
       <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
+             <Box display="flex" justifyContent="center" mb="20px">
+                          <Box sx={{ position: 'relative' }}>
+                            <Avatar
+                              src={profileImage || "https://via.placeholder.com/150"}
+                              sx={{
+                                width: 120,
+                                height: 120,
+                                border: `2px solid ${colors.primary[500]}`,
+                                cursor: isEditing ? 'pointer' : 'default',
+                                opacity: isEditing ? 1 : 0.8
+                              }}
+                              onClick={triggerFileInput}
+                            />
+                            <IconButton
+                              sx={{
+                                position: 'absolute',
+                                bottom: 0,
+                                right: 0,
+                                backgroundColor: colors.blueAccent[500],
+                                '&:hover': {
+                                  backgroundColor: isEditing ? colors.blueAccent[600] : colors.blueAccent[500],
+                                },
+                                opacity: isEditing ? 1 : 0.7
+                              }}
+                              onClick={triggerFileInput}
+                              disabled={!isEditing}
+                            >
+                              <PhotoCamera />
+                            </IconButton>
+                            <input
+                              type="file"
+                              ref={fileInputRef}
+                              onChange={handleImageUpload}
+                              accept="image/*"
+                              style={{ display: 'none' }}
+                              disabled={!isEditing}
+                            />
+                          </Box>
+                        </Box>
+            
+                        {/* Crop Modal */}
+                        <Dialog open={cropModalOpen} onClose={() => setCropModalOpen(false)} maxWidth="md">
+                          <DialogTitle>Crop Profile Picture</DialogTitle>
+                          <DialogContent>
+                            {originalImage && (
+                              <ReactCrop
+                                crop={crop}
+                                onChange={(c) => setCrop(c)}
+                                onComplete={handleCropComplete}
+                                aspect={1}
+                                circularCrop
+                              >
+                                <img
+                                  ref={imgRef}
+                                  src={originalImage}
+                                  onLoad={onImageLoad}
+                                  style={{ maxHeight: '70vh', maxWidth: '100%' }}
+                                  alt="Crop preview"
+                                />
+                              </ReactCrop>
+                            )}
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={() => setCropModalOpen(false)} color="primary">
+                              Cancel
+                            </Button>
+                            <Button onClick={handleSaveCroppedImage} color="primary" variant="contained">
+                              Save
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
             <Box
               display="grid"
               gap="20px"
@@ -234,24 +419,6 @@ const HobDetails = () => {
                 />
               )}
 
-              {/* Address */}
-              {renderField(
-                "Address",
-                "address",
-                values.address,
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  type="text"
-                  name="address"
-                  value={values.address}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched.address && !!errors.address}
-                  helperText={touched.address && errors.address}
-                  sx={textFieldStyles}
-                />
-              )}
 
               {/* Phone Number */}
               {renderField(
@@ -293,6 +460,33 @@ const HobDetails = () => {
                 </Box>,
                 1
               )}
+                      {renderField(
+                              "Gender",
+                              "gender",
+                              values.gender,
+                              <Autocomplete
+                                fullWidth
+                                options={gender}
+                                value={values.gender || null}
+                                onChange={(event, newValue) => {
+                                  setFieldValue("gender", newValue || "");
+                                }}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    sx={textFieldStyles }
+                                    error={!!touched.gender && !!errors.gender}
+                                    helperText={touched.gender && errors.gender}
+                                    disabled={!isEditing}
+                                  />
+                                )}
+                                disabled={!isEditing}
+                                sx={{ gridColumn: "span 1" }}
+                                freeSolo
+                                forcePopupIcon
+                                popupIcon={<ArrowDropDownIcon />}
+                              />
+                            )}
 
               {/* Country */}
               {renderField(
@@ -376,6 +570,25 @@ const HobDetails = () => {
                     />
                   )}
                   disabled={!selectedState}
+                />
+              )}
+
+              {/* Address */}
+              {renderField(
+                "Address",
+                "address",
+                values.address,
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  type="text"
+                  name="address"
+                  value={values.address}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={!!touched.address && !!errors.address}
+                  helperText={touched.address && errors.address}
+                  sx={textFieldStyles}
                 />
               )}
             </Box>

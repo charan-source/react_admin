@@ -258,7 +258,7 @@ const CrmForm = () => {
     "HCL",
     "Tech Mahindra",
   ];
-
+  const gender = ["Male", "Female"];
   return (
     <Box m="15px" sx={{
       backgroundColor: "#ffffff", padding: "20px"
@@ -356,7 +356,7 @@ const CrmForm = () => {
                 // { label: "City", name: "city" },
                 // { label: "State", name: "state" },
                 // { label: "Country", name: "country" },
-                // { label: "Email Id", name: "email", type: "email" },
+                { label: "Email Id", name: "email", type: "email" },
                 // { label: "Phone No", name: "PhoneNo", type: "text" },
                 // { label: "Subject", name: "subject" },
               ].map((field, index) => (
@@ -375,6 +375,28 @@ const CrmForm = () => {
                   sx={{ ...textFieldStyles, gridColumn: "span 1" }}
                 />
               ))}
+          
+          <Autocomplete
+                fullWidth
+                options={gender}
+                value={values.gender || null}
+                onChange={(event, newValue) => {
+                  setFieldValue("gender", newValue || "");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Gender"
+                    sx={textFieldStyles}
+                    error={!!touched.gender && !!errors.gender}
+                    helperText={touched.gender && errors.gender}
+                  />
+                )}
+                sx={{ gridColumn: "span 1" }}
+                freeSolo
+                forcePopupIcon
+                popupIcon={<ArrowDropDownIcon />}
+              />
 
               <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px" }}>
                 {/* Phone Code Dropdown */}
@@ -416,27 +438,7 @@ const CrmForm = () => {
                 />
               </Box>
 
-              {[
-
-
-                { label: "Email Id", name: "email", type: "email" },
-
-              ].map((field, index) => (
-                <TextField
-                  key={index}
-                  fullWidth
-                  variant="outlined"
-                  type={field.type || "text"}
-                  label={field.label}
-                  name={field.name}
-                  value={values[field.name]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={!!touched[field.name] && !!errors[field.name]}
-                  helperText={touched[field.name] && errors[field.name]}
-                  sx={{ ...textFieldStyles, gridColumn: "span 1" }}
-                />
-              ))}
+        
 
               <Autocomplete
                 fullWidth
@@ -529,7 +531,7 @@ const CrmForm = () => {
                   sx={{ ...textFieldStyles, gridColumn: "span 1" }}
                 />
               ))}
-
+   <Box sx={{ gridColumn: "span 2", display: "flex", gap: "10px", alignItems: "center" }}></Box>
 
               {orgManagerPairs.map((pair, index) => (
                 <React.Fragment key={`pair-${index}`}>

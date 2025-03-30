@@ -1,10 +1,31 @@
-import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Select, MenuItem, FormControl,  Typography } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme, Autocomplete, Typography, Avatar, IconButton, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { tokens } from "../../theme";
 import { Formik } from "formik";
 import * as yup from "yup";
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import { Country, State, City } from 'country-state-city';
 import { useLocation } from 'react-router-dom';
+
+
+function centerAspectCrop(mediaWidth, mediaHeight, aspect) {
+  const cropWidth = mediaWidth * 0.9;
+  const cropHeight = cropWidth / aspect;
+
+  const cropX = (mediaWidth - cropWidth) / 2;
+  const cropY = (mediaHeight - cropHeight) / 2;
+
+  return {
+    unit: '%',
+    x: cropX / mediaWidth * 100,
+    y: cropY / mediaHeight * 100,
+    width: cropWidth / mediaWidth * 100,
+    height: cropHeight / mediaHeight * 100
+  };
+}
 
 const CmDetails = () => {
   const theme = useTheme();
@@ -14,9 +35,105 @@ const CmDetails = () => {
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [originalImage, setOriginalImage] = useState(null);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [crop, setCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState();
+  const imgRef = useRef(null);
+  const fileInputRef = useRef(null);
   const location = useLocation();
 
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
+
+
+  const handleFormSubmit = (values) => {
+    const formData = {
+      ...values,
+      profileImage: profileImage
+    };
+    const fullPhoneNumber = `${values.phoneCode}${values.PhoneNo}`;
+    console.log("Form Data:", { ...values, fullPhoneNumber });
+    setIsEditing(false);
+    console.log("Form Data:", formData);
+  };
+
+  const handleImageUpload = (event) => {
+    if (!isEditing) return; // Prevent image upload in disabled mode
+    
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setOriginalImage(reader.result);
+        setCropModalOpen(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    if (!isEditing) return; // Prevent triggering file input in disabled mode
+    fileInputRef.current?.click();
+  };
+
+  function onImageLoad(e) {
+    const { width, height } = e.currentTarget;
+    setCrop(centerAspectCrop(width, height, 1));
+  }
+
+  const handleCropComplete = (crop) => {
+    setCompletedCrop(crop);
+  };
+
+  const handleCropImage = async () => {
+    if (!completedCrop || !imgRef.current) {
+      return;
+    }
+
+    const image = imgRef.current;
+    const canvas = document.createElement('canvas');
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = completedCrop.width;
+    canvas.height = completedCrop.height;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      return;
+    }
+
+    ctx.drawImage(
+      image,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      completedCrop.width,
+      completedCrop.height
+    );
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProfileImage(reader.result);
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/jpeg', 0.9);
+    });
+  };
+
+  const handleSaveCroppedImage = async () => {
+    await handleCropImage();
+    setCropModalOpen(false);
+  };
 
   useEffect(() => {
     if (ticket.country) {
@@ -32,12 +149,6 @@ const CmDetails = () => {
       setSelectedCity(city || null);
     }
   }, [ticket, selectedCountry, selectedState]);
-
-  const handleFormSubmit = (values) => {
-    const fullPhoneNumber = `${values.phoneCode}${values.PhoneNo}`;
-    console.log("Form Data:", { ...values, fullPhoneNumber });
-    setIsEditing(false);
-  };
 
   const handleCancel = () => {
     setIsEditing(false);
@@ -56,6 +167,7 @@ const CmDetails = () => {
     phoneCode: ticket.phonenocode || "",
     customerManager: ticket.customermanager || "",
     organization: ticket.organization || "",
+    gender: ticket.gender || "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -75,6 +187,7 @@ const CmDetails = () => {
     phoneCode: yup.string().required("Required"),
     customerManager: yup.string().required("Required"),
     organization: yup.string().required("Required"),
+    gender: yup.string().required("Required"),
   });
 
   const textFieldStyles = {
@@ -99,22 +212,26 @@ const CmDetails = () => {
     },
   };
 
-  // const selectStyles = {
-  //   "& .MuiOutlinedInput-root": {
-  //     borderRadius: "8px",
-  //     backgroundColor: "#ffffff",
-  //     boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.1)",
-  //     "& .MuiOutlinedInput-notchedOutline": {
-  //       borderColor: "#ccc",
-  //     },
-  //   },
-  //   "& .MuiSelect-select": {
-  //     padding: "8px 12px",
-  //     height: "33px !important",
-  //     display: "flex",
-  //     alignItems: "center",
-  //   },
-  // };
+  const disabledTextFieldStyles = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+      backgroundColor: "#f5f5f5",
+      fontSize: "16px",
+      padding: "8px 12px",
+      height: "50px",
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#e0e0e0",
+      },
+      "& .Mui-disabled": {
+        color: "#555",
+        WebkitTextFillColor: "#555",
+      },
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "16px",
+      color: "#999",
+    },
+  };
 
   const countries = Country.getAllCountries();
   const states = selectedCountry ? State.getStatesOfCountry(selectedCountry.isoCode) : [];
@@ -123,9 +240,9 @@ const CmDetails = () => {
   const customerManagers = [
     "Rambabu",
     "Charan",
-    "",
-    "Customer Manager 4",
-    "Customer Manager 5",
+    "Lakshman",
+    "Satya dev",
+    "Ram",
   ];
 
   const organization = [
@@ -136,6 +253,8 @@ const CmDetails = () => {
     "Tech Mahindra",
   ];
 
+  const gender = ["Male", "Female"];
+
   const renderField = (heading, name, value, fieldComponent, gridSpan = 1) => (
     <Box sx={{ gridColumn: `span ${gridSpan}` }}>
       <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
@@ -144,7 +263,7 @@ const CmDetails = () => {
       {isEditing ? (
         fieldComponent
       ) : (
-        <Typography variant="body1" sx={{ 
+        <Typography variant="body1" sx={{
           padding: "12px",
           backgroundColor: "#f5f5f5",
           borderRadius: "4px",
@@ -169,6 +288,78 @@ const CmDetails = () => {
       <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
+
+            <Box display="flex" justifyContent="center" mb="20px">
+              <Box sx={{ position: 'relative' }}>
+                <Avatar
+                  src={profileImage || "https://via.placeholder.com/150"}
+                  sx={{
+                    width: 120,
+                    height: 120,
+                    border: `2px solid ${colors.primary[500]}`,
+                    cursor: isEditing ? 'pointer' : 'default',
+                    opacity: isEditing ? 1 : 0.8
+                  }}
+                  onClick={triggerFileInput}
+                />
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    backgroundColor: colors.blueAccent[500],
+                    '&:hover': {
+                      backgroundColor: isEditing ? colors.blueAccent[600] : colors.blueAccent[500],
+                    },
+                    opacity: isEditing ? 1 : 0.7
+                  }}
+                  onClick={triggerFileInput}
+                  disabled={!isEditing}
+                >
+                  <PhotoCamera />
+                </IconButton>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  disabled={!isEditing}
+                />
+              </Box>
+            </Box>
+
+            {/* Crop Modal */}
+            <Dialog open={cropModalOpen} onClose={() => setCropModalOpen(false)} maxWidth="md">
+              <DialogTitle>Crop Profile Picture</DialogTitle>
+              <DialogContent>
+                {originalImage && (
+                  <ReactCrop
+                    crop={crop}
+                    onChange={(c) => setCrop(c)}
+                    onComplete={handleCropComplete}
+                    aspect={1}
+                    circularCrop
+                  >
+                    <img
+                      ref={imgRef}
+                      src={originalImage}
+                      onLoad={onImageLoad}
+                      style={{ maxHeight: '70vh', maxWidth: '100%' }}
+                      alt="Crop preview"
+                    />
+                  </ReactCrop>
+                )}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setCropModalOpen(false)} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleSaveCroppedImage} color="primary" variant="contained">
+                  Save
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Box
               display="grid"
               gap="20px"
@@ -267,11 +458,13 @@ const CmDetails = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        sx={textFieldStyles}
+                        sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
                         error={!!touched.phoneCode && !!errors.phoneCode}
                         helperText={touched.phoneCode && errors.phoneCode}
+                        disabled={!isEditing}
                       />
                     )}
+                    disabled={!isEditing}
                   />
                   <TextField
                     fullWidth
@@ -283,10 +476,40 @@ const CmDetails = () => {
                     onBlur={handleBlur}
                     error={!!touched.PhoneNo && !!errors.PhoneNo}
                     helperText={touched.PhoneNo && errors.PhoneNo}
-                    sx={textFieldStyles}
+                    sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                    disabled={!isEditing}
                   />
                 </Box>,
                 1
+              )}
+
+              {/* Gender */}
+              {renderField(
+                "Gender",
+                "gender",
+                values.gender,
+                <Autocomplete
+                  fullWidth
+                  options={gender}
+                  value={values.gender || null}
+                  onChange={(event, newValue) => {
+                    setFieldValue("gender", newValue || "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                      error={!!touched.gender && !!errors.gender}
+                      helperText={touched.gender && errors.gender}
+                      disabled={!isEditing}
+                    />
+                  )}
+                  disabled={!isEditing}
+                  sx={{ gridColumn: "span 1" }}
+                  freeSolo
+                  forcePopupIcon
+                  popupIcon={<ArrowDropDownIcon />}
+                />
               )}
 
               {/* Country */}
@@ -308,11 +531,13 @@ const CmDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      sx={textFieldStyles}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
                       error={!!touched.country && !!errors.country}
                       helperText={touched.country && errors.country}
+                      disabled={!isEditing}
                     />
                   )}
+                  disabled={!isEditing}
                 />
               )}
 
@@ -334,13 +559,13 @@ const CmDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      sx={textFieldStyles}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
                       error={!!touched.state && !!errors.state}
                       helperText={touched.state && errors.state}
-                      disabled={!selectedCountry}
+                      disabled={!selectedCountry || !isEditing}
                     />
                   )}
-                  disabled={!selectedCountry}
+                  disabled={!selectedCountry || !isEditing}
                 />
               )}
 
@@ -361,13 +586,13 @@ const CmDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      sx={textFieldStyles}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
                       error={!!touched.city && !!errors.city}
                       helperText={touched.city && errors.city}
-                      disabled={!selectedState}
+                      disabled={!selectedState || !isEditing}
                     />
                   )}
-                  disabled={!selectedState}
+                  disabled={!selectedState || !isEditing}
                 />
               )}
 
@@ -386,7 +611,8 @@ const CmDetails = () => {
                   onBlur={handleBlur}
                   error={!!touched.street && !!errors.street}
                   helperText={touched.street && errors.street}
-                  sx={textFieldStyles}
+                  sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                  disabled={!isEditing}
                 />
               )}
 
@@ -395,53 +621,56 @@ const CmDetails = () => {
                 "Organization",
                 "organization",
                 values.organization,
-                <FormControl fullWidth >
-                  <Select
-                    name="organization"
-                    value={values.organization}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    <MenuItem value="" disabled>
-                      Select Organization
-                    </MenuItem>
-                    {organization.map((org, index) => (
-                      <MenuItem key={index} value={org}>
-                        {org}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {touched.organization && errors.organization && (
-                    <p style={{ color: "red", fontSize: "12px" }}>{errors.organization}</p>
+                <Autocomplete
+                  fullWidth
+                  options={organization}
+                  value={values.organization || null}
+                  onChange={(event, newValue) => {
+                    setFieldValue("gender", newValue || "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                      error={!!touched.organization && !!errors.organization}
+                      helperText={touched.organization && errors.organization}
+                      disabled={!isEditing}
+                    />
                   )}
-                </FormControl>
+                  disabled={!isEditing}
+                  sx={{ gridColumn: "span 1" }}
+                  freeSolo
+                  forcePopupIcon
+                  popupIcon={<ArrowDropDownIcon />}
+                />
               )}
 
-              {/* Customer Manager */}
-              {renderField(
-                "Customer Relationship Manager",
+            {renderField(
+                "Customer Ralationship Manager",
                 "customerManager",
                 values.customerManager,
-                <FormControl fullWidth >
-                  <Select
-                    name="customerManager"
-                    value={values.customerManager}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    <MenuItem value="" disabled>
-                      Select Customer Relationship Manager
-                    </MenuItem>
-                    {customerManagers.map((manager, index) => (
-                      <MenuItem key={index} value={manager}>
-                        {manager}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {touched.customerManager && errors.customerManager && (
-                    <p style={{ color: "red", fontSize: "12px" }}>{errors.customerManager}</p>
+                <Autocomplete
+                  fullWidth
+                  options={customerManagers}
+                  value={values.customerManager || null}
+                  onChange={(event, newValue) => {
+                    setFieldValue("gender", newValue || "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                      error={!!touched.customerManager && !!errors.customerManager}
+                      helperText={touched.customerManager && errors.customerManager}
+                      disabled={!isEditing}
+                    />
                   )}
-                </FormControl>
+                  disabled={!isEditing}
+                  sx={{ gridColumn: "span 1" }}
+                  freeSolo
+                  forcePopupIcon
+                  popupIcon={<ArrowDropDownIcon />}
+                />
               )}
             </Box>
 
