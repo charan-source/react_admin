@@ -234,19 +234,28 @@ const Topbar = ({ onLogout}) => {
     </Box>
   );
 
-  const handleLogout = () => {
-    // Clear the token from localStorage
-    localStorage.removeItem('token');
+  // const handleLogout = () => {
+  //   // Clear the token from localStorage
+  //   localStorage.removeItem('token');
     
-    // Call the parent logout handler if provided
-    if (onLogout) onLogout();
+  //   // Call the parent logout handler if provided
+  //   if (onLogout) onLogout();
     
-    // Navigate to login page
-    navigate('/login');
+  //   // Navigate to login page
+  //   navigate('/login');
     
-    // Optional: Force a full page reload to reset the application state
+  //   // Optional: Force a full page reload to reset the application state
+
+  // };
+
+  const handleLogout = () => { 
+
+    sessionStorage.removeItem('token');
+    onLogout();
     window.location.reload();
-  };
+    navigate('/login');
+  }
+
 
   return (
     <Box

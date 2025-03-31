@@ -101,8 +101,8 @@ const Sidebar = ({ isSidebar, onLogout }) => {
   const logoSrc = logoLight;
 
   const handleLogout = () => {
-    onLogout(); // Call the logout function from props
     localStorage.removeItem('token');
+    onLogout(); // Call the logout function from props
     window.location.reload(); // Reload the page to reset the state
     navigate('/login'); // Navigate to login page
 
@@ -150,32 +150,33 @@ const Sidebar = ({ isSidebar, onLogout }) => {
         <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        <ListItem
-          button
-          onClick={handleLogout}
-          sx={{
-            color: colors.blueAccent[500],
-            borderRadius: "10px",
-            marginBottom: "8px",
-            "&:hover": {
-              backgroundColor: colors.blueAccent[700],
-              color: "white",
-            },
-          }}
-        >
-          <ListItemIcon sx={{ color: "inherit" }}>
-            <LogoutOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary="Logout"
-            sx={{
-              "& .MuiTypography-root": {
-                fontWeight: "bold !important",
-                fontSize: "13px",
-              },
-            }}
-          />
-        </ListItem>
+        
+              <ListItem
+                    button
+                    onClick={handleLogout}
+                    sx={{
+                      color: colors.blueAccent[500],
+                      borderRadius: "10px",
+                      marginBottom: "8px",
+                      "&:hover": {
+                        backgroundColor: colors.blueAccent[700],
+                        color: "white",
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "inherit" }}>
+                      <LogoutOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Logout"
+                      sx={{
+                        "& .MuiTypography-root": {
+                          fontWeight: "bold !important",
+                          fontSize: "15px",
+                        },
+                      }}
+                    />
+                  </ListItem>
       </List>
     </Drawer>
   );

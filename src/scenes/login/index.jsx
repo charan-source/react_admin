@@ -30,20 +30,22 @@ const Login = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-
+  
     // Basic validation
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
-
+  
     // Static authentication check
     if (email === STATIC_CREDENTIALS.email && password === STATIC_CREDENTIALS.password) {
-      // Store a dummy token in localStorage
-      localStorage.setItem('token', 'dummy-auth-token');
-      // Call the onLogin callback to update the authentication state
-      onLogin();
+        onLogin(); 
+      // Store a dummy token in session storage
+      sessionStorage.setItem('token', 'dummy-auth-token');
+       
       navigate('/');
+ 
+
     } else {
       setError('Invalid credentials. Use admin@example.com / password123');
     }
