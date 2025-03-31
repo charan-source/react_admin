@@ -139,6 +139,7 @@ const CmForm = () => {
     email: "",
     PhoneNo: "",
     organization: "",
+    branch: "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -158,6 +159,7 @@ const CmForm = () => {
       .min(10, "Must be at least 10 digits")
       .required("Required"),
     organization: yup.string().required("Required"),
+    branch: yup.string().required("Required"),
   });
 
   const textFieldStyles = {
@@ -186,6 +188,7 @@ const CmForm = () => {
   const cities = selectedState ? City.getCitiesOfState(selectedCountry?.isoCode, selectedState.isoCode) : [];
   const organization = ["Wipro", "Infosys", "TCS", "HCL", "Tech Mahindra"];
   const gender = ["Male", "Female"];
+  const branch = ["Branch 1", "Branch 2", "Branch 3", "Branch 4", "Branch 5"];
 
   return (
     <Box m="15px" sx={{ backgroundColor: "#ffffff", padding: "20px" }}>
@@ -453,6 +456,28 @@ const CmForm = () => {
                     sx={textFieldStyles}
                     error={!!touched.organization && !!errors.organization}
                     helperText={touched.organization && errors.organization}
+                  />
+                )}
+                sx={{ gridColumn: "span 1" }}
+                freeSolo
+                forcePopupIcon
+                popupIcon={<ArrowDropDownIcon />}
+              />
+              {/* <Box  sx={{gridColumn:"span 2"}}></Box> */}
+              <Autocomplete
+                fullWidth
+                options={branch}
+                value={values.branch || null}
+                onChange={(event, newValue) => {
+                  setFieldValue("branch", newValue || "");
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Branch"
+                    sx={textFieldStyles}
+                    error={!!touched.branch && !!errors.branch}
+                    helperText={touched.branch && errors.branch}
                   />
                 )}
                 sx={{ gridColumn: "span 1" }}

@@ -10,6 +10,7 @@ import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useNavigate } from "react-router-dom";
 import logoLight from "./logo.png";
 
 // Shared getActivePage function
@@ -84,10 +85,11 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 };
 
 // Sidebar Component
-const Sidebar = ({ isSidebar }) => {
+const Sidebar = ({ isSidebar, onLogout }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   // const isMobile = useMediaQuery("(max-width: 900px)");
+  const navigate = useNavigate();
   const location = useLocation();
   const [selected, setSelected] = useState(getActivePage(location.pathname));
 
@@ -97,6 +99,14 @@ const Sidebar = ({ isSidebar }) => {
   }, [location.pathname]);
 
   const logoSrc = logoLight;
+
+  const handleLogout = () => {
+    onLogout(); // Call the logout function from props
+    localStorage.removeItem('token');
+    window.location.reload(); // Reload the page to reset the state
+    navigate('/login'); // Navigate to login page
+
+  };
 
   return (
     <Drawer
@@ -140,7 +150,32 @@ const Sidebar = ({ isSidebar }) => {
         <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
-        <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <ListItem
+          button
+          onClick={handleLogout}
+          sx={{
+            color: colors.blueAccent[500],
+            borderRadius: "10px",
+            marginBottom: "8px",
+            "&:hover": {
+              backgroundColor: colors.blueAccent[700],
+              color: "white",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "inherit" }}>
+            <LogoutOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="Logout"
+            sx={{
+              "& .MuiTypography-root": {
+                fontWeight: "bold !important",
+                fontSize: "13px",
+              },
+            }}
+          />
+        </ListItem>
       </List>
     </Drawer>
   );

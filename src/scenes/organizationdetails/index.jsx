@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 const OrganizationDetails = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
+  // const isMobile = useMediaQuery("(max-width:600px)");
   const colors = tokens(theme.palette.mode);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
@@ -263,7 +264,7 @@ const OrganizationDetails = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Phone Code"
+                        // label="Phone Code"
                         sx={textFieldStyles}
                         error={!!touched.phoneCode && !!errors.phoneCode}
                         helperText={touched.phoneCode && errors.phoneCode}
@@ -274,7 +275,7 @@ const OrganizationDetails = () => {
                     fullWidth
                     variant="outlined"
                     type="text"
-                    label="Phone No"
+                    // label="Phone No"
                     name="PhoneNo"
                     value={values.PhoneNo}
                     onChange={handleChange}
@@ -306,7 +307,7 @@ const OrganizationDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Country"
+                      // label="Country"
                       sx={textFieldStyles}
                       error={!!touched.country && !!errors.country}
                       helperText={touched.country && errors.country}
@@ -333,7 +334,7 @@ const OrganizationDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="State"
+                      // label="State"
                       sx={textFieldStyles}
                       error={!!touched.state && !!errors.state}
                       helperText={touched.state && errors.state}
@@ -361,7 +362,7 @@ const OrganizationDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="City"
+                      // label="City"
                       sx={textFieldStyles}
                       error={!!touched.city && !!errors.city}
                       helperText={touched.city && errors.city}
@@ -376,92 +377,93 @@ const OrganizationDetails = () => {
 
               {/* Branch Fields - Single Column Layout */}
               {/* Branch Fields - Single Column Layout */}
-              <Box sx={{ gridColumn: "span 1" }}>
+              {/* Branch Fields - Single Column Layout */}
+              {/* Branch Fields - Single Column Layout */}
+              {/* Branch Fields - Full Width Container */}
+              <Box sx={{
+                gridColumn: "1 / -1",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap: "20px"
+              }}>
                 {orgManagerPairs.map((pair, index) => (
-                  <React.Fragment key={`pair-${index}`}>
-                    {/* <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
-                      {index === 0 ?  `Branch  ${index + 1}` : ""}
-                    </Typography> */}
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                        mb: 2,
-                        alignItems: "center"
-                      }}
-                    >
-                      {/* Branch Field with Heading */}
-                      <Box sx={{ flex: 1 }}>
-                        <Typography variant="subtitle1" sx={{ mb: 1, color: "#555" }}>
-                          {index === 0 ? "Branch" : `Branch ${index + 1}`}
-                        </Typography>
-                        {isEditing ? (
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            type="text"
-                            name={`branch${index}`}
-                            value={values[`branch${index}`] || ''}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            error={!!touched[`branch${index}`] && !!errors[`branch${index}`]}
-                            helperText={touched[`branch${index}`] && errors[`branch${index}`]}
-                            sx={textFieldStyles}
-                          />
-                        ) : (
-                          <Box sx={{
-                            padding: "12px",
-                            backgroundColor: "#f5f5f5",
-                            borderRadius: "4px",
-                            minHeight: "50px",
-                            display: "flex",
-                            alignItems: "center"
-                          }}>
-                            {values[`branch${index}`] || "-"}
-                          </Box>
-                        )}
-                      </Box>
-
-                      {/* Add/Remove Buttons */}
-                      {isEditing && (
+                  <Box key={`pair-${index}`} sx={{
+                    gridColumn: "span 1",
+                    display: "flex",
+                    flexDirection: isNonMobile ? "column" : "row",
+                    alignItems: isNonMobile ? "flex-start" : "center",
+                    gap: isNonMobile ? "10px" : "0px"
+                  }}>
+                    {/* Input field */}
+                    <Box sx={{ flex: 1, width: "100%" }}>
+                      <Typography variant="subtitle1" sx={{ mb: 1, color: "#555" }}>
+                        {index === 0 ? "Branch" : `Branch ${index + 1}`}
+                      </Typography>
+                      {isEditing ? (
+                        <TextField
+                          fullWidth
+                          variant="outlined"
+                          type="text"
+                          name={`branch${index}`}
+                          value={values[`branch${index}`] || ''}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={!!touched[`branch${index}`] && !!errors[`branch${index}`]}
+                          helperText={touched[`branch${index}`] && errors[`branch${index}`]}
+                          sx={textFieldStyles}
+                        />
+                      ) : (
                         <Box sx={{
+                          padding: "12px",
+                          backgroundColor: "#f5f5f5",
+                          borderRadius: "4px",
+                          minHeight: "50px",
                           display: "flex",
-                          gap: "10px",
-                          alignItems: "center",
-                          marginTop:"30px"
+                          alignItems: "center"
                         }}>
-                          {index === orgManagerPairs.length - 1 ? (
-                            <Button
-                              variant="outlined"
-                              onClick={addOrgManagerPair}
-                              sx={{
-                                minWidth: '100px',
-                                height: '40px',
-                                backgroundColor: colors.blueAccent[700],
-                                color: "#ffffff"
-                              }}
-                            >
-                              Add More
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outlined"
-                              onClick={() => removeOrgManagerPair(index)}
-                              sx={{
-                                minWidth: '100px',
-                                height: '40px',
-                                backgroundColor: '#ffebee'
-                              }}
-                              color="error"
-                            >
-                              Remove
-                            </Button>
-                          )}
+                          {values[`branch${index}`] || "-"}
                         </Box>
                       )}
                     </Box>
-                  </React.Fragment>
+
+                    {/* Buttons - responsive positioning */}
+                    {isEditing && (
+                      <Box sx={{
+                        ml: isNonMobile ? 0 : 2,
+                        // mt: isNonMobile ? 1 : 0,
+                        marginTop:"30px",
+                        alignSelf: isNonMobile ? "flex-start" : "center"
+                      }}>
+                        {index === orgManagerPairs.length - 1 ? (
+                          <Button
+                            variant="outlined"
+                            onClick={addOrgManagerPair}
+                            sx={{
+                              minWidth: '100px',
+                              height: '40px',
+                              backgroundColor: colors.blueAccent[700],
+                              color: "#ffffff"
+                            }}
+                          >
+                            Add More
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="outlined"
+                            onClick={() => removeOrgManagerPair(index)}
+                            sx={{
+                              minWidth: '100px',
+                              height: '40px',
+                              backgroundColor: '#ffebee'
+                            }}
+                            color="error"
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
                 ))}
               </Box>
             </Box>

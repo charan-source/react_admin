@@ -87,7 +87,7 @@ const Item = ({ title, to, icon, selected, setSelected, handleClose }) => {
   );
 };
 
-const Topbar = () => {
+const Topbar = ({ onLogout}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -234,6 +234,19 @@ const Topbar = () => {
     </Box>
   );
 
+  const handleLogout = () => {
+    // Clear the token from localStorage
+    localStorage.removeItem('token');
+    
+    // Call the parent logout handler if provided
+    if (onLogout) onLogout();
+    
+    // Navigate to login page
+    navigate('/login');
+    
+    // Optional: Force a full page reload to reset the application state
+    window.location.reload();
+  };
 
   return (
     <Box
@@ -545,7 +558,32 @@ const Topbar = () => {
             <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-            <Item title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <ListItem
+            button
+            onClick={handleLogout}
+            sx={{
+              color: colors.blueAccent[500],
+              borderRadius: "10px",
+              marginBottom: "8px",
+              "&:hover": {
+                backgroundColor: colors.blueAccent[700],
+                color: "white",
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: "inherit" }}>
+              <LogoutOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Logout"
+              sx={{
+                "& .MuiTypography-root": {
+                  fontWeight: "bold !important",
+                  fontSize: "15px",
+                },
+              }}
+            />
+          </ListItem>
           </Box>
         </Modal>
       </Box>

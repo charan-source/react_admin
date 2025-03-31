@@ -437,7 +437,7 @@ const HobDetails = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Phone Code"
+                        // label="Phone Code"
                         sx={textFieldStyles}
                         error={!!touched.phoneCode && !!errors.phoneCode}
                         helperText={touched.phoneCode && errors.phoneCode}
@@ -448,7 +448,7 @@ const HobDetails = () => {
                     fullWidth
                     variant="outlined"
                     type="text"
-                    label="Phone No"
+                    // label="Phone No"
                     name="PhoneNo"
                     value={values.PhoneNo}
                     onChange={handleChange}
@@ -507,7 +507,7 @@ const HobDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Country"
+                      // label="Country"
                       sx={textFieldStyles}
                       error={!!touched.country && !!errors.country}
                       helperText={touched.country && errors.country}
@@ -534,7 +534,7 @@ const HobDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="State"
+                      // label="State"
                       sx={textFieldStyles}
                       error={!!touched.state && !!errors.state}
                       helperText={touched.state && errors.state}
@@ -562,7 +562,7 @@ const HobDetails = () => {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="City"
+                      // label="City"
                       sx={textFieldStyles}
                       error={!!touched.city && !!errors.city}
                       helperText={touched.city && errors.city}

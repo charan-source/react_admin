@@ -4,7 +4,7 @@ import { CssBaseline, Box, useMediaQuery } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-// Import Poppins font weights
+// Import Poppins font
 import '@fontsource/poppins/300.css';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
@@ -12,9 +12,13 @@ import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
 
 // Import components
+// import Topbar from "./scenes/global/Topbar";
+// import Sidebar from "./scenes/global/Sidebar";
+import Dashboard from "./scenes/dashboard";
+import Login from "./scenes/login";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
-import Dashboard from "./scenes/dashboard";
+// import Dashboard from "./scenes/dashboard";
 import Cm from "./scenes/cm";
 import Hob from "./scenes/hob";
 import Crm from "./scenes/crm";
@@ -41,7 +45,7 @@ import CmForm from "./scenes/cmform";
 import CrmForm from "./scenes/crmform";
 import BsuForm from "./scenes/bsuform";
 import OrganizationForm from "./scenes/organizationform";
-import Login from "./scenes/login";
+// import Login from "./scenes/login";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -50,7 +54,7 @@ function App() {
   const isMobile = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
 
-  // Check authentication status on app load
+  // Check authentication on app load
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -61,19 +65,7 @@ function App() {
   // Create theme with Poppins font
   const appTheme = createTheme(theme, {
     typography: {
-      fontFamily: [
-        'Poppins',
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
+      fontFamily: 'Poppins, sans-serif',
       h1: { fontWeight: 700 },
       h2: { fontWeight: 700 },
       h3: { fontWeight: 600 },
@@ -89,39 +81,20 @@ function App() {
           },
         },
       },
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            fontFamily: 'Poppins, sans-serif',
-            fontWeight: 500,
-          },
-        },
-      },
-      MuiTypography: {
-        defaultProps: {
-          fontFamily: 'Poppins, sans-serif',
-        },
-      },
     },
   });
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
-  }, [location.pathname]); // Add location.pathname as dependency
 
   const handleLogin = () => {
     setIsAuthenticated(true);
-    localStorage.setItem('token', 'dummy-auth-token');
-    return <Navigate to="/" replace />;
+    localStorage.setItem('token', 'your-auth-token');
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('token');
-    return <Navigate to="/login" replace />;
   };
 
-  // If not authenticated and not on login page, redirect to login
+  // Redirect to login if not authenticated
   if (!isAuthenticated && location.pathname !== '/login') {
     return <Navigate to="/login" replace />;
   }
@@ -149,7 +122,7 @@ function App() {
                   zIndex: 900,
                 }}
               >
-                <Sidebar isSidebar={isSidebar} onLogout={handleLogout} />
+                <Sidebar isSidebar={isSidebar} />
               </Box>
             )}
 
@@ -169,50 +142,48 @@ function App() {
                   backgroundColor: "#000000",
                   borderRadius: "4px",
                 },
-                fontFamily: 'Poppins, sans-serif !important',
               }}
             >
               <Routes>
                 <Route path="/" element={<Dashboard />} />
+                {/* Add all your protected routes here */}
+                {/* Example: */}
                 <Route path="/cm" element={<Cm />} />
                 <Route path="/crm" element={<Crm />} />
-                <Route path="/hob" element={<Hob />} />
-                <Route path="/organization" element={<Organization />} />
-                <Route path="/allExperiences" element={<AllExperiences />} />
-                <Route path="/newExperiences" element={<NewExperiences />} />
-                <Route path="/pendingExperiences" element={<PendingExperiences />} />
-                <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/notes" element={<Notes />} />
-                <Route path="/form" element={<Form />} />
-                <Route path="/cmform" element={<CmForm />} />
-                <Route path="/crmform" element={<CrmForm />} />
-                <Route path="/bsuform" element={<BsuForm />} />
-                <Route path="/organizationform" element={<OrganizationForm />} />
-                <Route path="/cmdetails" element={<CmDetails />} />
-                <Route path="/crmdetails" element={<CrmDetails />} />
-                <Route path="/organizationdetails" element={<OrganizationDetails />} />
-                <Route path="/hobdetails" element={<HobDetails />} />
-                <Route path="/ticketdetails" element={<TicketDetails />} />
-                <Route path="/bar" element={<Bar />} />
-                <Route path="/pie" element={<Pie />} />
-                <Route path="/line" element={<Line />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="/geography" element={<Geography />} />
+                {/* ... other routes ... */}
+                  <Route path="/hob" element={<Hob />} />
+                            <Route path="/organization" element={<Organization />} />
+                            <Route path="/allExperiences" element={<AllExperiences />} />
+                            <Route path="/newExperiences" element={<NewExperiences />} />
+                            <Route path="/pendingExperiences" element={<PendingExperiences />} />
+                            <Route path="/resolvedExperiences" element={<ResolvedExperiences />} />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/notes" element={<Notes />} />
+                            <Route path="/form" element={<Form />} />
+                            <Route path="/cmform" element={<CmForm />} />
+                            <Route path="/crmform" element={<CrmForm />} />
+                            <Route path="/bsuform" element={<BsuForm />} />
+                            <Route path="/organizationform" element={<OrganizationForm />} />
+                            <Route path="/cmdetails" element={<CmDetails />} />
+                            <Route path="/crmdetails" element={<CrmDetails />} />
+                            <Route path="/organizationdetails" element={<OrganizationDetails />} />
+                            <Route path="/hobdetails" element={<HobDetails />} />
+                            <Route path="/ticketdetails" element={<TicketDetails />} />
+                            <Route path="/bar" element={<Bar />} />
+                            <Route path="/pie" element={<Pie />} />
+                            <Route path="/line" element={<Line />} />
+                            <Route path="/faq" element={<FAQ />} />
+                            <Route path="/calendar" element={<Calendar />} />
+                            <Route path="/geography" element={<Geography />} />
               </Routes>
             </Box>
           </>
-         ) : (
-          <Box>
-            {/* Login Page - Full Screen */}
-            <Routes>
-              <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            </Routes>
-          </Box>
-        )
-        }
+        ) : (
+          {/* Login Page - Full Screen */}
+        //   <Routes>
+        //     <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        //   </Routes>
+        )}
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
