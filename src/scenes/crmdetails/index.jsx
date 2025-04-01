@@ -201,6 +201,26 @@ const CrmDetails = () => {
 
   };
 
+  const disabledTextFieldStyles = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "8px",
+      backgroundColor: "#f5f5f5",
+      fontSize: "16px",
+      padding: "8px 12px",
+      height: "50px",
+      "& .MuiOutlinedInput-notchedOutline": {
+        borderColor: "#e0e0e0",
+      },
+      "& .Mui-disabled": {
+        color: "#555",
+        WebkitTextFillColor: "#555",
+      },
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "16px",
+      color: "#999",
+    },
+  };
 
   // const disabledFieldStyles = {
   //   "& .MuiOutlinedInput-root": {
@@ -224,6 +244,7 @@ const CrmDetails = () => {
   const customerManagers = ["Rambabu", "Charan", "Sathira", "Jyothika"];
   const organization = ["Wipro", "Infosys", "TCS", "HCL", "Tech Mahindra"];
   const gender = ["Male", "Female"];
+  const status = ["Suspend", "Active"];
 
   const getPhoneCodeDisplay = (phoneCode) => {
     if (!phoneCode) return "-";
@@ -605,125 +626,154 @@ const CrmDetails = () => {
                   sx={textFieldStyles}
                 />
               )}
-              <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px", alignItems: "center" }}></Box>
+
+                     {renderField(
+                              "Status",
+                              "status",
+                              values.status,
+                              <Autocomplete
+                                fullWidth
+                                options={status}
+                                value={values.status || null}
+                                onChange={(event, newValue) => {
+                                  setFieldValue("status", newValue || "");
+                                }}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                                    error={!!touched.status && !!errors.status}
+                                    helperText={touched.status && errors.status}
+                                    disabled={!isEditing}
+                                  />
+                                )}
+                                disabled={!isEditing}
+                                sx={{ gridColumn: "span 1" }}
+                                freeSolo
+                                forcePopupIcon
+                                popupIcon={<ArrowDropDownIcon />}
+                              />
+                            )}
+                    
+              {/* <Box sx={{ gridColumn: "span 1", display: "flex", gap: "10px", alignItems: "center" }}></Box> */}
               {orgManagerPairs.map((pair, index) => (
-  <React.Fragment key={`pair-${index}`}>
-    {/* Organization Field with Heading */}
-    <Box sx={{ gridColumn: "span 1" }}>
-      <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
-        {index === 0 ? "Organization" : `Organization ${index + 1}`}
-      </Typography>
-      {isEditing ? (
-        <Autocomplete
-          fullWidth
-          options={organization}
-          value={values[`organization${index}`] || null}
-          onChange={(event, newValue) => {
-            setFieldValue(`organization${index}`, newValue || "");
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              sx={textFieldStyles}
-              error={!!touched[`organization${index}`] && !!errors[`organization${index}`]}
-              helperText={touched[`organization${index}`] && errors[`organization${index}`]}
-            />
-          )}
-          freeSolo
-          forcePopupIcon
-          popupIcon={<ArrowDropDownIcon />}
-        />
-      ) : (
-        <Box sx={{
-          padding: "12px",
-          backgroundColor: "#f5f5f5",
-          borderRadius: "4px",
-          minHeight: "50px",
-          display: "flex",
-          alignItems: "center"
-        }}>
-          {values[`organization${index}`] || "-"}
-        </Box>
-      )}
-    </Box>
+                <React.Fragment key={`pair-${index}`}>
+                  {/* Organization Field with Heading */}
+                  <Box sx={{ gridColumn: "span 1" }}>
+                    <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
+                      {index === 0 ? "Organization" : `Organization ${index + 1}`}
+                    </Typography>
+                    {isEditing ? (
+                      <Autocomplete
+                        fullWidth
+                        options={organization}
+                        value={values[`organization${index}`] || null}
+                        onChange={(event, newValue) => {
+                          setFieldValue(`organization${index}`, newValue || "");
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            sx={textFieldStyles}
+                            error={!!touched[`organization${index}`] && !!errors[`organization${index}`]}
+                            helperText={touched[`organization${index}`] && errors[`organization${index}`]}
+                          />
+                        )}
+                        freeSolo
+                        forcePopupIcon
+                        popupIcon={<ArrowDropDownIcon />}
+                      />
+                    ) : (
+                      <Box sx={{
+                        padding: "12px",
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "4px",
+                        minHeight: "50px",
+                        display: "flex",
+                        alignItems: "center"
+                      }}>
+                        {values[`organization${index}`] || "-"}
+                      </Box>
+                    )}
+                  </Box>
 
-    {/* Customer Manager Field with Heading */}
-    <Box sx={{ gridColumn: "span 1" }}>
-      <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
-        {index === 0 ? "Customer Manager" : `Customer Manager ${index + 1}`}
-      </Typography>
-      {isEditing ? (
-        <Autocomplete
-          fullWidth
-          options={customerManagers}
-          value={values[`customerManager${index}`] || null}
-          onChange={(event, newValue) => {
-            setFieldValue(`customerManager${index}`, newValue || "");
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              sx={textFieldStyles}
-              error={!!touched[`customerManager${index}`] && !!errors[`customerManager${index}`]}
-              helperText={touched[`customerManager${index}`] && errors[`customerManager${index}`]}
-            />
-          )}
-          freeSolo
-          forcePopupIcon
-          popupIcon={<ArrowDropDownIcon />}
-        />
-      ) : (
-        <Box sx={{
-          padding: "12px",
-          backgroundColor: "#f5f5f5",
-          borderRadius: "4px",
-          minHeight: "50px",
-          display: "flex",
-          alignItems: "center"
-        }}>
-          {values[`customerManager${index}`] || "-"}
-        </Box>
-      )}
-    </Box>
+                  {/* Customer Manager Field with Heading */}
+                  <Box sx={{ gridColumn: "span 1" }}>
+                    <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold", color: "#555" }}>
+                      {index === 0 ? "Customer Manager" : `Customer Manager ${index + 1}`}
+                    </Typography>
+                    {isEditing ? (
+                      <Autocomplete
+                        fullWidth
+                        options={customerManagers}
+                        value={values[`customerManager${index}`] || null}
+                        onChange={(event, newValue) => {
+                          setFieldValue(`customerManager${index}`, newValue || "");
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            sx={textFieldStyles}
+                            error={!!touched[`customerManager${index}`] && !!errors[`customerManager${index}`]}
+                            helperText={touched[`customerManager${index}`] && errors[`customerManager${index}`]}
+                          />
+                        )}
+                        freeSolo
+                        forcePopupIcon
+                        popupIcon={<ArrowDropDownIcon />}
+                      />
+                    ) : (
+                      <Box sx={{
+                        padding: "12px",
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "4px",
+                        minHeight: "50px",
+                        display: "flex",
+                        alignItems: "center"
+                      }}>
+                        {values[`customerManager${index}`] || "-"}
+                      </Box>
+                    )}
+                  </Box>
 
-    {/* Add/Remove Buttons */}
-    <Box sx={{ 
-      gridColumn: "span 1", 
-      display: isEditing ? "flex" : "none", 
-      gap: "10px", 
-      alignItems: "center",
-      mt: "28px" // Add margin to align with content
-    }}>
-      {index === orgManagerPairs.length - 1 ? (
-        <Button
-          variant="outlined"
-          onClick={addOrgManagerPair}
-          sx={{ 
-            minWidth: '100px', 
-            height: '40px', 
-            backgroundColor: colors.blueAccent[700], 
-            color: "#ffffff" 
-          }}
-        >
-          Add More
-        </Button>
-      ) : (
-        <Button
-          variant="outlined"
-          onClick={() => removeOrgManagerPair(index)}
-          sx={{ 
-            minWidth: '100px', 
-            height: '40px', 
-            backgroundColor: '#ffebee' 
-          }}
-          color="error"
-        >
-          Remove
-        </Button>
-      )}
-    </Box>
-  </React.Fragment>
-))}
+                  {/* Add/Remove Buttons */}
+                  <Box sx={{
+                    gridColumn: "span 1",
+                    display: isEditing ? "flex" : "none",
+                    gap: "10px",
+                    alignItems: "center",
+                    mt: "28px" // Add margin to align with content
+                  }}>
+                    {index === orgManagerPairs.length - 1 ? (
+                      <Button
+                        variant="outlined"
+                        onClick={addOrgManagerPair}
+                        sx={{
+                          minWidth: '100px',
+                          height: '40px',
+                          backgroundColor: colors.blueAccent[700],
+                          color: "#ffffff"
+                        }}
+                      >
+                        Add More
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        onClick={() => removeOrgManagerPair(index)}
+                        sx={{
+                          minWidth: '100px',
+                          height: '40px',
+                          backgroundColor: '#ffebee'
+                        }}
+                        color="error"
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </Box>
+                </React.Fragment>
+              ))}
               {/* </Box> */}
 
 

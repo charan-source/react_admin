@@ -155,13 +155,10 @@ const Sidebar = ({ isSidebar, onLogout }) => {
                     button
                     onClick={handleLogout}
                     sx={{
-                      color: colors.blueAccent[500],
+                      // color: colors.blueAccent[500],
                       borderRadius: "10px",
                       marginBottom: "8px",
-                      "&:hover": {
-                        backgroundColor: colors.blueAccent[700],
-                        color: "white",
-                      },
+
                     }}
                   >
                     <ListItemIcon sx={{ color: "inherit" }}>
@@ -171,8 +168,9 @@ const Sidebar = ({ isSidebar, onLogout }) => {
                       primary="Logout"
                       sx={{
                         "& .MuiTypography-root": {
-                          fontWeight: "bold !important",
-                          fontSize: "15px",
+                          fontWeight: "bold !important", // Ensure text is bold for selected item
+                          fontSize: "13px",
+                
                         },
                       }}
                     />

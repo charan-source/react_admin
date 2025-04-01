@@ -249,6 +249,7 @@ const ResolvedExperiences = () => {
             // scrollbarWidth: "none", // Hides scrollbar in Firefox
             "&:hover": {
               cursor: "pointer",
+               backgroundColor:"#D9EAFD"
             },
           },
           "& .MuiDataGrid-virtualScroller": {
@@ -256,6 +257,10 @@ const ResolvedExperiences = () => {
           },
           "& .MuiDataGrid-row": {
             borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
+            "&:hover": {
+              cursor: "pointer",
+               backgroundColor:"#D9EAFD"
+            },
           },
           "& .MuiTablePagination-root": {
             color: "#ffffff !important", // Ensure pagination text is white
@@ -325,6 +330,10 @@ const ResolvedExperiences = () => {
           },
           "& .MuiDataGrid-row": {
             borderBottom: `0.5px solid ${colors.grey[300]}`, // Add border to the bottom of each row
+            "&:hover": {
+              cursor: "pointer",
+               backgroundColor:"#D9EAFD"
+            },
           },
           "& .MuiTablePagination-root": {
             color: "#ffffff !important", // Ensure pagination text is white

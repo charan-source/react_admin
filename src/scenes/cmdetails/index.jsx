@@ -168,6 +168,7 @@ const CmDetails = () => {
     customerManager: ticket.customermanager || "",
     organization: ticket.organization || "",
     gender: ticket.gender || "",
+    status: ticket.status || "",
   };
 
   const checkoutSchema = yup.object().shape({
@@ -179,6 +180,7 @@ const CmDetails = () => {
     state: yup.string().required("Required"),
     country: yup.string().required("Required"),
     email: yup.string().email("Invalid email").required("Required"),
+    status: yup.string().required(""),
     PhoneNo: yup
       .string()
       .matches(/^[0-9]+$/, "Only numbers are allowed")
@@ -254,6 +256,8 @@ const CmDetails = () => {
   ];
 
   const gender = ["Male", "Female"];
+  const status = ["Suspend", "Active"];
+  
 
   const renderField = (heading, name, value, fieldComponent, gridSpan = 1) => (
     <Box sx={{ gridColumn: `span ${gridSpan}` }}>
@@ -662,6 +666,34 @@ const CmDetails = () => {
                       sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
                       error={!!touched.customerManager && !!errors.customerManager}
                       helperText={touched.customerManager && errors.customerManager}
+                      disabled={!isEditing}
+                    />
+                  )}
+                  disabled={!isEditing}
+                  sx={{ gridColumn: "span 1" }}
+                  freeSolo
+                  forcePopupIcon
+                  popupIcon={<ArrowDropDownIcon />}
+                />
+              )}
+
+             {renderField(
+                "Status",
+                "status",
+                values.status,
+                <Autocomplete
+                  fullWidth
+                  options={status}
+                  value={values.status || null}
+                  onChange={(event, newValue) => {
+                    setFieldValue("status", newValue || "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      sx={isEditing ? textFieldStyles : disabledTextFieldStyles}
+                      error={!!touched.status && !!errors.status}
+                      helperText={touched.status && errors.status}
                       disabled={!isEditing}
                     />
                   )}
