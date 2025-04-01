@@ -126,7 +126,7 @@ const Sidebar = ({ isSidebar, onLogout }) => {
         alignItems="center"
         sx={{
           width: "100%",
-          padding: "20px",
+          padding: "10px",
           background: "#ffffff",
           boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
           paddingBottom: 1,

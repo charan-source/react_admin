@@ -6,7 +6,7 @@ import {
   Grid,
   TextField,
   Typography,
-  Link,
+//   Link,
   useMediaQuery,
   useTheme
 } from '@mui/material';
@@ -55,10 +55,10 @@ const Login = ({ onLogin }) => {
     <Container 
       maxWidth="lg"
       sx={{
-        height: '100vh',
+        height: '95vh',
         display: 'flex',
         alignItems: 'center',
-        py: 4
+        // py: 4
       }}
     >
       <Grid 
@@ -91,11 +91,11 @@ const Login = ({ onLogin }) => {
               width: '100%'
             }}
           >
-            <Box textAlign="center" mb={4}>
+            <Box textAlign="center" mb={5}>
               <img 
                 src={Logo}
                 alt="logo"
-                style={{ width: 230 }}
+                style={{ width: 360 }}
               />
               {/* <Typography 
                 variant="h5" 
@@ -108,7 +108,7 @@ const Login = ({ onLogin }) => {
               </Typography> */}
             </Box>
 
-            <Typography variant="body1" mb={3}>
+            <Typography variant="body1" mb={1}>
               Please login to your account
             </Typography>
 
@@ -151,18 +151,19 @@ const Login = ({ onLogin }) => {
                   sx={{
                    
                     mb: 3,
-                    background: 'linear-gradient(to right, #0A0A3D, #1C1C6B, #2E2E9F, #5050D4, #FFFFFF)',
+                    fontWeight:"bold",
+                    background: 'linear-gradient(to right, #0A0A3D, #1C1C6B, #2E2E9F, #5050D4, #5050D4)',
                     color: 'white',
                     '&:hover': {
-                        background: 'linear-gradient(to right, #0A0A3D, #1C1C6B, #2E2E9F, #5050D4, #FFFFFF)',
+                        background: 'linear-gradient(to right, #0A0A3D, #1C1C6B, #2E2E9F, #5050D4, #5050D4)',
                     }
                   }}
                 >
                   Sign in
                 </Button>
-                <Link href="#" color="text.secondary" underline="hover">
+                {/* <Link href="#" color="text.secondary" underline="hover">
                   Forgot password?
-                </Link>
+                </Link> */}
               </Box>
             </form>
 
@@ -193,7 +194,7 @@ const Login = ({ onLogin }) => {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    background: 'linear-gradient(to right, #0A0A3D, #1C1C6B, #2E2E9F, #5050D4, #FFFFFF)',
+    background: 'linear-gradient(to right, #0A0A3D, #1C1C6B, #2E2E9F, #5050D4, #5050D4)',
     color: 'white',
     textAlign: isMobile ? 'center' : 'left'
   }}
