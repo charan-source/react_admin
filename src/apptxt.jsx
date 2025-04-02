@@ -1,17 +1,17 @@
-import { useContext, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { CssBaseline, Box, useMediaQuery, ThemeProvider } from "@mui/material";
-import { AuthContext, AuthProvider } from "./scenes/context";
+import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { CssBaseline, Box, useMediaQuery } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-// Import fonts
-import "@fontsource/poppins/300.css";
-import "@fontsource/poppins/400.css";
-import "@fontsource/poppins/500.css";
-import "@fontsource/poppins/600.css";
-import "@fontsource/poppins/700.css";
+// Import Poppins font weights
+import '@fontsource/poppins/300.css'; // Light
+import '@fontsource/poppins/400.css'; // Regular
+import '@fontsource/poppins/500.css'; // Medium
+import '@fontsource/poppins/600.css'; // Semi-bold
+import '@fontsource/poppins/700.css'; // Bold
 
-// Import components
+// Import your components
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
@@ -43,34 +43,128 @@ import BsuForm from "./scenes/bsuform";
 import OrganizationForm from "./scenes/organizationform";
 import Login from "./scenes/login";
 
-function App() {
-  const { isAuthenticated, handleLogout } = useContext(AuthContext);
-  const [theme] = useMode(); // Use theme from useMode
+function Cgcvhg() {
+  const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const isMobile = useMediaQuery("(max-width: 900px)");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  // Create theme with Poppins font
+  const appTheme = createTheme(theme, {
+    typography: {
+      fontFamily: [
+        'Poppins',
+        '-apple-system',
+        'BlinkMacSystemFont',
+        '"Segoe UI"',
+        'Roboto',
+        '"Helvetica Neue"',
+        'Arial',
+        'sans-serif',
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(','),
+      h1: { fontWeight: 700 },
+      h2: { fontWeight: 700 },
+      h3: { fontWeight: 600 },
+      h4: { fontWeight: 600 },
+      h5: { fontWeight: 500 },
+      h6: { fontWeight: 500 },
+    },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            fontFamily: 'Poppins, sans-serif',
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: 500,
+          },
+        },
+      },
+      MuiTypography: {
+        defaultProps: {
+          fontFamily: 'Poppins, sans-serif',
+        },
+      },
+    },
+  });
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    setIsAuthenticated(!!token);  // Convert token existence to boolean
+  }, []);
+  
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    navigate('/');
+  };
+const handleLogout = () => { 
+    sessionStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/login');
+  }
+
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      
-      {isAuthenticated && (
-        <Box sx={{ width: "100vw", position: "fixed", top: 0, zIndex: 1000 }}>
-          <Topbar setIsSidebar={setIsSidebar} onLogout={handleLogout} />
-        </Box>
-      )}
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={appTheme}>
+        <CssBaseline />
 
-      {isAuthenticated && !isMobile && isSidebar && (
-        <Box sx={{ position: "fixed", left: 0, top: "64px", height: "calc(100vh - 64px)", width: "260px", zIndex: 900 }}>
-          <Sidebar isSidebar={isSidebar} onLogout={handleLogout} />
+        {/* Topbar: Full width at the top */}
+        <Box sx={{ width: "100vw", top: 5, zIndex: 1000, display: isAuthenticated ? "block" : "none" }}>
+          <Topbar setIsSidebar={setIsSidebar} onLogout = {handleLogout} />
         </Box>
-      )}
 
-      <Box sx={{ marginLeft: isAuthenticated && !isMobile ? "260px" : 0, paddingTop: "64px", width: "100%" }}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cm" element={<Cm />} />
+        {/* Sidebar: Fixed on the left */}
+        {isAuthenticated && !isMobile && isSidebar && (
+          <Box
+            sx={{
+              position: "fixed",
+              left: 0,
+              top: "64px",
+              height: "calc(100vh - 64px)",
+              width: "260px",
+              zIndex: 900,
+              // display: isAuthenticated  === 'true' ? "block" : "none"
+            }}
+          >
+            <Sidebar isSidebar={isSidebar} onLogout = {handleLogout} />
+          </Box>
+        )}
+
+        {/* Main Content */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            marginLeft: isMobile || !isAuthenticated ? "0px" : isSidebar ? "260px" : "0px" ,
+            padding: "20px 20px 20px",
+            overflowY: "auto",
+            transition: "margin 0.3s ease-in-out",
+            "&::-webkit-scrollbar": {
+              width: "1px",
+              height: "5px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#000000",
+              borderRadius: "4px",
+            },
+            fontFamily: 'Poppins, sans-serif !important',
+          }}
+        >
+          {isAuthenticated ? (
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+             {/* <Route path="/login" element={<Login />}  onLogin={handleLogin}/> */}
+              <Route path="/cm" element={<Cm />} />
               <Route path="/crm" element={<Crm />} />
               <Route path="/hob" element={<Hob />} />
               <Route path="/organization" element={<Organization />} />
@@ -96,17 +190,18 @@ function App() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/geography" element={<Geography />} />
-              <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </Box>
-    </ThemeProvider>
+              <Route path="*" element={<Navigate to="/" />} /> {/* Redirect unknown routes */}
+            </Routes>
+          ) : (
+            <Routes>
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
+          )}
+        </Box>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
-export default function WrappedApp() {
-  return (
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  );
-}
+export default Cgcvhg;
