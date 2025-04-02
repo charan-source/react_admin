@@ -2,10 +2,8 @@ import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal, Backdrop, 
 import { useState, useEffect } from "react";
 import { tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import PersonIcon from "@mui/icons-material/Person";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-
-
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -387,7 +385,7 @@ const Topbar = ({ onLogout}) => {
                     justifyContent: "center",
                   }}
                 >
-                  <PersonOutlinedIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
+                  <PersonIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
                 </Box>
                 <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
                   Delphin
@@ -472,7 +470,7 @@ const Topbar = ({ onLogout}) => {
                     justifyContent: "center",
                   }}
                  > 
-                  <PersonOutlinedIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
+                  <PersonIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
                 </Box>
                 <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
                   Delphin
