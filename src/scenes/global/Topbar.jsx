@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { tokens } from "../../theme";
 import { Link, useLocation } from "react-router-dom";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+
+
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
@@ -176,13 +179,13 @@ const Topbar = ({ onLogout}) => {
       case "/hobdetails":
         return { primaryTitle: "Head of The Business Details", secondaryTitle: null };
       case "/allExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "All Experiences" };
+        return { primaryTitle: "All Experiences", secondaryTitle: null  };
       case "/newExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "New Experiences" };
+        return { primaryTitle: "New Experiences", secondaryTitle: null  };
       case "/pendingExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "Pending Experiences" };
+        return { primaryTitle: "Pending Experiences", secondaryTitle: null };
       case "/resolvedExperiences":
-        return { primaryTitle: "Experiences", secondaryTitle: "Resolved Experiences" };
+        return { primaryTitle: "Resolved Experiences", secondaryTitle: null };
       case "/profile":
         return { primaryTitle: "Profile", secondaryTitle: null };
       case "/notes":
@@ -284,12 +287,12 @@ const Topbar = ({ onLogout}) => {
             sx={{
               bgcolor: "#fefefe !important",
               boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
-              marginBottom: 2,
-              padding: 2,
+              // marginBottom: 2,
+              padding: 1,
             }}
           >
             {/* Logo on Mobile */}
-            <Box sx={{ maxWidth: "180px", height: "50px", backgroundColor: "#fefefe !important" }}>
+            <Box sx={{ maxWidth: "200px", height: "50px", backgroundColor: "#fefefe !important" }}>
               <img
                 src={logoSrc}
                 alt="logo"
@@ -318,7 +321,7 @@ const Topbar = ({ onLogout}) => {
               paddingX: isMobile ? 2 : 9,
               paddingY: 1,
               boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
-              padding: 4,
+              padding: 1,
             }}
           >
             {/* Greeting Message */}
@@ -352,6 +355,26 @@ const Topbar = ({ onLogout}) => {
                 alignItems: "center",
               }}
             >
+
+<IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+                <Box
+                  sx={{
+                    width: isMobile ? 25 : 30,
+                    height: isMobile ? 25 : 30,
+                    borderRadius: "50%",
+                    backgroundColor: colors.blueAccent[500],
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                 <NotificationsIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
+
+                </Box>
+                {/* <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
+                  Delphin
+                </Typography> */}
+              </IconButton>
               <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
                 <Box
                   sx={{
@@ -418,7 +441,7 @@ const Topbar = ({ onLogout}) => {
                 alignItems: "center",
               }}
             >
-              <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+            <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
                 <Box
                   sx={{
                     width: isMobile ? 25 : 30,
@@ -430,6 +453,25 @@ const Topbar = ({ onLogout}) => {
                     justifyContent: "center",
                   }}
                 >
+                 <NotificationsIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
+
+                </Box>
+                {/* <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>
+                  Delphin
+                </Typography> */}
+              </IconButton>
+              <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+                <Box
+                  sx={{
+                    width: isMobile ? 25 : 30,
+                    height: isMobile ? 25 : 30,
+                    borderRadius: "50%",
+                    backgroundColor: colors.blueAccent[500],
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                 > 
                   <PersonOutlinedIcon sx={{ fontSize: isMobile ? 18 : 20, color: "#fff" }} />
                 </Box>
                 <Typography sx={{ color: "#000", fontSize: isMobile ? 15 : 17 }}>

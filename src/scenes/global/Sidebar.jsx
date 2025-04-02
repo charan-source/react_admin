@@ -101,9 +101,9 @@ const Sidebar = ({ isSidebar, onLogout }) => {
   const logoSrc = logoLight;
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    onLogout(); // Call the logout function from props
-    window.location.reload(); // Reload the page to reset the state
+    // localStorage.removeItem('token');
+    // onLogout(); // Call the logout function from props
+    // window.location.reload(); // Reload the page to reset the state
     navigate('/login'); // Navigate to login page
 
   };
@@ -126,10 +126,11 @@ const Sidebar = ({ isSidebar, onLogout }) => {
         alignItems="center"
         sx={{
           width: "100%",
-          padding: "10px",
+          padding: "20px",
           background: "#ffffff",
           boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
           paddingBottom: 1,
+
         }}
       >
         <img src={logoSrc} alt="logo" style={{ width: "100%", cursor: "pointer" }} />
