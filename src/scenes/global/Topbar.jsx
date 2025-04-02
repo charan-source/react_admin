@@ -356,7 +356,7 @@ const Topbar = ({ onLogout}) => {
               }}
             >
 
-<IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+<IconButton  sx={{ gap: 1 }}>
                 <Box
                   sx={{
                     width: isMobile ? 25 : 30,
@@ -441,7 +441,7 @@ const Topbar = ({ onLogout}) => {
                 alignItems: "center",
               }}
             >
-            <IconButton onClick={() => navigate("profile")} sx={{ gap: 1 }}>
+            <IconButton  sx={{ gap: 1 }}>
                 <Box
                   sx={{
                     width: isMobile ? 25 : 30,
