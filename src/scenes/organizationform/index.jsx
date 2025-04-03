@@ -167,6 +167,20 @@ const OrganizationForm = () => {
                     sx={{ ...textFieldStyles, gridColumn: "span 1" }}
                   />
 
+
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    label="Branch"
+                    name="email"
+                    value={values.branch}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!touched.branch && !!errors.branch}
+                    helperText={touched.branch && errors.branch}
+                    sx={{ ...textFieldStyles, gridColumn: "span 1" }}
+                  />
+
                   <Autocomplete
                     fullWidth
                     options={countries}
