@@ -1,19 +1,27 @@
-import { Box, useMediaQuery, Typography, Button, useTheme } from "@mui/material";
+import { Box, useMediaQuery, Typography, Button, useTheme, TextField } from "@mui/material";
 import { Formik } from "formik";
 import { tokens } from "../../theme";
 import * as yup from "yup";
 import React, { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import download from 'downloadjs';
+import JoditEditor from 'jodit-react';
+// import {Jodit} from 'jodit-pro';
+import 'jodit-pro/es5/jodit.min.css';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+import HelpIcon from '@mui/icons-material/Help';
 
 const TicketDetails = () => {
-    const theme = useTheme();
+  const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:600px)");
+  // const isMobile = useMediaQuery("(max-width:600px)");
   const isLargeScreen = useMediaQuery("(min-width:800px)");
   const location = useLocation();
   const [isDownloading, setIsDownloading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-    const colors = tokens(theme.palette.mode);
+  const [isEditing, setIsEditing] = useState(false);
+  const colors = tokens(theme.palette.mode);
 
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
 
@@ -91,6 +99,34 @@ const TicketDetails = () => {
     }
   };
 
+  const config = {
+    readonly: false,
+    buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'link'],
+  };
+
+  // Add these state variables at the top of your component
+const [messages, setMessages] = useState([
+  { text: "Hello! How can I help you today?", sender: "support" }
+]);
+const [newMessage, setNewMessage] = useState("");
+
+// Add this function to handle sending messages
+const handleSendMessage = () => {
+  if (newMessage.trim() === "") return;
+  
+  // Add user message
+  setMessages(prev => [...prev, { text: newMessage, sender: "user" }]);
+  setNewMessage("");
+  
+  // Simulate bot response after a short delay
+  setTimeout(() => {
+    setMessages(prev => [...prev, { 
+      text: "Thanks for your message! Our team will get back to you soon.", 
+      sender: "support" 
+    }]);
+  }, 1000);
+};
+
   return (
     <Box sx={{ 
       display: "flex", 
@@ -98,12 +134,14 @@ const TicketDetails = () => {
       gap: 2,
       p: isDesktop ? 3 : 2
     }}>
-      {/* First Column */}
+      {/* First Column - Ticket Details */}
       <Box sx={{ 
         backgroundColor: "#ffffff", 
         p: isDesktop ? 3 : 2,
         borderRadius: "8px",
-        flex: 1
+        flex: 1,
+        maxWidth: isLargeScreen ? "65%" : "100%",
+        width: isLargeScreen ? "65%" : "100%"
       }}>
         <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
           {({ values }) => (
@@ -153,6 +191,16 @@ const TicketDetails = () => {
                   <Typography>{values.time}</Typography>
                 </Box>
 
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Organization</Typography>
+                  <Typography>{values.organization}</Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Customer Manager</Typography>
+                  <Typography>{values.cmname}</Typography>
+                </Box>
+
                 <Box sx={{ gridColumn: { xs: "auto", sm: "span 2", md: "auto" } }}>
                   <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Customer Relationship Manager</Typography>
                   <Typography>{values.crmname}</Typography>
@@ -165,9 +213,69 @@ const TicketDetails = () => {
               </Box>
 
               <Box sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+                {/* Request Details Section with Edit Functionality */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Request Details</Typography>
-                  <Typography>{values.requestdetails}</Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Request Details</Typography>
+                    {!isEditing && (
+                      <Button 
+                        variant="outlined" 
+                        onClick={() => setIsEditing(true)}
+                        sx={{ 
+                          textTransform: 'none',
+                          color: colors.blueAccent[700],
+                          borderColor: colors.blueAccent[700],
+                          '&:hover': {
+                            backgroundColor: colors.blueAccent[50],
+                            borderColor: colors.blueAccent[700]
+                          }
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </Box>
+                  
+                  {!isEditing ? (
+                    <Typography sx={{ mt: 1, whiteSpace: 'pre-wrap' }}>{values.requestdetails}</Typography>
+                  ) : (
+                    <>
+                      <Box sx={{ mt: 2 }}>
+                        <JoditEditor
+                          value={values.requestdetails}
+                          config={config}
+                          onChange={(newContent) => {}}
+                        />
+                      </Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+                        <Button 
+                          variant="outlined"
+                          onClick={() => setIsEditing(false)}
+                          sx={{ 
+                            textTransform: 'none',
+                            color: colors.grey[700],
+                            borderColor: colors.grey[700]
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            // Handle save logic here
+                            setIsEditing(false);
+                          }}
+                          sx={{
+                            textTransform: 'none',
+                            backgroundColor: colors.blueAccent[700],
+                            '&:hover': { backgroundColor: colors.blueAccent[600] }
+                          }}
+                        >
+                          Save Changes
+                        </Button>
+                      </Box>
+                    </>
+                  )}
                 </Box>
 
                 {/* File Upload Section */}
@@ -225,90 +333,165 @@ const TicketDetails = () => {
                     onClick={handleDownload}
                     sx={{ minWidth: 180 }}
                   >
-                    {isDownloading ? 'Downloading...' : 'Download Sample File'}
+                    {isDownloading ? 'Downloading...' : 'Download Attachment'}
                   </Button>
                 </Box>
 
-                {/* Save Button */}
-                <Box sx={{ display: "flex", justifyContent:"flex-end", gap: 2, mt: 1 }}>
-                   <Button
-                      variant="contained"
-                      // onClick={handleCreateSubmit}
-                      sx={{
-                        padding: "12px 24px",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        borderRadius: "8px",
-                        boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
-                        transition: "0.3s",
-                        backgroundColor: colors.blueAccent[700],
-                        color: "#ffffff",
-                        textTransform: "none",
-                        "&:hover": { 
-                          backgroundColor: colors.blueAccent[600], 
-                          boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" 
-                        },
-                      }}
-                    >
-                      Save
-                    </Button>
+                {/* Action Buttons */}
+                <Box sx={{ display: "flex", justifyContent:"space-between", gap: 2, mt: 1 }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      padding: "12px 24px",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      borderRadius: "8px",
+                      boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                      transition: "0.3s",
+                      backgroundColor: colors.redAccent[400],
+                      color: "#ffffff",
+                      textTransform: "none",
+                      "&:hover": { 
+                        backgroundColor: colors.redAccent[500], 
+                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" 
+                      },
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      padding: "12px 24px",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      borderRadius: "8px",
+                      boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                      transition: "0.3s",
+                      backgroundColor: colors.blueAccent[700],
+                      color: "#ffffff",
+                      textTransform: "none",
+                      "&:hover": { 
+                        backgroundColor: colors.blueAccent[600], 
+                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" 
+                      },
+                    }}
+                  >
+                    Save
+                  </Button>
                 </Box>
-
               </Box>
             </form>
           )}
         </Formik>
       </Box>
 
-      {/* Second Column */}
+      {/* Second Column - Customer Support */}
       <Box sx={{ 
         backgroundColor: "#ffffff", 
         p: isDesktop ? 3 : 2,
         borderRadius: "8px",
-        flex: 1
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+        maxWidth: isLargeScreen ? "35%" : "100%",
+        width: isLargeScreen ? "35%" : "100%",
       }}>
-        <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
-          {({ values }) => (
-            <form>
-              <Box
-                display="grid"
-                gap={2}
-                gridTemplateColumns={{
-                  xs: "1fr",
-                  sm: "repeat(2, 1fr)",
-                  md: "repeat(3, 1fr)"
-                }}
-              >
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Organization</Typography>
-                  <Typography>{values.organization}</Typography>
-                </Box>
+        {/* Customer Care Section */}
+        <Box sx={{ 
+          mt: 2,
+          p: 2,
+          backgroundColor: "#f5f5f5",
+          borderRadius: "8px"
+        }}>
+          <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>Customer Care</Typography>
+          <Typography sx={{ mb: 2 }}>Need help? Contact our support team:</Typography>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Button variant="contained" startIcon={<PhoneIcon />}>
+              Call Support
+            </Button>
+            <Button variant="contained" startIcon={<EmailIcon />}>
+              Email Support
+            </Button>
+            <Button variant="contained" startIcon={<HelpIcon />}>
+              FAQ
+            </Button>
+          </Box>
+        </Box>
 
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Customer Manager Name</Typography>
-                  <Typography>{values.cmname}</Typography>
-                </Box>
+        {/* Customer Chat Section */}
+        <Box sx={{ 
+  p: 2,
+  backgroundColor: "#f5f5f5",
+  borderRadius: "8px"
+}}>
+  <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>Live Chat</Typography>
+  <Typography sx={{ mb: 2 }}>Chat with our support team in real-time:</Typography>
+  <Box sx={{ 
+    height: "200px",
+    backgroundColor: "white",
+    borderRadius: "4px",
+    p: 2,
+    mb: 2,
+    border: "1px solid #ddd",
+    overflowY: "auto"
+  }}>
+    {messages.map((message, index) => (
+      <Box 
+        key={index}
+        sx={{ 
+          textAlign: message.sender === "user" ? "right" : "left",
+          mb: 2
+        }}
+      >
+        <Box
+          sx={{
+            display: "inline-block",
+            p: 1.5,
+            borderRadius: "4px",
+            backgroundColor: message.sender === "user" 
+              ? colors.blueAccent[100] 
+              : colors.grey[200],
+            maxWidth: "80%",
+            wordWrap: "break-word"
+          }}
+        >
+          <Typography variant="body2">{message.text}</Typography>
+        </Box>
+        <Typography 
+          variant="caption" 
+          sx={{ 
+            display: "block",
+            color: colors.grey[600],
+            mt: 0.5
+          }}
+        >
+          {message.sender === "user" ? "You" : "Support"}
+        </Typography>
+      </Box>
+    ))}
+  </Box>
+  <Box sx={{ display: "flex", gap: 1 }}>
+    <TextField 
+      fullWidth 
+      placeholder="Type your message..." 
+      size="small"
+      variant="outlined"
+      value={newMessage}
+      onChange={(e) => setNewMessage(e.target.value)}
+      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+    />
+    <Button 
+      variant="contained"
+      onClick={handleSendMessage}
+      disabled={!newMessage.trim()}
+    >
+      Send
+    </Button>
+  </Box>
+</Box>
 
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Impact</Typography>
-                  <Typography>{values.department}</Typography>
-                </Box>
-              </Box>
-
-              <Box sx={{ mt: 3, display: "flex", flexDirection: "column", gap: 2 }}>
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Subject</Typography>
-                  <Typography>{values.subject}</Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Request Details</Typography>
-                  <Typography>{values.requestdetails}</Typography>
-                </Box>
-              </Box>
-            </form>
-          )}
-        </Formik>
       </Box>
     </Box>
   );

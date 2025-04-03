@@ -6,6 +6,9 @@ import React, { useState,  useMemo, useRef } from 'react';
 import { Country, State, City } from 'country-state-city';
 import { useLocation } from 'react-router-dom';
 
+
+
+
 const OrganizationDetails = () => {
   const theme = useTheme();
   const isNonMobile = useMediaQuery("(max-width:600px)");
