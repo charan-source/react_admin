@@ -251,10 +251,7 @@ const TicketDetails = () => {
                   <Typography>{values.status}</Typography>
                 </Box>
               )}
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Experience</Typography>
-                  <Typography sx={{ color: getExperienceColor(values.experience) }}>{values.experience}</Typography>
-                </Box>
+        
 
 
                 <Box>
@@ -273,7 +270,10 @@ const TicketDetails = () => {
                 </Box>
 
 
-
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Experience</Typography>
+                  <Typography sx={{ color: getExperienceColor(values.experience) }}>{values.experience}</Typography>
+                </Box>
 
                 <Box sx={{ gridColumn: { xs: "auto", sm: "span 2", md: "span 3" } }}>
                   <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Subject</Typography>
