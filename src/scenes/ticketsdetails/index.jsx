@@ -44,6 +44,7 @@ const TicketDetails = () => {
     organization: ticket.organization || "",
     cmname: ticket.cmname || "",
     experience: ticket.experience || "",
+    branch: ticket.branch || "",
     priority: ticket.priority || "",
     crmname: ticket.crmname || "",
     status: ticket.status || "",
@@ -63,6 +64,7 @@ const TicketDetails = () => {
     cmname: yup.string().required("Required"),
     crmname: yup.string().required("Required"),
     status: yup.string().required("Required"),
+    branch: yup.string().required("Required"),
     department: yup.string().required("Required"),
     date: yup.string().required("Required"),
     time: yup.string().required("Required"),
@@ -99,49 +101,49 @@ const TicketDetails = () => {
     }
   };
 
-  const config = {
-    readonly: false,
-    buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'link'],
-  };
+  // const config = {
+  //   readonly: false,
+  //   buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'ul', 'ol', '|', 'link'],
+  // };
 
   // Add these state variables at the top of your component
-const [messages, setMessages] = useState([
-  { text: "Hello! How can I help you today?", sender: "support" }
-]);
-const [newMessage, setNewMessage] = useState("");
+  const [messages, setMessages] = useState([
+    { text: "Hello! How can I help you today?", sender: "support" }
+  ]);
+  const [newMessage, setNewMessage] = useState("");
 
-// Add this function to handle sending messages
-const handleSendMessage = () => {
-  if (newMessage.trim() === "") return;
-  
-  // Add user message
-  setMessages(prev => [...prev, { text: newMessage, sender: "user" }]);
-  setNewMessage("");
-  
-  // Simulate bot response after a short delay
-  setTimeout(() => {
-    setMessages(prev => [...prev, { 
-      text: "Thanks for your message! Our team will get back to you soon.", 
-      sender: "support" 
-    }]);
-  }, 1000);
-};
+  // Add this function to handle sending messages
+  const handleSendMessage = () => {
+    if (newMessage.trim() === "") return;
+
+    // Add user message
+    setMessages(prev => [...prev, { text: newMessage, sender: "user" }]);
+    setNewMessage("");
+
+    // Simulate bot response after a short delay
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        text: "Thanks for your message! Our team will get back to you soon.",
+        sender: "support"
+      }]);
+    }, 1000);
+  };
 
   return (
-    <Box sx={{ 
-      display: "flex", 
+    <Box sx={{
+      display: "flex",
       flexDirection: isLargeScreen ? "row" : "column",
       gap: 2,
       p: isDesktop ? 3 : 2
     }}>
       {/* First Column - Ticket Details */}
-      <Box sx={{ 
-        backgroundColor: "#ffffff", 
+      <Box sx={{
+        backgroundColor: "#ffffff",
         p: isDesktop ? 3 : 2,
         borderRadius: "8px",
         flex: 1,
-        maxWidth: isLargeScreen ? "65%" : "100%",
-        width: isLargeScreen ? "65%" : "100%"
+        maxWidth: isLargeScreen ? "60%" : "100%",
+        width: isLargeScreen ? "60%" : "100%"
       }}>
         <Formik initialValues={initialValues} validationSchema={checkoutSchema} onSubmit={handleFormSubmit}>
           {({ values }) => (
@@ -157,57 +159,124 @@ const handleSendMessage = () => {
               >
                 {/* Ticket Details Fields */}
                 <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Experience ID</Typography>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Experience ID</Typography>
                   <Typography>{values.id}</Typography>
                 </Box>
-                
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Experience</Typography>
-                  <Typography sx={{ color: getExperienceColor(values.experience) }}>{values.experience}</Typography>
-                </Box>
 
                 <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Priority</Typography>
-                  <Typography sx={{ color: getExperienceColor(values.priority) }}>{values.priority}</Typography>
-                </Box>
-                
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Status</Typography>
-                  <Typography>{values.status}</Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Impact</Typography>
-                  <Typography>{values.department}</Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Date</Typography>
-                  <Typography>{values.date}</Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Time</Typography>
-                  <Typography>{values.time}</Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Organization</Typography>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Organization</Typography>
                   <Typography>{values.organization}</Typography>
                 </Box>
 
                 <Box>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Customer Manager</Typography>
-                  <Typography>{values.cmname}</Typography>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Branch</Typography>
+                  <Typography>{values.branch}</Typography>
                 </Box>
 
-                <Box sx={{ gridColumn: { xs: "auto", sm: "span 2", md: "auto" } }}>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Customer Relationship Manager</Typography>
-                  <Typography>{values.crmname}</Typography>
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Customer Manager</Typography>
+                  <Typography>{values.cmname}</Typography>
                 </Box>
-                
+                {isEditing ? (
+
+          
+
+
+          
+<Box sx={{ gridColumn: { xs: "auto", sm: "span 2", md: "auto" } }}>
+<Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Customer Relationship Manager</Typography>
+{/* <Box> */}
+
+  <TextField 
+  fullWidth 
+  // placeholder="Type your message..." 
+  size="small"
+  variant="outlined"
+  value={values.crmname}
+  // onChange={(e) => setNewMessage(e.target.value)}
+  // onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+  />
+{/* </Box> */}
+</Box>
+      ) : (
+
+        <Box sx={{ gridColumn: { xs: "auto", sm: "span 2", md: "auto" } }}>
+        <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Customer Relationship Manager</Typography>
+        <Typography>{values.crmname}</Typography>
+      </Box>
+        
+      )}
+                {isEditing ? (
+                <Box>
+
+
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Priority</Typography>
+                  <TextField 
+                  fullWidth 
+                  // placeholder="Type your message..." 
+                  size="small"
+                  variant="outlined"
+                  value={values.priority}
+                  // onChange={(e) => setNewMessage(e.target.value)}
+                  // onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  />
+                  </Box>
+                ) : (
+                  <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Priority</Typography>
+                  <Typography sx={{ color: getExperienceColor(values.priority) }}>{values.priority}</Typography>
+
+                </Box>
+                )}
+            
+
+
+          {isEditing ? (
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Status</Typography>
+                  {/* <Typography>{values.status}</Typography> */}
+                        <TextField 
+                        fullWidth 
+                        placeholder="Type your message..." 
+                        size="small"
+                        variant="outlined"
+                        value={values.status}
+                        // onChange={(e) => setNewMessage(e.target.value)}
+                        // onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      />
+                </Box>
+              ) : (
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Status</Typography>
+                  <Typography>{values.status}</Typography>
+                </Box>
+              )}
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Experience</Typography>
+                  <Typography sx={{ color: getExperienceColor(values.experience) }}>{values.experience}</Typography>
+                </Box>
+
+
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Impact</Typography>
+                  <Typography>{values.department}</Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Date</Typography>
+                  <Typography>{values.date}</Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Time</Typography>
+                  <Typography>{values.time}</Typography>
+                </Box>
+
+
+
+
                 <Box sx={{ gridColumn: { xs: "auto", sm: "span 2", md: "span 3" } }}>
-                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Subject</Typography>
+                  <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Subject</Typography>
                   <Typography>{values.subject}</Typography>
                 </Box>
               </Box>
@@ -216,12 +285,12 @@ const handleSendMessage = () => {
                 {/* Request Details Section with Edit Functionality */}
                 <Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="subtitle2" sx={{ color: "#555", fontWeight:"bold" }}>Request Details</Typography>
-                    {!isEditing && (
-                      <Button 
-                        variant="outlined" 
+                    <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Request Details</Typography>
+                    {/* {!isEditing && (
+                      <Button
+                        variant="outlined"
                         onClick={() => setIsEditing(true)}
-                        sx={{ 
+                        sx={{
                           textTransform: 'none',
                           color: colors.blueAccent[700],
                           borderColor: colors.blueAccent[700],
@@ -233,25 +302,25 @@ const handleSendMessage = () => {
                       >
                         Edit
                       </Button>
-                    )}
+                    )} */}
                   </Box>
-                  
-                  {!isEditing ? (
+
+                  {/* {!isEditing ? ( */}
                     <Typography sx={{ mt: 1, whiteSpace: 'pre-wrap' }}>{values.requestdetails}</Typography>
-                  ) : (
+                  {/* ) : (
                     <>
                       <Box sx={{ mt: 2 }}>
                         <JoditEditor
                           value={values.requestdetails}
                           config={config}
-                          onChange={(newContent) => {}}
+                          onChange={(newContent) => { }}
                         />
                       </Box>
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
-                        <Button 
+                        <Button
                           variant="outlined"
                           onClick={() => setIsEditing(false)}
-                          sx={{ 
+                          sx={{
                             textTransform: 'none',
                             color: colors.grey[700],
                             borderColor: colors.grey[700]
@@ -275,7 +344,7 @@ const handleSendMessage = () => {
                         </Button>
                       </Box>
                     </>
-                  )}
+                  )} */}
                 </Box>
 
                 {/* File Upload Section */}
@@ -338,7 +407,7 @@ const handleSendMessage = () => {
                 </Box>
 
                 {/* Action Buttons */}
-                <Box sx={{ display: "flex", justifyContent:"space-between", gap: 2, mt: 1 }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, mt: 1 }}>
                   <Button
                     variant="contained"
                     sx={{
@@ -351,16 +420,18 @@ const handleSendMessage = () => {
                       backgroundColor: colors.redAccent[400],
                       color: "#ffffff",
                       textTransform: "none",
-                      "&:hover": { 
-                        backgroundColor: colors.redAccent[500], 
-                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" 
+                      "&:hover": {
+                        backgroundColor: colors.redAccent[500],
+                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)"
                       },
                     }}
                   >
                     Delete
                   </Button>
-                  <Button
+
+                  {/* <Button
                     variant="contained"
+                    onClick={setIsEditing}
                     sx={{
                       padding: "12px 24px",
                       fontSize: "14px",
@@ -371,14 +442,85 @@ const handleSendMessage = () => {
                       backgroundColor: colors.blueAccent[700],
                       color: "#ffffff",
                       textTransform: "none",
-                      "&:hover": { 
-                        backgroundColor: colors.blueAccent[600], 
-                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" 
+                      "&:hover": {
+                        backgroundColor: colors.blueAccent[600],
+                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)"
                       },
                     }}
                   >
-                    Save
-                  </Button>
+
+                    Edit
+                  </Button> */}
+                  {isEditing ? (
+                    <Box sx={{display: "flex", gap: 2}}>
+                      <Button
+                        variant="contained"
+                        onClick={() => setIsEditing(false)}
+                        sx={{
+                          padding: "12px 24px",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          borderRadius: "8px",
+                          boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                          transition: "0.3s",
+                          backgroundColor: colors.redAccent[400],
+                          color: "#ffffff",
+                          textTransform: "none",
+                          "&:hover": {
+                            backgroundColor: colors.redAccent[500],
+                            boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)"
+                          },
+                        }}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        sx={{
+                          padding: "12px 24px",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          borderRadius: "8px",
+                          boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                          transition: "0.3s",
+                          backgroundColor: colors.blueAccent[700],
+                          color: "#ffffff",
+                          textTransform: "none",
+                          "&:hover": {
+                            backgroundColor: colors.blueAccent[600],
+                            boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)"
+                          },
+                        }}
+                      >
+                        Save
+                      </Button>
+                    </Box>
+                  ) :
+                    (
+                      <Button
+                        variant="contained"
+                        onClick={setIsEditing}
+                        sx={{
+                          padding: "12px 24px",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          borderRadius: "8px",
+                          boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                          transition: "0.3s",
+                          backgroundColor: colors.blueAccent[700],
+                          color: "#ffffff",
+                          textTransform: "none",
+                          "&:hover": {
+                            backgroundColor: colors.blueAccent[600],
+                            boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)"
+                          },
+                        }}
+                      >
+
+                        Edit
+                      </Button>
+                    )}
                 </Box>
               </Box>
             </form>
@@ -387,19 +529,19 @@ const handleSendMessage = () => {
       </Box>
 
       {/* Second Column - Customer Support */}
-      <Box sx={{ 
-        backgroundColor: "#ffffff", 
+      <Box sx={{
+        backgroundColor: "#ffffff",
         p: isDesktop ? 3 : 2,
         borderRadius: "8px",
         flex: 1,
         display: "flex",
         flexDirection: "column",
         gap: 3,
-        maxWidth: isLargeScreen ? "35%" : "100%",
-        width: isLargeScreen ? "35%" : "100%",
+        maxWidth: isLargeScreen ? "40%" : "100%",
+        width: isLargeScreen ? "40%" : "100%",
       }}>
         {/* Customer Care Section */}
-        <Box sx={{ 
+        <Box sx={{
           mt: 2,
           p: 2,
           backgroundColor: "#f5f5f5",
@@ -421,59 +563,59 @@ const handleSendMessage = () => {
         </Box>
 
         {/* Customer Chat Section */}
-        <Box sx={{ 
-  p: 2,
-  backgroundColor: "#f5f5f5",
-  borderRadius: "8px"
-}}>
-  <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>Live Chat</Typography>
-  <Typography sx={{ mb: 2 }}>Chat with our support team in real-time:</Typography>
-  <Box sx={{ 
-    height: "200px",
-    backgroundColor: "white",
-    borderRadius: "4px",
-    p: 2,
-    mb: 2,
-    border: "1px solid #ddd",
-    overflowY: "auto"
-  }}>
-    {messages.map((message, index) => (
-      <Box 
-        key={index}
-        sx={{ 
-          textAlign: message.sender === "user" ? "right" : "left",
-          mb: 2
-        }}
-      >
-        <Box
-          sx={{
-            display: "inline-block",
-            p: 1.5,
+        <Box sx={{
+          p: 2,
+          backgroundColor: "#f5f5f5",
+          borderRadius: "8px"
+        }}>
+          <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}> Chat</Typography>
+          <Typography sx={{ mb: 2 }}>Chat with our support team </Typography>
+          <Box sx={{
+            height: "200px",
+            backgroundColor: "white",
             borderRadius: "4px",
-            backgroundColor: message.sender === "user" 
-              ? colors.blueAccent[100] 
-              : colors.grey[200],
-            maxWidth: "80%",
-            wordWrap: "break-word"
-          }}
-        >
-          <Typography variant="body2">{message.text}</Typography>
-        </Box>
-        <Typography 
-          variant="caption" 
-          sx={{ 
-            display: "block",
-            color: colors.grey[600],
-            mt: 0.5
-          }}
-        >
-          {message.sender === "user" ? "You" : "Support"}
-        </Typography>
-      </Box>
-    ))}
-  </Box>
-  <Box sx={{ display: "flex", gap: 1 }}>
-    <TextField 
+            p: 2,
+            mb: 2,
+            border: "1px solid #ddd",
+            overflowY: "auto"
+          }}>
+            {messages.map((message, index) => (
+              <Box
+                key={index}
+                sx={{
+                  textAlign: message.sender === "user" ? "right" : "left",
+                  mb: 2
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "inline-block",
+                    p: 1.5,
+                    borderRadius: "4px",
+                    backgroundColor: message.sender === "user"
+                      ? colors.blueAccent[100]
+                      : colors.grey[200],
+                    maxWidth: "80%",
+                    wordWrap: "break-word"
+                  }}
+                >
+                  <Typography variant="body2">{message.text}</Typography>
+                </Box>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: "block",
+                    color: colors.grey[600],
+                    mt: 0.5
+                  }}
+                >
+                  {message.sender === "user" ? "You" : "Support"}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {/* <TextField 
       fullWidth 
       placeholder="Type your message..." 
       size="small"
@@ -481,16 +623,142 @@ const handleSendMessage = () => {
       value={newMessage}
       onChange={(e) => setNewMessage(e.target.value)}
       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-    />
-    <Button 
-      variant="contained"
-      onClick={handleSendMessage}
-      disabled={!newMessage.trim()}
-    >
-      Send
-    </Button>
-  </Box>
-</Box>
+    /> */}
+
+            <JoditEditor
+              value={newMessage}
+              onChange={(content) => setNewMessage(content)}
+              config={{
+                readonly: false,
+                toolbarButtonSize: "small",
+                showCharsCounter: false,
+                showWordsCounter: false,
+                showXPathInStatusbar: false,
+                buttons: [
+                  'bold',
+                  'italic',
+                  'underline',
+                  'strikethrough',
+                  '|',
+                  'ul',
+                  'ol',
+                  '|',
+                  'font',
+                  'fontsize',
+                  'paragraph',
+                  '|',
+                  'align',
+                  '|',
+                  'link',
+                  'file',
+                  'image',
+                  'media',
+                  'table',
+                  '|',
+                  'quote'
+                ],
+                buttonsMD: [
+                  'bold',
+                  'italic',
+                  'underline',
+                  'strikethrough',
+                  '|',
+                  'ul',
+                  'ol',
+                  '|',
+                  'font',
+                  'fontsize',
+                  'paragraph',
+                  '|',
+                  'align',
+                  '|',
+                  'link',
+                  'file',
+                  'image',
+                  'media',
+                  'table',
+                  '|',
+                  'quote'
+                ],
+                buttonsSM: [
+                  'bold',
+                  'italic',
+                  'underline',
+                  'strikethrough',
+                  '|',
+                  'ul',
+                  'ol',
+                  '|',
+                  'font',
+                  'fontsize',
+                  'paragraph',
+                  '|',
+                  'align',
+                  '|',
+                  'link',
+                  'file',
+                  'image',
+                  'media',
+                  'table',
+                  '|',
+                  'quote'
+                ],
+                buttonsXS: [
+                  'bold',
+                  'italic',
+                  'underline',
+                  'strikethrough',
+                  '|',
+                  'ul',
+                  'ol',
+                  '|',
+                  'font',
+                  'fontsize',
+                  'paragraph',
+                  '|',
+                  'align',
+                  '|',
+                  'link',
+                  'file',
+                  'image',
+                  'media',
+                  'table',
+                  '|',
+                  'quote'
+                ],
+                removeButtons: [
+                  'source',
+                  'fullsize',
+                  'print',
+                  'about',
+                  'outdent',
+                  'indent',
+                  'copyformat',
+                  'hr',
+                  'eraser',
+                  'dots',
+                  'brush',
+                  'symbol',
+                  'cut',
+                  'selectall'
+                ]
+              }}
+            />
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: colors.blueAccent[700],
+                color: "#ffffff",
+                '&:hover': { backgroundColor: colors.blueAccent[600] },
+                textTransform: 'none'
+              }}
+              onClick={handleSendMessage}
+              disabled={!newMessage.trim()}
+            >
+              Send
+            </Button>
+          </Box>
+        </Box>
 
       </Box>
     </Box>
