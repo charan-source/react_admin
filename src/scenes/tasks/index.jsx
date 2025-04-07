@@ -23,9 +23,9 @@ const Tasks = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
+//   const handleOpenModal = () => {
+//     setOpenModal(true);
+//   };
   const handletaskmodel = () => {
     setTaskopenModal(true);
   };
