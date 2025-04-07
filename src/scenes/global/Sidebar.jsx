@@ -23,6 +23,8 @@ const getActivePage = (pathname) => {
     return "/hob";
   } else if (pathname.includes("/notes")) {
     return "/notes";
+  } else if (pathname.includes("/tasks")) {
+      return "/tasks";
   } else if (pathname.includes("/calendar")) {
     return "/calendar";
   }
@@ -149,6 +151,7 @@ const Sidebar = ({ isSidebar, onLogout }) => {
         />
        <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} />
+        <Item title="Tasks" to="/tasks" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} />
         <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} />
         

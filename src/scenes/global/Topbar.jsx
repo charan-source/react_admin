@@ -30,6 +30,8 @@ const getActivePage = (pathname) => {
     return "/notes";
   } else if (pathname.includes("/calendar")) {
     return "/calendar";
+  } else if (pathname.includes("/tasks")) {
+    return "/tasks";
   } else if (pathname.includes("/organization")) {
     return "/organization";
   } else if (
@@ -112,6 +114,8 @@ const Topbar = ({ onLogout}) => {
         return " Create a New Customer Relationship Manager";
       case "/hob":
         return "Head of the Business";
+      case "/tasks":
+          return "Tasks List";  
       case "/crmdetails":
         return "Customer Relationship Manager Details";
       case "/cmdetails":
@@ -172,6 +176,8 @@ const Topbar = ({ onLogout}) => {
         return { primaryTitle: "Customer Relationship Manager", secondaryTitle: "Create a New Customer Relationship Manager" };
       case "/hob":
         return { primaryTitle: "Head of the Business", secondaryTitle: null };
+      case "/tasks":
+        return { primaryTitle: "Tasks List", secondaryTitle: null };
       case "/form":
         return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
       case "/hobdetails":
@@ -605,6 +611,7 @@ const Topbar = ({ onLogout}) => {
             <Item title="Customer Relationship Manager" to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Tasks" to="/tasks" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <ListItem

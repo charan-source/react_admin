@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 // import { useNavigate } from "react-router-dom";
 
-const Notes = () => {
+const Tasks = () => {
   // Responsive breakpoints
   const isDesktop = useMediaQuery("(min-width: 1024px)"); // Desktop (5 columns)
   const isTablet = useMediaQuery("(min-width: 768px)"); // Tablet (3 columns)
@@ -153,23 +153,23 @@ const Notes = () => {
               startAdornment: <SearchIcon sx={{ color: "action.active" }} />,
             }}
           />
+
           <Button
             variant="contained"
             sx={{
               background: colors.blueAccent[500],
               color: "#ffffff",
-              width: "40%",
-              height: "55px",
-              borderRadius: "8px",
+              width: "70%",
+              height: "45px",
+              borderRadius: "4px",
               fontSize: "14px",
               fontWeight: "bold",
               textTransform: "none",
             }}
-            onClick={handleOpenModal}
+            onClick={handletaskmodel}
           >
-            Create New
+            Create New Task
           </Button>
-
         </Box>
       ) : (
         <Box display="flex" justifyContent="center" alignItems="center" p={3} gap={2}>
@@ -192,6 +192,7 @@ const Notes = () => {
               startAdornment: <SearchIcon sx={{ color: "action.active", mr: 1 }} />,
             }}
           />
+
           <Button
             variant="contained"
             sx={{
@@ -204,11 +205,10 @@ const Notes = () => {
               fontWeight: "bold",
               textTransform: "none",
             }}
-            onClick={handleOpenModal}
+            onClick={handletaskmodel}
           >
-            Create New
+            Create New Task
           </Button>
-
         </Box>
       )}
       <Box
@@ -371,4 +371,4 @@ const Notes = () => {
   );
 };
 
-export default Notes;
+export default Tasks;
