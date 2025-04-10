@@ -43,6 +43,8 @@ import BsuForm from "./scenes/bsuform";
 import OrganizationForm from "./scenes/organizationform";
 import Login from "./scenes/login";
 import Tasks from "./scenes/tasks";
+import TaskForm from "./scenes/taskform";
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -181,6 +183,7 @@ function App() {
               <Route path="/cmform" element={<CmForm />} />
               <Route path="/crmform" element={<CrmForm />} />
               <Route path="/bsuform" element={<BsuForm />} />
+              <Route path="/taskform" element={<TaskForm />} />
               <Route path="/organizationform" element={<OrganizationForm />} />
               <Route path="/cmdetails" element={<CmDetails />} />
               <Route path="/crmdetails" element={<CrmDetails />} />

@@ -42,7 +42,7 @@ const Tasks = () => {
   };
 
   const handleNewTicket = () => {
-    navigate('/organizationform');
+    navigate('/taskform');
   };
 
   const handleRowClick = (params) => {
@@ -78,7 +78,7 @@ const Tasks = () => {
         <Box sx={{ display: 'flex', gap: 1 }}>
           <IconButton 
             onClick={handleCompleteTask(params.id)}
-            sx={{ color: "#ffffff", backgroundColor: "#0BDA51" }}
+            sx={{ color: "#ffffff", backgroundColor: "#0BDA51",  width: "30px", height: "30px"  }}
             aria-label="complete"
             disableRipple
           >
@@ -86,7 +86,7 @@ const Tasks = () => {
           </IconButton>
           <IconButton 
             onClick={handleDeleteTask(params.id)}
-            sx={{ color: "#ffffff", backgroundColor: "#FF2C2C",  }}
+            sx={{ color: "#ffffff", backgroundColor: "#FF2C2C", width: "30px", height: "30px" }}
             disableRipple
             aria-label="delete"
 
