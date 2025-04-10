@@ -13,6 +13,7 @@ import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import TaskOutlinedIcon from "@mui/icons-material/TaskOutlined";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import logoLight from "./logo.png";
@@ -292,11 +293,11 @@ const Topbar = ({ onLogout}) => {
               bgcolor: "#fefefe !important",
               boxShadow: "0px 4px 4px -2px rgba(0, 0, 0, 0.1)",
               // marginBottom: 2,
-              padding: 1,
+              // padding: null,
             }}
           >
             {/* Logo on Mobile */}
-            <Box sx={{ maxWidth: "200px", height: "50px", backgroundColor: "#fefefe !important" }}>
+            <Box sx={{ maxWidth: "200px", height: "65px", backgroundColor: "#fefefe !important" }}>
               <img
                 src={logoSrc}
                 alt="logo"
@@ -611,7 +612,7 @@ const Topbar = ({ onLogout}) => {
             <Item title="Customer Relationship Manager" to="/crm" icon={<HandshakeOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Head of the Business" to="/hob" icon={<StorefrontOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Organization" to="/organization" icon={<BusinessOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
-            <Item title="Tasks" to="/tasks" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
+            <Item title="Tasks" to="/tasks" icon={<TaskOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Notes" to="/notes" icon={<DescriptionOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <Item title="Calendar" to="/calendar" icon={<CalendarTodayOutlinedIcon />} selected={selected} setSelected={setSelected} handleClose={() => setIsModalOpen(false)} />
             <ListItem

@@ -198,7 +198,7 @@ const Notes = () => {
               background: colors.blueAccent[500],
               color: "#ffffff",
               width: "15%",
-              height: "50px",
+              height: "45px",
               borderRadius: "4px",
               fontSize: "14px",
               fontWeight: "bold",

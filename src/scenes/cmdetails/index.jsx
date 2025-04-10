@@ -658,7 +658,7 @@ const CmDetails = () => {
                   options={customerManagers}
                   value={values.customerManager || null}
                   onChange={(event, newValue) => {
-                    setFieldValue("gender", newValue || "");
+                    setFieldValue("customerManager", newValue || "");
                   }}
                   renderInput={(params) => (
                     <TextField

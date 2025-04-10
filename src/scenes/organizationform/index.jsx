@@ -117,7 +117,7 @@ const OrganizationForm = () => {
           >
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
               <form onSubmit={handleSubmit} style={{ marginBottom: "20px", borderBottom: "2px solid #ddd", paddingBottom: "20px" }}>
-                <h3>Branch {index + 1}</h3>
+                <h3> {index === 0 ? "Parent Company" : `Branch ${index}`}</h3>
                 <Box
                   display="grid"
                   gap="20px"
