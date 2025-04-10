@@ -44,6 +44,7 @@ import OrganizationForm from "./scenes/organizationform";
 import Login from "./scenes/login";
 import Tasks from "./scenes/tasks";
 import TaskForm from "./scenes/taskform";
+import TaskDetails from "./scenes/taskdetails";
 
 
 function App() {
@@ -190,6 +191,7 @@ function App() {
               <Route path="/organizationdetails" element={<OrganizationDetails />} />
               <Route path="/hobdetails" element={<HobDetails />} />
               <Route path="/ticketdetails" element={<TicketDetails />} />
+              <Route path="/taskdetails" element={<TaskDetails />} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />

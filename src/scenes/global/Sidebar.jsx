@@ -25,8 +25,8 @@ const getActivePage = (pathname) => {
     return "/hob";
   } else if (pathname.includes("/notes")) {
     return "/notes";
-  } else if (pathname.includes("/tasks") || pathname.includes("/taskform")) {
-      return "/tasks";
+  }else if (pathname.includes("/tasks") || pathname.includes("/taskform") || pathname.includes("/taskdetails")) {
+    return "/tasks";
   }
    else if (pathname.includes("/calendar")) {
     return "/calendar";

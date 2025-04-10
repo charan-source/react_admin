@@ -117,6 +117,8 @@ const Topbar = ({ onLogout}) => {
         return "Head of the Business";
       case "/tasks":
           return "Tasks List";  
+      case "/taskdetails":
+          return "Task Details";  
       case "/taskform":
             return "Create New Task";  
       case "/crmdetails":
@@ -183,6 +185,8 @@ const Topbar = ({ onLogout}) => {
         return { primaryTitle: "Tasks List", secondaryTitle: null };
       case "/taskform":
         return { primaryTitle: "Tasks List", secondaryTitle: "Create a New Task" };  
+      case "/taskdetails":
+        return { primaryTitle: "Task Details", secondaryTitle: null };  
       case "/form":
         return { primaryTitle: "Head of the Business", secondaryTitle: "Create a New Head of the Business Unit" };
       case "/hobdetails":

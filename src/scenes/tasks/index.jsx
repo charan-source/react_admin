@@ -16,17 +16,18 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+// import { date } from "yup";
 
 const initialTickets = [
-  { id: 1, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 2, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 3, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 4, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 5, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 6, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 7, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 8, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
-  { id: 9, name: "Charan Palemala", email: "charan@gmail.com", phone: "1234567890", city: "Visakhapatnam", created: "14th March, 2025", country: "India", state: "Andhra Pradesh", phoneno: "7386569469", phonenocode: "+91", address: "5448 Claudine Extension Suite 701", organization: "Wipro" },
+  { id: 1, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket", taskid : "1", date:"03-04-2025", time: "10:00 AM" },
+  { id: 2, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",   taskid : "2", date:"03-04-2025", time: "10:00 AM" },
+  { id: 3, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",   taskid : "3", date:"03-04-2025", time: "10:00 AM" },
+  { id: 4, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "4", date:"03-04-2025", time: "10:00 AM" },
+  { id: 5, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "5", date:"03-04-2025", time: "10:00 AM" },
+  { id: 6, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "6", date:"03-04-2025", time: "10:00 AM" },
+  { id: 7, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "7", date:"03-04-2025", time: "10:00 AM" },
+  { id: 8, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket", taskid : "8", date:"03-04-2025", time: "10:00 AM" },
+  { id: 9, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",   taskid : "9", date:"03-04-2025", time: "10:00 AM" },
 
 ];
 
@@ -64,9 +65,9 @@ const Tasks = () => {
   // Columns for DataGrid
   const columns = [
     { field: "id", headerName: "ID", flex: 0.4, headerClassName: "bold-header", disableColumnMenu: false, minWidth: 100 },
-    { field: "name", headerName: "Task name", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 200 },
-    { field: "phone", headerName: "Task owner", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
-    { field: "city", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+    { field: "ticketraise", headerName: "Task name", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 200 },
+    { field: "name", headerName: "Task owner", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
+    { field: "status", headerName: "Status", flex: 1, headerClassName: "bold-header", disableColumnMenu: true, minWidth: 150 },
     { 
       field: "actions", 
       headerName: "Action", 
