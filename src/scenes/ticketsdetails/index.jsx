@@ -5,9 +5,13 @@ import * as yup from "yup";
 import React, { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import download from 'downloadjs';
-import JoditEditor from 'jodit-react';
+// import JoditEditor from 'jodit-react';
 // import {Jodit} from 'jodit-pro';
-import 'jodit-pro/es5/jodit.min.css';
+// import 'jodit-pro/es5/jodit.min.css';
+
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 // import { Block } from "@mui/icons-material";
 // import PhoneIcon from '@mui/icons-material/Phone';
@@ -24,6 +28,7 @@ const TicketDetails = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const colors = tokens(theme.palette.mode);
+  // const editor = useRef(null);
 
   const ticket = useMemo(() => location.state?.ticket || {}, [location.state]);
 
@@ -113,16 +118,46 @@ const TicketDetails = () => {
     { text: "Hello! How can I help you today?", sender: "support" }
   ]);
   const [newMessage, setNewMessage] = useState("");
+  // const [newMessage, setNewMessage] = useState("");
+
 
   // Add this function to handle sending messages
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
+  // const config = {
+  //   readonly: false,
+  //   toolbar: false, // Hide toolbar for cleaner chat input
+  //   statusbar: false,
+  //   spellcheck: true,
+  //   enter: "br", // Enter creates <br> instead of <p>
+  //   defaultActionOnPaste: "insert_only_text",
+  //   buttons: [],
+  //   height: 100,
+  //   width: '100%',
+  //   style: {
+  //     background: '#fff',
+  //     color: '#333',
+  //     fontSize: '14px',
+  //     border: `1px solid ${colors.grey[300]}`,
+  //     borderRadius: '4px',
+  //     padding: '8px'
+  //   }
+  // };
 
-    // Add user message
-    setMessages(prev => [...prev, { text: newMessage, sender: "user" }]);
+  const handleSendMessage = () => {
+    if (!newMessage.trim()) return;
+
+    // Strip HTML tags but preserve line breaks
+    const cleanMessage = newMessage
+      .replace(/<[^>]*>/g, '') // Remove HTML tags
+      .replace(/\n/g, '<br>'); // Convert newlines to <br>
+
+    setMessages(prev => [...prev, {
+      text: cleanMessage,
+      sender: "user",
+      raw: newMessage // Store original for editing
+    }]);
     setNewMessage("");
 
-    // Simulate bot response after a short delay
+    // Simulate bot response
     setTimeout(() => {
       setMessages(prev => [...prev, {
         text: "Thanks for your message! Our team will get back to you soon.",
@@ -130,6 +165,27 @@ const TicketDetails = () => {
       }]);
     }, 1000);
   };
+
+  // Function to safely render HTML content
+  // const renderMessageContent = (html) => {
+  //   return { __html: html.replace(/\n/g, '<br>') };
+  // };
+
+
+
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['link']
+    ]
+  };
+
+  const formats = [
+    'bold', 'italic', 'underline',
+    'list', 'bullet',
+    'link'
+  ];
 
   const customerManagers = [
     "Rambabu",
@@ -301,7 +357,7 @@ const TicketDetails = () => {
                 )}
 
 
-{/* 
+                {/* 
                 {isEditing ? (
                   <Box>
                     <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Status</Typography>
@@ -324,7 +380,7 @@ const TicketDetails = () => {
 
 
 
-{isEditing ? (
+                {isEditing ? (
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold", marginBottom: "5px" }}>
                       Status
@@ -662,19 +718,18 @@ const TicketDetails = () => {
         maxWidth: isLargeScreen ? "40%" : "100%",
         width: isLargeScreen ? "40%" : "100%",
       }}>
-        {/* Customer Care Section */}
-
-
-        {/* Customer Chat Section */}
+        {/* Chat Section */}
         <Box sx={{
           p: 2,
           backgroundColor: "#f5f5f5",
-          borderRadius: "8px"
+          borderRadius: "8px",
+          display: 'flex',
+          flexDirection: 'column',
+          height: '500px'
         }}>
-          <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}> Chat</Typography>
-          <Typography sx={{ mb: 2 }}>Chat with our support team </Typography>
+          {/* Messages Display */}
           <Box sx={{
-            height: "200px",
+            flex: 1,
             backgroundColor: "white",
             borderRadius: "4px",
             p: 2,
@@ -683,186 +738,69 @@ const TicketDetails = () => {
             overflowY: "auto"
           }}>
             {messages.map((message, index) => (
-              <Box
-                key={index}
-                sx={{
-                  textAlign: message.sender === "user" ? "right" : "left",
-                  mb: 2
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "inline-block",
-                    p: 1.5,
-                    borderRadius: "4px",
-                    backgroundColor: message.sender === "user"
-                      ? colors.blueAccent[100]
-                      : "#f0f0f0",
-                    maxWidth: "80%",
-                    wordWrap: "break-word"
-                  }}
-                >
-                  <Typography variant="body2">{message.text}</Typography>
-                </Box>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    display: "block",
-                    color: colors.grey[600],
-                    mt: 0.5
-                  }}
-                >
+              <Box key={index} sx={{ mb: 2 }}>
+                <Typography variant="caption" sx={{ color: colors.grey[600] }}>
                   {message.sender === "user" ? "You" : "Support"}
                 </Typography>
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 1,
+                    bgcolor: message.sender === "user"
+                      ? colors.blueAccent[100]
+                      : "#f0f0f0",
+                    display: 'inline-block'
+                  }}
+                  dangerouslySetInnerHTML={{ __html: message.text }}
+                />
               </Box>
             ))}
           </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            {/* <TextField 
-      fullWidth 
-      placeholder="Type your message..." 
-      size="small"
-      variant="outlined"
-      value={newMessage}
-      onChange={(e) => setNewMessage(e.target.value)}
-      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-    /> */}
 
-            <JoditEditor
+          {/* Quill Editor */}
+          <Box sx={{
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            // border: `1px solid ${colors.grey[300]}`
+          }}>
+            <ReactQuill
+              theme="snow"
               value={newMessage}
-              onChange={(content) => setNewMessage(content)}
-              config={{
-                readonly: false,
-                toolbarButtonSize: "small",
-                showCharsCounter: false,
-                showWordsCounter: false,
-                showXPathInStatusbar: false,
-                buttons: [
-                  'bold',
-                  'italic',
-                  'underline',
-                  'strikethrough',
-                  '|',
-                  'ul',
-                  'ol',
-                  '|',
-                  'font',
-                  'fontsize',
-                  'paragraph',
-                  '|',
-                  'align',
-                  '|',
-                  'link',
-                  'file',
-                  'image',
-                  'media',
-                  'table',
-                  '|',
-                  'quote'
-                ],
-                buttonsMD: [
-                  'bold',
-                  'italic',
-                  'underline',
-                  'strikethrough',
-                  '|',
-                  'ul',
-                  'ol',
-                  '|',
-                  'font',
-                  'fontsize',
-                  'paragraph',
-                  '|',
-                  'align',
-                  '|',
-                  'link',
-                  'file',
-                  'image',
-                  'media',
-                  'table',
-                  '|',
-                  'quote'
-                ],
-                buttonsSM: [
-                  'bold',
-                  'italic',
-                  'underline',
-                  'strikethrough',
-                  '|',
-                  'ul',
-                  'ol',
-                  '|',
-                  'font',
-                  'fontsize',
-                  'paragraph',
-                  '|',
-                  'align',
-                  '|',
-                  'link',
-                  'file',
-                  'image',
-                  'media',
-                  'table',
-                  '|',
-                  'quote'
-                ],
-                buttonsXS: [
-                  'bold',
-                  'italic',
-                  'underline',
-                  'strikethrough',
-                  '|',
-                  'ul',
-                  'ol',
-                  '|',
-                  'font',
-                  'fontsize',
-                  'paragraph',
-                  '|',
-                  'align',
-                  '|',
-                  'link',
-                  'file',
-                  'image',
-                  'media',
-                  'table',
-                  '|',
-                  'quote'
-                ],
-                removeButtons: [
-                  'source',
-                  'fullsize',
-                  'print',
-                  'about',
-                  'outdent',
-                  'indent',
-                  'copyformat',
-                  'hr',
-                  'eraser',
-                  'dots',
-                  'brush',
-                  'symbol',
-                  'cut',
-                  'selectall'
-                ]
+              onChange={setNewMessage}
+              modules={modules}
+              formats={formats}
+              placeholder="Type your message..."
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: '4px',
+                border: 'none',
+                height: '120px'
               }}
             />
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: colors.blueAccent[700],
-                color: "#ffffff",
-                '&:hover': { backgroundColor: colors.blueAccent[600] },
-                textTransform: 'none'
-              }}
-              onClick={handleSendMessage}
-              disabled={!newMessage.trim()}
-            >
-              Send
-            </Button>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              p: 1,
+              // backgroundColor: "#f0f0f0",
+              // borderTop: `1px solid ${colors.grey[300]}`
+            }}>
+              <Button
+                variant="contained"
+                onClick={handleSendMessage}
+                disabled={!newMessage.trim()}
+                sx={{
+                  backgroundColor: colors.blueAccent[700],
+                  color: "#ffffff",
+                  '&:hover': { backgroundColor: colors.blueAccent[600] },
+                  textTransform: 'none',
+                  minWidth: '100px'
+                }}
+              >
+                Send
+              </Button>
+            </Box>
           </Box>
         </Box>
-
       </Box>
     </Box>
   );
