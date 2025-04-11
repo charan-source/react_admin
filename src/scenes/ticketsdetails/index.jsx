@@ -1,4 +1,4 @@
-import { Box, useMediaQuery, Typography, Button, useTheme, TextField, Autocomplete } from "@mui/material";
+import { Box, useMediaQuery, Typography, Button, useTheme, TextField, Autocomplete, IconButton } from "@mui/material";
 import { Formik } from "formik";
 import { tokens } from "../../theme";
 import * as yup from "yup";
@@ -10,8 +10,28 @@ import download from 'downloadjs';
 // import 'jodit-pro/es5/jodit.min.css';
 
 
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// import ReactQuill from 'react-quill';
+// import 'react-quill/dist/quill.snow.css';
+
+
+
+import {
+  FormatBold, FormatItalic, FormatUnderlined,
+  FormatListNumbered, FormatListBulleted,
+  InsertPhoto, TableChart, YouTube
+} from '@mui/icons-material';
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Image from '@tiptap/extension-image'
+import Table from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableHeader from '@tiptap/extension-table-header'
+import TableCell from '@tiptap/extension-table-cell'
+import Youtube from '@tiptap/extension-youtube'
+
+
+
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 // import { Block } from "@mui/icons-material";
 // import PhoneIcon from '@mui/icons-material/Phone';
@@ -141,26 +161,66 @@ const TicketDetails = () => {
   //     padding: '8px'
   //   }
   // };
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      Youtube,
+    ],
+    content: newMessage,
+    onUpdate: ({ editor }) => {
+      setNewMessage(editor.getHTML());
+    },
+  });
+
+  const addImage = () => {
+    const url = window.prompt('Enter the URL of the image:');
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run();
+    }
+  };
+
+  const addYoutubeVideo = () => {
+    const url = window.prompt('Enter YouTube URL:');
+    if (url) {
+      editor.commands.setYoutubeVideo({
+        src: url,
+        width: 640,
+        height: 480,
+      });
+    }
+  };
+
+  const addTable = () => {
+    editor.chain().focus().insertTable({ 
+      rows: 3, 
+      cols: 3, 
+      withHeaderRow: true 
+    }).run();
+  };
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
 
-    // Strip HTML tags but preserve line breaks
-    const cleanMessage = newMessage
-      .replace(/<[^>]*>/g, '') // Remove HTML tags
-      .replace(/\n/g, '<br>'); // Convert newlines to <br>
-
     setMessages(prev => [...prev, {
-      text: cleanMessage,
-      sender: "user",
-      raw: newMessage // Store original for editing
+      text: newMessage,
+      sender: "user"
     }]);
     setNewMessage("");
+    editor.commands.clearContent();
 
-    // Simulate bot response
     setTimeout(() => {
       setMessages(prev => [...prev, {
-        text: "Thanks for your message! Our team will get back to you soon.",
+        text: "We've received your message with attachments!",
         sender: "support"
       }]);
     }, 1000);
@@ -173,19 +233,19 @@ const TicketDetails = () => {
 
 
 
-  const modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['link']
-    ]
-  };
+  // const modules = {
+  //   toolbar: [
+  //     ['bold', 'italic', 'underline'],
+  //     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+  //     ['link']
+  //   ]
+  // };
 
-  const formats = [
-    'bold', 'italic', 'underline',
-    'list', 'bullet',
-    'link'
-  ];
+  // const formats = [
+  //   'bold', 'italic', 'underline',
+  //   'list', 'bullet',
+  //   'link'
+  // ];
 
   const customerManagers = [
     "Rambabu",
@@ -725,8 +785,12 @@ const TicketDetails = () => {
           borderRadius: "8px",
           display: 'flex',
           flexDirection: 'column',
-          height: '500px'
+          minHeight: isDesktop ?  '0px' :  '520px', // Minimum height for chat section
+          maxHeight: isDesktop ? '600px' :  '520px' // Increased overall height
         }}>
+          <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}> Chat Support</Typography>
+          <Typography sx={{ mb: 2, color: colors.grey[600] }}>Get immediate help from our support team</Typography>
+          
           {/* Messages Display */}
           <Box sx={{
             flex: 1,
@@ -735,19 +799,21 @@ const TicketDetails = () => {
             p: 2,
             mb: 2,
             border: "1px solid #ddd",
-            overflowY: "auto"
+            overflowY: "auto",
+            minHeight: '200px', // Minimum height for messages
+            maxHeight: '800px' // Fixed height for messages
           }}>
             {messages.map((message, index) => (
               <Box key={index} sx={{ mb: 2 }}>
                 <Typography variant="caption" sx={{ color: colors.grey[600] }}>
                   {message.sender === "user" ? "You" : "Support"}
                 </Typography>
-                <Box
+                <Box 
                   sx={{
                     p: 1.5,
                     borderRadius: 1,
-                    bgcolor: message.sender === "user"
-                      ? colors.blueAccent[100]
+                    bgcolor: message.sender === "user" 
+                      ? colors.blueAccent[100] 
                       : "#f0f0f0",
                     display: 'inline-block'
                   }}
@@ -757,32 +823,104 @@ const TicketDetails = () => {
             ))}
           </Box>
 
-          {/* Quill Editor */}
-          <Box sx={{
+          {/* Tiptap Editor */}
+          <Box sx={{ 
             backgroundColor: 'white',
             borderRadius: '4px',
-            // border: `1px solid ${colors.grey[300]}`
+            border: `1px solid ${colors.grey[300]}`,
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column'
           }}>
-            <ReactQuill
-              theme="snow"
-              value={newMessage}
-              onChange={setNewMessage}
-              modules={modules}
-              formats={formats}
-              placeholder="Type your message..."
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: '4px',
-                border: 'none',
-                height: '120px'
-              }}
-            />
+            {/* Toolbar */}
+            {editor && (
+              <Box sx={{ 
+                display: 'flex', 
+                gap: 1, 
+                p: 1,
+                borderBottom: `1px solid ${colors.grey[300]}`,
+                flexWrap: 'wrap'
+              }}>
+                <IconButton
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                  color={editor.isActive('bold') ? 'primary' : 'default'}
+                  size="small"
+                >
+                  <FormatBold fontSize="small" />
+                </IconButton>
+                
+                <IconButton
+                  onClick={() => editor.chain().focus().toggleItalic().run()}
+                  color={editor.isActive('italic') ? 'primary' : 'default'}
+                  size="small"
+                >
+                  <FormatItalic fontSize="small" />
+                </IconButton>
+                
+                <IconButton
+                  onClick={() => editor.chain().focus().toggleUnderline().run()}
+                  color={editor.isActive('underline') ? 'primary' : 'default'}
+                  size="small"
+                >
+                  <FormatUnderlined fontSize="small" />
+                </IconButton>
+                
+                <IconButton
+                  onClick={() => editor.chain().focus().toggleBulletList().run()}
+                  color={editor.isActive('bulletList') ? 'primary' : 'default'}
+                  size="small"
+                >
+                  <FormatListBulleted fontSize="small" />
+                </IconButton>
+                
+                <IconButton
+                  onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                  color={editor.isActive('orderedList') ? 'primary' : 'default'}
+                  size="small"
+                >
+                  <FormatListNumbered fontSize="small" />
+                </IconButton>
+                
+                <IconButton onClick={addImage} size="small">
+                  <InsertPhoto fontSize="small" />
+                </IconButton>
+                
+                <IconButton onClick={addTable} size="small">
+                  <TableChart fontSize="small" />
+                </IconButton>
+                
+                <IconButton onClick={addYoutubeVideo} size="small">
+                  <YouTube fontSize="small" />
+                </IconButton>
+              </Box>
+            )}
+            
+            {/* Editor Content - Now with larger height */}
+            <Box sx={{ 
+              flex: 1,
+              overflowY: 'auto',
+              p: 2,
+              minHeight: '100px', // Minimum height
+              maxHeight: '100px', // Maximum height before scrolling
+              '& .tiptap': {
+                minHeight: '200px', // Ensure the editor has enough space
+                outline: 'none',
+                '& p': {
+                  margin: 0,
+                  marginBottom: '0.5em'
+                }
+              }
+            }}>
+              <EditorContent editor={editor} />
+            </Box>
+            
             <Box sx={{
               display: 'flex',
               justifyContent: 'flex-end',
               p: 1,
-              // backgroundColor: "#f0f0f0",
-              // borderTop: `1px solid ${colors.grey[300]}`
+              // backgroundColor: "#f5f5f5",
+              borderTop: `1px solid ${colors.grey[300]}`,
+              maxHeight: '100px',
             }}>
               <Button
                 variant="contained"
@@ -793,7 +931,7 @@ const TicketDetails = () => {
                   color: "#ffffff",
                   '&:hover': { backgroundColor: colors.blueAccent[600] },
                   textTransform: 'none',
-                  minWidth: '100px'
+                  // minWidth: '100px'
                 }}
               >
                 Send
