@@ -19,15 +19,15 @@ import { useNavigate } from "react-router-dom";
 // import { date } from "yup";
 
 const initialTickets = [
-  { id: 1, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket", taskid : "1", date:"03-04-2025", time: "10:00 AM" },
-  { id: 2, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",   taskid : "2", date:"03-04-2025", time: "10:00 AM" },
-  { id: 3, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",   taskid : "3", date:"03-04-2025", time: "10:00 AM" },
-  { id: 4, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "4", date:"03-04-2025", time: "10:00 AM" },
-  { id: 5, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "5", date:"03-04-2025", time: "10:00 AM" },
-  { id: 6, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "6", date:"03-04-2025", time: "10:00 AM" },
-  { id: 7, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",  taskid : "7", date:"03-04-2025", time: "10:00 AM" },
-  { id: 8, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket", taskid : "8", date:"03-04-2025", time: "10:00 AM" },
-  { id: 9, name: "Charan Palemala", status: "Pending", priority: "Urgent", ticketraise: "create a ticket",   taskid : "9", date:"03-04-2025", time: "10:00 AM" },
+  { id: 1, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket", taskid : "1", date:"03-04-2025", time: "10:00 AM" },
+  { id: 2, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",   taskid : "2", date:"03-04-2025", time: "10:00 AM" },
+  { id: 3, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",   taskid : "3", date:"03-04-2025", time: "10:00 AM" },
+  { id: 4, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",  taskid : "4", date:"03-04-2025", time: "10:00 AM" },
+  { id: 5, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",  taskid : "5", date:"03-04-2025", time: "10:00 AM" },
+  { id: 6, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",  taskid : "6", date:"03-04-2025", time: "10:00 AM" },
+  { id: 7, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",  taskid : "7", date:"03-04-2025", time: "10:00 AM" },
+  { id: 8, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket", taskid : "8", date:"03-04-2025", time: "10:00 AM" },
+  { id: 9, name: "Charan Palemala", status: "Pending", description: "this is not available", priority: "Urgent", ticketraise: "create a ticket",   taskid : "9", date:"03-04-2025", time: "10:00 AM" },
 
 ];
 

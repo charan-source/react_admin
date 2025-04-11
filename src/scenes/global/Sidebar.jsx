@@ -162,7 +162,7 @@ const Sidebar = ({ isSidebar, onLogout }) => {
                     button
                     onClick={handleLogout}
                     sx={{
-                      // color: colors.blueAccent[500],
+                      color: colors.blueAccent[500],
                       borderRadius: "10px",
                       marginBottom: "8px",
 

@@ -44,6 +44,7 @@ const TaskDetails = () => {
         taskid: ticket.taskid || "",
         priority: ticket.priority || "",
         ticketraise: ticket.ticketraise || "",
+        description: ticket.description || "",
         name: ticket.name || "",
         status: ticket.status || "",
         date: ticket.date || "",
