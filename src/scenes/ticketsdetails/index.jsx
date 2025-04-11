@@ -145,6 +145,12 @@ const TicketDetails = () => {
     "High",
     "Low",
   ];
+
+  const status = [
+    "Peding",
+    "Processing",
+    "Closed",
+  ];
   return (
     <Box sx={{
       display: "flex",
@@ -295,19 +301,18 @@ const TicketDetails = () => {
                 )}
 
 
-
+{/* 
                 {isEditing ? (
                   <Box>
                     <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Status</Typography>
-                    {/* <Typography>{values.status}</Typography> */}
+                
                     <TextField
                       fullWidth
                       placeholder="Type your message..."
                       size="small"
                       variant="outlined"
                       value={values.status}
-                    // onChange={(e) => setNewMessage(e.target.value)}
-                    // onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+   
                     />
                   </Box>
                 ) : (
@@ -315,10 +320,60 @@ const TicketDetails = () => {
                     <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Status</Typography>
                     <Typography>{values.status}</Typography>
                   </Box>
+                )} */}
+
+
+
+{isEditing ? (
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold", marginBottom: "5px" }}>
+                      Status
+                    </Typography>
+                    <Autocomplete
+                      fullWidth
+                      options={status}
+                      value={values.status || null}
+                      onChange={(event, newValue) => {
+                        setFieldValue("priority", newValue || "");
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          sx={{
+                            display: isEditing ? "block" : "none",
+                            '& .MuiInputBase-root': {  // Target the input container
+                              height: '40px',          // Adjust input height
+                            }
+                          }}
+                          error={!!touched.status && !!errors.status}
+                          helperText={touched.status && errors.status}
+                          disabled={!isEditing}
+                        />
+                      )}
+                      disabled={!isEditing}
+                      sx={{
+                        gridColumn: "span 1",
+                        '& .MuiAutocomplete-listbox': {  // Target the dropdown list
+                          maxHeight: '200px',           // Set maximum height
+                          padding: 0,                   // Remove default padding
+                          '& .MuiAutocomplete-option': { // Target each option
+                            minHeight: '32px',          // Reduce option height
+                            padding: '4px 16px',        // Adjust padding
+                          }
+                        }
+                      }}
+                      freeSolo
+                      forcePopupIcon
+                      popupIcon={<ArrowDropDownIcon />}
+                    />
+                  </Box>
+                ) : (
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ color: "#555", fontWeight: "bold" }}>Status</Typography>
+                    <Typography sx={{ color: getExperienceColor(values.priority) }}>{values.status}</Typography>
+
+                  </Box>
                 )}
-
-
-
 
 
                 <Box>
