@@ -41,7 +41,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 const TicketDetails = () => {
   const theme = useTheme();
   const isDesktop = useMediaQuery("(min-width:600px)");
-  // const isMobile = useMediaQuery("(max-width:600px)");
+  const isMobile = useMediaQuery("(max-width:484px)");
   const isLargeScreen = useMediaQuery("(min-width:800px)");
   const location = useLocation();
   const [isDownloading, setIsDownloading] = useState(false);
@@ -785,8 +785,8 @@ const TicketDetails = () => {
           borderRadius: "8px",
           display: 'flex',
           flexDirection: 'column',
-          minHeight: isDesktop ?  '0px' :  '520px', // Minimum height for chat section
-          maxHeight: isDesktop ? '600px' :  '520px' // Increased overall height
+          minHeight: isMobile ? '550px' : ""  , // Minimum height for chat section
+          maxHeight: isMobile ? '600px' :  '620px' // Increased overall height
         }}>
           <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}> Chat Support</Typography>
           <Typography sx={{ mb: 2, color: colors.grey[600] }}>Get immediate help from our support team</Typography>
