@@ -37,6 +37,7 @@ const getActivePage = (pathname) => {
     return "/organization";
   } else if (
     pathname === "/" ||
+    pathname.includes("/ticketdetails") ||
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
     pathname.includes("/profile") ||
