@@ -31,7 +31,7 @@ const getActivePage = (pathname) => {
     return "/notes";
   } else if (pathname.includes("/calendar")) {
     return "/calendar";
-  }else if (pathname.includes("/tasks") || pathname.includes("/taskform") || pathname.includes("/taskdetails")) {
+  }else if (pathname.includes("/tasks") || pathname.includes("/taskform")) {
     return "/tasks";
   } else if (pathname.includes("/organization")) {
     return "/organization";
@@ -41,6 +41,7 @@ const getActivePage = (pathname) => {
     pathname.includes("/allExperiences") ||
     pathname.includes("/newExperiences") ||
     pathname.includes("/profile") ||
+    pathname.includes("/taskdetails") ||
     pathname.includes("/pendingExperiences") ||
     pathname.includes("/resolvedExperiences")
   ) {
